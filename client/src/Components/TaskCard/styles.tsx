@@ -29,6 +29,14 @@ const cardStyles = (loadingCard: boolean) =>
       color: '#999',
       textAlign: 'right',
     },
+    completedText: {
+      fontWeight: 'bold',
+      color: 'green',
+    },
+    incompletedText: {
+      fontWeight: 'bold',
+      color: 'red',
+    },
     header: {
       flexDirection: !loadingCard ? 'row-reverse' : 'row',
       justifyContent: 'space-between',
