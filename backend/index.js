@@ -1,10 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require('dotenv').config();
+const taskRoutes = require("./src/routes/taskRoutes");
+require("dotenv").config();
 
 const URI = process.env.MONGO_URI;
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 
 const app = express();
 
@@ -22,6 +23,8 @@ mongoose
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
+
+app.use("/api/tasks", taskRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
