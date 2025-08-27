@@ -2,6 +2,7 @@ import { API_URL } from '@env';
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from './src/Components/Header/Header';
 import TaskCard from './src/Components/TaskCard/TaskCard';
 
 const App = () => {
@@ -36,9 +37,11 @@ const App = () => {
         }}
       >
         <TaskCard
+          loadingCard
           item={{
             title: 'Loading...',
             description: 'Please wait while we fetch your tasks.',
+            createdAt: undefined,
           }}
         />
       </SafeAreaView>
@@ -46,8 +49,10 @@ const App = () => {
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <Header title="My Tasks" />
       {workouts.length === 0 ? (
         <TaskCard
+          loadingCard
           item={{
             title: 'No Tasks Available',
             description: 'Please add some tasks.',

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const cardStyles = () =>
+const cardStyles = (loadingCard: boolean) =>
   StyleSheet.create({
     container: {
       backgroundColor: '#fff',
@@ -28,6 +28,10 @@ const cardStyles = () =>
       fontSize: 12,
       color: '#999',
       textAlign: 'right',
+    },
+    header: {
+      flexDirection: !loadingCard ? 'row-reverse' : 'row',
+      justifyContent: 'space-between',
     },
   });
 export default cardStyles;
