@@ -41,5 +41,11 @@ const cardStyles = (loadingCard: boolean) =>
       flexDirection: !loadingCard ? 'row-reverse' : 'row',
       justifyContent: 'space-between',
     },
+    footer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginTop: 8,
+    },
   });
 export default cardStyles;

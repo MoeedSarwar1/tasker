@@ -33,9 +33,23 @@ const TaskCard = ({ item, onDelete, loadingCard = false }: Task) => {
         </View>
       </View>
       {!loadingCard && (
-        <Text style={style.date}>
-          {new Date(item.createdAt as Date).toLocaleDateString()}
-        </Text>
+        <View style={style.footer}>
+          <Pressable>
+            <Text
+              style={[
+                item.completed ? style.incompletedText : style.completedText,
+              ]}
+              onPress={() => {
+                item.completed = !item.completed;
+              }}
+            >
+              {item.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
+            </Text>
+          </Pressable>
+          <Text style={style.date}>
+            {new Date(item.createdAt as Date).toLocaleDateString()}
+          </Text>
+        </View>
       )}
     </View>
   );
