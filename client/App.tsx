@@ -1,3 +1,4 @@
+import { API_URL } from '@env';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
@@ -8,11 +9,11 @@ const App = () => {
     const getAllWorkOuts = async () => {
       try {
         // replace with your actual backend URL
-        const response = await fetch('http://localhost:3000/api/tasks');
+        const response = await fetch(`${API_URL}/api/tasks`);
         const json = await response.json();
         setWorkouts(json);
       } catch (error) {
-        console.error('Error fetching workouts:', error);
+        console.error('Error fetching tasks:', error);
       }
     };
 
