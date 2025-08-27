@@ -1,12 +1,12 @@
 import { API_URL } from '@env';
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from './src/Components/Header/Header';
 import TaskCard from './src/Components/TaskCard/TaskCard';
 
 const App = () => {
-  const [workouts, setWorkouts] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const App = () => {
         // replace with your actual backend URL
         const response = await fetch(`${API_URL}/api/tasks`);
         const json = await response.json();
-        setWorkouts(json);
+        setTasks(json);
         setTimeout(() => {
           setLoading(false);
         }, 3000);
@@ -25,7 +25,7 @@ const App = () => {
     };
 
     getAllWorkOuts();
-  }, []);
+  }, [tasks]);
 
   if (loading) {
     return (
@@ -50,7 +50,7 @@ const App = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Header title="My Tasks" />
-      {workouts.length === 0 ? (
+      {tasks.length === 0 ? (
         <TaskCard
           loadingCard
           item={{
@@ -60,11 +60,16 @@ const App = () => {
         />
       ) : (
         <FlatList
-          data={workouts}
+          data={tasks}
           keyExtractor={(item, index) =>
             item.id?.toString() || index.toString()
           }
           renderItem={({ item }) => <TaskCard item={item} />}
+          ListFooterComponent={
+            <Text style={{ textAlign: 'center', padding: 10, color: 'grey' }}>
+              Showing all {tasks.length} tasks
+            </Text>
+          }
         />
       )}
     </SafeAreaView>
