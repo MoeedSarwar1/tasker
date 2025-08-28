@@ -68,9 +68,9 @@ const App = () => {
     }
   };
 
-  const updateTaskStatus = async (id: string, status: boolean) => {
+  const updateTaskStatus = async (id: string, completed: boolean) => {
     try {
-      await updateStatus('/api/tasks', id, status);
+      await updateStatus('/api/tasks', id, completed);
     } catch (error) {
       console.error('Error updating task status:', error);
     }

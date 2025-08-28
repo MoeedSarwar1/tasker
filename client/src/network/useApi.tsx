@@ -33,7 +33,7 @@ const useApi = () => {
   const updateStatus = async (
     endpoint: string,
     _id: string,
-    status: boolean,
+    completed: boolean,
   ) => {
     try {
       const response = await fetch(`${API_URL}${endpoint}/${_id}`, {
@@ -41,7 +41,7 @@ const useApi = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ completed: status }),
+        body: JSON.stringify({ completed: completed }),
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');

@@ -12,7 +12,9 @@ const TaskCard = ({ item, onDelete, loadingCard = false, onChange }: Task) => {
   };
 
   const onStatusChange = () => {
-    onChange?.(item._id, !item.completed);
+    if (typeof item.completed !== 'undefined') {
+      onChange?.(item._id, !item.completed);
+    }
   };
   return (
     <View style={style.container}>
@@ -43,9 +45,6 @@ const TaskCard = ({ item, onDelete, loadingCard = false, onChange }: Task) => {
               style={[
                 item.completed ? style.incompletedText : style.completedText,
               ]}
-              onPress={() => {
-                item.completed = !item.completed;
-              }}
             >
               {item.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
             </Text>
