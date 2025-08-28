@@ -30,6 +30,48 @@ const useApi = () => {
     }
   };
 
-  return { fetchData, deleteData };
+  const updateStatus = async (
+    endpoint: string,
+    _id: string,
+    status: boolean,
+  ) => {
+    try {
+      const response = await fetch(`${API_URL}${endpoint}/${_id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ completed: status }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return true;
+    } catch (error) {
+      console.error('Error updating status:', error);
+      throw error;
+    }
+  };
+
+  const postData = async (endpoint: string, data: any) => {
+    try {
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return true;
+    } catch (error) {
+      console.error('Error posting data:', error);
+      throw error;
+    }
+  };
+
+  return { fetchData, deleteData, updateStatus, postData };
 };
 export default useApi;

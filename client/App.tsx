@@ -1,9 +1,10 @@
 import { API_URL } from '@env';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Alert, FlatList, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AddTask from './src/Components/AddTask/AddTask';
 import Header from './src/Components/Header/Header';
 import TaskCard from './src/Components/TaskCard/TaskCard';
 import useApi from './src/network/useApi';
@@ -12,8 +13,8 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const { deleteData } = useApi();
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const { deleteData, updateStatus, postData } = useApi();
+  const snapPoints = useMemo(() => ['45%'], []);
 
   const handlePresentModal = () => {
     bottomSheetRef.current?.expand();
@@ -23,7 +24,22 @@ const App = () => {
     bottomSheetRef.current?.close();
   };
 
+  const postTask = async (task: { title: string; description: string }) => {
+    try {
+      await postData('/api/tasks', task);
+      setTasks(prevTasks => [
+        ...prevTasks,
+        { ...task, id: Date.now().toString() },
+      ]);
+      Alert.alert('Task Added Successfully');
+      bottomSheetRef.current?.close();
+    } catch (error) {
+      console.error('Error posting task:', error);
+    }
+  };
+
   useEffect(() => {
+    console.log('Fetching tasks from API...', API_URL);
     const getAllWorkOuts = async () => {
       try {
         // replace with your actual backend URL
@@ -43,11 +59,20 @@ const App = () => {
   const deleteTask = async (id: string) => {
     try {
       await deleteData('/api/tasks', id);
+
       setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
     } catch (error) {
       console.error('Error deleting task:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateTaskStatus = async (id: string, status: boolean) => {
+    try {
+      await updateStatus('/api/tasks', id, status);
+    } catch (error) {
+      console.error('Error updating task status:', error);
     }
   };
 
@@ -90,7 +115,11 @@ const App = () => {
               item.id?.toString() || index.toString()
             }
             renderItem={({ item }) => (
-              <TaskCard item={item} onDelete={deleteTask} />
+              <TaskCard
+                item={item}
+                onDelete={deleteTask}
+                onChange={updateTaskStatus}
+              />
             )}
             ListFooterComponent={
               <Text style={{ textAlign: 'center', padding: 10, color: 'grey' }}>
@@ -108,9 +137,16 @@ const App = () => {
         onClose={handleHideModal}
         enablePanDownToClose
       >
-        <View style={{ padding: 20 }}>
-          <Text style={{ fontSize: 16 }}>➕ Add a new task here</Text>
-        </View>
+        <BottomSheetView>
+          <Header
+            title="Add Task"
+            onPressAdd={() => handleHideModal()}
+            iconName="close"
+            bottomSheetHeader
+          />
+
+          <AddTask onCancle={handleHideModal} onSubmit={postTask} />
+        </BottomSheetView>
       </BottomSheet>
     </GestureHandlerRootView>
   );

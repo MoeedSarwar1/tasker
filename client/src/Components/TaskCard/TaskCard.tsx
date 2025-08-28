@@ -3,12 +3,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import cardStyles from './styles';
 import { Task } from './task.interface';
 
-const TaskCard = ({ item, onDelete, loadingCard = false }: Task) => {
+const TaskCard = ({ item, onDelete, loadingCard = false, onChange }: Task) => {
   const style = cardStyles(loadingCard);
 
   const handleDelete = () => {
     onDelete?.(item._id);
     Alert.alert(`'${item.title}' Deleted Successfully`);
+  };
+
+  const onStatusChange = () => {
+    onChange?.(item._id, !item.completed);
   };
   return (
     <View style={style.container}>
@@ -34,7 +38,7 @@ const TaskCard = ({ item, onDelete, loadingCard = false }: Task) => {
       </View>
       {!loadingCard && (
         <View style={style.footer}>
-          <Pressable>
+          <Pressable onPress={onStatusChange}>
             <Text
               style={[
                 item.completed ? style.incompletedText : style.completedText,
