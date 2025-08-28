@@ -1,3 +1,4 @@
+import { API_URL } from '@env';
 import BottomSheet from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
@@ -11,7 +12,7 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const { fetchData } = useApi();
+  const { deleteData } = useApi();
   const snapPoints = useMemo(() => ['25%', '50%'], []);
 
   const handlePresentModal = () => {
@@ -23,11 +24,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      setLoading(true);
+    const getAllWorkOuts = async () => {
       try {
-        const data = await fetchData('/api/tasks');
-        setTasks(data);
+        // replace with your actual backend URL
+        const response = await fetch(`${API_URL}/api/tasks`);
+        const json = await response.json();
+        setTasks(json);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       } finally {
@@ -35,8 +37,19 @@ const App = () => {
       }
     };
 
-    fetchTasks();
-  }, []);
+    getAllWorkOuts();
+  }, [tasks]);
+
+  const deleteTask = async (id: string) => {
+    try {
+      await deleteData('/api/tasks', id);
+      setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -76,7 +89,9 @@ const App = () => {
             keyExtractor={(item, index) =>
               item.id?.toString() || index.toString()
             }
-            renderItem={({ item }) => <TaskCard item={item} />}
+            renderItem={({ item }) => (
+              <TaskCard item={item} onDelete={deleteTask} />
+            )}
             ListFooterComponent={
               <Text style={{ textAlign: 'center', padding: 10, color: 'grey' }}>
                 Showing all {tasks.length} tasks
