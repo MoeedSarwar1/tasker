@@ -7,6 +7,6 @@ export interface Task {
     createdAt?: Date;
   };
   onDelete?: (id: string | undefined) => void;
-  onChange?: (id: string | undefined) => void;
+  onChange?: (id: string | undefined, completed: boolean) => void;
   loadingCard?: boolean;
 }
