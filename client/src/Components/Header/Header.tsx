@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ title, onPressAdd }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <Pressable onPress={handleAdd}>
+      <Pressable onPress={handleAdd} hitSlop={10}>
         <Icon name="add" size={24} color="#14a3c7" />
       </Pressable>
     </View>
