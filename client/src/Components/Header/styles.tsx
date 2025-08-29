@@ -4,7 +4,6 @@ const headerStyles = (bottomSheetHeader: boolean) =>
   StyleSheet.create({
     container: {
       padding: 16,
-      backgroundColor: '#fff',
       alignItems: 'center',
       flexDirection: 'row',
       borderBottomWidth: bottomSheetHeader ? 0 : 1,

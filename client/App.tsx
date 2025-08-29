@@ -44,6 +44,7 @@ const App = () => {
       try {
         // replace with your actual backend URL
         const response = await fetch(`${API_URL}/api/tasks`);
+        console.log('Response:', response);
         const json = await response.json();
         setTasks(json);
       } catch (error) {
@@ -83,6 +84,7 @@ const App = () => {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: '#F8F8F8',
         }}
       >
         <TaskCard
@@ -97,7 +99,7 @@ const App = () => {
     );
   }
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       <SafeAreaView style={{ flex: 1 }}>
         <Header title="My Tasks" onPressAdd={() => handlePresentModal()} />
         {tasks.length === 0 ? (
