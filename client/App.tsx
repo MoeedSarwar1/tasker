@@ -1,9 +1,10 @@
 import { API_URL } from '@env';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, FlatList, Text } from 'react-native';
+import { Alert, FlatList, Platform, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import SplashScreen from 'react-native-splash-screen';
 import AddTask from './src/Components/AddTask/AddTask';
 import Header from './src/Components/Header/Header';
 import TaskCard from './src/Components/TaskCard/TaskCard';
@@ -40,6 +41,8 @@ const App = () => {
 
   useEffect(() => {
     console.log('Fetching tasks from API...', API_URL);
+    Platform.OS === 'android' && SplashScreen.hide();
+
     const getAllWorkOuts = async () => {
       try {
         // replace with your actual backend URL
