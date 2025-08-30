@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-const cardStyles = (loadingCard: boolean) =>
+const cardStyles = () =>
   StyleSheet.create({
     container: {
-      backgroundColor: '#fff',
+      backgroundColor: '#FFFFFF',
       borderRadius: 8,
       padding: 16,
-      marginVertical: 8,
-      marginHorizontal: 16,
+      marginVertical: 16,
+      borderColor: '#E5E7EB',
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
@@ -15,30 +15,21 @@ const cardStyles = (loadingCard: boolean) =>
       elevation: 2,
     },
     title: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 8,
+      fontSize: 16,
+      fontWeight: 'semibold',
+      color: '#111827',
+      marginBottom: 4,
     },
     description: {
       fontSize: 14,
-      color: '#666',
-      marginBottom: 8,
+      color: '#4B5563',
+      marginBottom: 12,
     },
     date: {
-      fontSize: 12,
-      color: '#999',
-      textAlign: 'right',
-    },
-    completedText: {
-      fontWeight: 'bold',
-      color: 'green',
-    },
-    incompletedText: {
-      fontWeight: 'bold',
-      color: 'red',
+      alignItems: 'flex-end',
     },
     header: {
-      flexDirection: !loadingCard ? 'row-reverse' : 'row',
+      flexDirection: 'row-reverse',
       justifyContent: 'space-between',
     },
     footer: {
@@ -46,6 +37,10 @@ const cardStyles = (loadingCard: boolean) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       marginTop: 8,
+    },
+    user: {
+      fontSize: 12,
+      color: '#6B7280',
     },
   });
 export default cardStyles;

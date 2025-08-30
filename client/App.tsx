@@ -1,7 +1,13 @@
-import { API_URL } from '@env';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, FlatList, Platform, RefreshControl, Text } from 'react-native';
+import {
+  Alert,
+  FlatList,
+  Platform,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
@@ -33,13 +39,23 @@ const App = () => {
     setRefreshing(false);
   }, [fetchData]);
 
+  const refreshTasks = async () => {
+    try {
+      const data = await fetchData('/tasks');
+      setTasks(data);
+    } catch (error) {
+      console.error('Error refreshing tasks:', error);
+    }
+  };
+
   const postTask = async (task: { title: string; description: string }) => {
     try {
-      await postData('/api/tasks', task);
+      await postData('/tasks', task);
       setTasks(prevTasks => [
         ...prevTasks,
         { ...task, id: Date.now().toString() },
       ]);
+      await refreshTasks(); // ✅ fetch latest from server
       Alert.alert('Task Added Successfully');
       bottomSheetRef.current?.close();
     } catch (error) {
@@ -48,12 +64,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log('Fetching tasks from API...', API_URL);
     Platform.OS === 'android' && SplashScreen.hide();
 
     const getAllWorkOuts = async () => {
       try {
-        const data = await fetchData('/tasks'); // notice `/tasks`, no double "api"
+        const data = await fetchData('/tasks');
+
         console.log('Response:', data);
         setTasks(data);
       } catch (error) {
@@ -69,6 +85,7 @@ const App = () => {
   const deleteTask = async (id: string) => {
     try {
       await deleteData('/tasks', id);
+      await refreshTasks(); // ✅ fetch latest from server
       setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -80,6 +97,7 @@ const App = () => {
   const updateTaskStatus = async (id: string, completed: boolean) => {
     try {
       await updateStatus('/tasks', id, completed);
+      await refreshTasks(); // ✅ fetch latest from server
     } catch (error) {
       console.error('Error updating task status:', error);
     }
@@ -110,37 +128,42 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       <SafeAreaView style={{ flex: 1 }}>
         <Header title="My Tasks" onPressAdd={() => handlePresentModal()} />
-        {tasks.length === 0 ? (
-          <TaskCard
-            loadingCard
-            item={{
-              title: 'No Tasks Available',
-              description: 'Please add some tasks.',
-            }}
-          />
-        ) : (
-          <FlatList
-            data={tasks}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            keyExtractor={(item, index) =>
-              item.id?.toString() || index.toString()
-            }
-            renderItem={({ item }) => (
-              <TaskCard
-                item={item}
-                onDelete={deleteTask}
-                onChange={updateTaskStatus}
-              />
-            )}
-            ListFooterComponent={
-              <Text style={{ textAlign: 'center', padding: 10, color: 'grey' }}>
-                Showing all {tasks.length} tasks
-              </Text>
-            }
-          />
-        )}
+        <View style={{ marginHorizontal: 24 }}>
+          {tasks.length === 0 ? (
+            <TaskCard
+              loadingCard
+              item={{
+                title: 'No Tasks Available',
+                description: 'Please add some tasks.',
+              }}
+            />
+          ) : (
+            <FlatList
+              data={tasks}
+              style={{ marginTop: 24 }}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              keyExtractor={(item, index) =>
+                item.id?.toString() || index.toString()
+              }
+              renderItem={({ item }) => (
+                <TaskCard
+                  item={item}
+                  onDelete={deleteTask}
+                  onChange={updateTaskStatus}
+                />
+              )}
+              ListFooterComponent={
+                <Text
+                  style={{ textAlign: 'center', padding: 10, color: 'grey' }}
+                >
+                  Showing all {tasks.length} tasks
+                </Text>
+              }
+            />
+          )}
+        </View>
       </SafeAreaView>
       <BottomSheet
         ref={bottomSheetRef}

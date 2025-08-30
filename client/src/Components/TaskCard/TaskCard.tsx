@@ -1,10 +1,10 @@
 import { Alert, Pressable, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import cardStyles from './styles';
 import { Task } from './task.interface';
 
-const TaskCard = ({ item, onDelete, loadingCard = false, onChange }: Task) => {
-  const style = cardStyles(loadingCard);
+const TaskCard = ({ item, onDelete, onChange }: Task) => {
+  const style = cardStyles();
 
   const handleDelete = () => {
     onDelete?.(item._id);
@@ -19,41 +19,40 @@ const TaskCard = ({ item, onDelete, loadingCard = false, onChange }: Task) => {
   return (
     <View style={style.container}>
       <View style={style.header}>
-        {!loadingCard && (
-          <Pressable onPress={() => handleDelete()}>
-            <Icon name="delete" size={16} color="red" />
-          </Pressable>
-        )}
-        <View>
-          <Text style={style.title}>{item.title}</Text>
-          <Text style={style.description}>{item.description}</Text>
-          {typeof item.completed !== 'undefined' && (
-            <Text
-              style={[
-                item.completed ? style.completedText : style.incompletedText,
-              ]}
-            >
-              {item.completed ? 'Completed' : 'Incomplete'}
-            </Text>
+        <Pressable onPress={onStatusChange} hitSlop={10}>
+          {item.completed ? (
+            <Icon name="check-circle" size={24} color="#22C55E" />
+          ) : (
+            <Icon
+              name="checkbox-blank-circle-outline"
+              size={24}
+              color="#667EEA"
+            />
           )}
-        </View>
-      </View>
-      {!loadingCard && (
-        <View style={style.footer}>
-          <Pressable onPress={onStatusChange}>
-            <Text
-              style={[
-                item.completed ? style.incompletedText : style.completedText,
-              ]}
-            >
-              {item.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
-            </Text>
-          </Pressable>
-          <Text style={style.date}>
-            {new Date(item.createdAt as Date).toLocaleDateString()}
+        </Pressable>
+
+        <View>
+          <Text
+            style={[
+              style.title,
+              item.completed && { textDecorationLine: 'line-through' },
+            ]}
+          >
+            {item.title}
+          </Text>
+          <Text style={style.description}>
+            {item.completed
+              ? 'Completed'
+              : `Due ${new Date(item.createdAt as Date).toLocaleDateString()}`}
           </Text>
         </View>
-      )}
+      </View>
+      <View style={style.footer}>
+        <Text style={style.user}>Team</Text>
+        <View style={style.date}>
+          <Icon name="dots-horizontal" size={16} color="#9ca3af" />
+        </View>
+      </View>
     </View>
   );
 };
