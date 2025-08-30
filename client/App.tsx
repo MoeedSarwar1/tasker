@@ -1,7 +1,7 @@
 import { API_URL } from '@env';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, FlatList, Platform, Text } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Alert, FlatList, Platform, RefreshControl, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
@@ -14,7 +14,8 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const { deleteData, updateStatus, postData } = useApi();
+  const { deleteData, updateStatus, postData, fetchData } = useApi();
+  const [refreshing, setRefreshing] = useState(false);
   const snapPoints = useMemo(() => ['45%'], []);
 
   const handlePresentModal = () => {
@@ -24,6 +25,13 @@ const App = () => {
   const handleHideModal = () => {
     bottomSheetRef.current?.close();
   };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    const data = await fetchData('/tasks');
+    setTasks(data);
+    setRefreshing(false);
+  }, [fetchData]);
 
   const postTask = async (task: { title: string; description: string }) => {
     try {
@@ -45,11 +53,9 @@ const App = () => {
 
     const getAllWorkOuts = async () => {
       try {
-        // replace with your actual backend URL
-        const response = await fetch(`${API_URL}/api/tasks`);
-        console.log('Response:', response);
-        const json = await response.json();
-        setTasks(json);
+        const data = await fetchData('/tasks'); // notice `/tasks`, no double "api"
+        console.log('Response:', data);
+        setTasks(data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       } finally {
@@ -58,12 +64,11 @@ const App = () => {
     };
 
     getAllWorkOuts();
-  }, [tasks]);
+  }, []);
 
   const deleteTask = async (id: string) => {
     try {
-      await deleteData('/api/tasks', id);
-
+      await deleteData('/tasks', id);
       setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -74,7 +79,7 @@ const App = () => {
 
   const updateTaskStatus = async (id: string, completed: boolean) => {
     try {
-      await updateStatus('/api/tasks', id, completed);
+      await updateStatus('/tasks', id, completed);
     } catch (error) {
       console.error('Error updating task status:', error);
     }
@@ -116,6 +121,9 @@ const App = () => {
         ) : (
           <FlatList
             data={tasks}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             keyExtractor={(item, index) =>
               item.id?.toString() || index.toString()
             }
@@ -134,13 +142,13 @@ const App = () => {
           />
         )}
       </SafeAreaView>
-
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
         onClose={handleHideModal}
         enablePanDownToClose
+        keyboardBehavior="extend"
       >
         <BottomSheetView>
           <Header
