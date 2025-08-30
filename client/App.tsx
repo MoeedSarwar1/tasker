@@ -148,7 +148,8 @@ const App = () => {
         snapPoints={snapPoints}
         onClose={handleHideModal}
         enablePanDownToClose
-        keyboardBehavior="extend"
+        keyboardBehavior="interactive" // 👈 important
+        keyboardBlurBehavior="restore"
       >
         <BottomSheetView>
           <Header
