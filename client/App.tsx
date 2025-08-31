@@ -1,13 +1,6 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  FlatList,
-  Platform,
-  RefreshControl,
-  Text,
-  View,
-} from 'react-native';
+import { Alert, FlatList, Platform, RefreshControl, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
@@ -22,7 +15,7 @@ const App = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const { deleteData, updateStatus, postData, fetchData } = useApi();
   const [refreshing, setRefreshing] = useState(false);
-  const snapPoints = useMemo(() => ['45%'], []);
+  const snapPoints = useMemo(() => ['50%'], []);
 
   const handlePresentModal = () => {
     bottomSheetRef.current?.expand();
@@ -127,7 +120,11 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
       <SafeAreaView style={{ flex: 1 }}>
-        <Header title="My Tasks" onPressAdd={() => handlePresentModal()} />
+        <Header
+          title="Good Morning!"
+          subtitle={`You have ${tasks.length} tasks today`}
+          onPressAdd={() => handlePresentModal()}
+        />
         <View style={{ marginHorizontal: 24 }}>
           {tasks.length === 0 ? (
             <TaskCard
@@ -154,13 +151,6 @@ const App = () => {
                   onChange={updateTaskStatus}
                 />
               )}
-              ListFooterComponent={
-                <Text
-                  style={{ textAlign: 'center', padding: 10, color: 'grey' }}
-                >
-                  Showing all {tasks.length} tasks
-                </Text>
-              }
             />
           )}
         </View>

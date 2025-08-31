@@ -8,6 +8,7 @@ const Header: React.FC<HeaderProps> = ({
   title,
   onPressAdd,
   bottomSheetHeader = false,
+  subtitle = '',
   iconName = 'add',
 }) => {
   const styles = headerStyles(bottomSheetHeader);
@@ -17,7 +18,10 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
+      </View>
       <Pressable onPress={handleAdd} hitSlop={10}>
         <Icon
           name={iconName}

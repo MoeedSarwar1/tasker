@@ -3,4 +3,5 @@ export interface HeaderProps {
   onPressAdd: () => void;
   bottomSheetHeader?: boolean;
   iconName?: string;
+  subtitle?: string;
 }
