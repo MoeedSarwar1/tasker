@@ -12,8 +12,8 @@ const {
 
 Router.get("/", auth, fetchAllTasks);
 Router.post("/", auth, addTask);
-Router.delete("/:id", auth, deleteTask);
-Router.get("/:id", auth, getSingleTask);
-Router.patch("/:id", auth, updateTask);
+Router.delete("/:taskID", auth, deleteTask);
+Router.get("/:taskID", auth, getSingleTask);
+Router.patch("/:taskID", auth, updateTask);
 
 module.exports = Router;

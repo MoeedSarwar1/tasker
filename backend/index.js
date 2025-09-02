@@ -12,8 +12,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/users", authRoutes);
+app.use("/api/users/:userId/tasks", taskRoutes);
 
 mongoose
+
   .connect(URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -24,9 +29,6 @@ mongoose
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
-
-aapp.use("/api/auth", authRoutes);
-pp.use("/api/tasks", taskRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

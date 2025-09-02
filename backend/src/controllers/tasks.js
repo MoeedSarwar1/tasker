@@ -28,7 +28,8 @@ const getSingleTask = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const { title, description, completed } = req.body;
-    const newTask = new Task({ title, description, completed });
+    const { id: userID } = req.user; // Assuming auth middleware sets req.user
+    const newTask = new Task({ title, description, completed, user: userID });
     await newTask.save();
     res.status(201).json(newTask);
   } catch (error) {
@@ -55,7 +56,7 @@ const updateTask = async (req, res) => {
     const updatedTask = await Task.findByIdAndUpdate(
       id,
       { title, description, completed },
-      { new: true }
+      { new: true },
     );
     res.json(updatedTask);
   } catch (error) {
