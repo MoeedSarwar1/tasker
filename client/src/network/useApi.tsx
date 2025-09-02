@@ -71,7 +71,37 @@ const useApi = () => {
       throw error;
     }
   };
+  const loginUser = async (
+    email: string,
+    password: string,
+    endpoint: string,
+  ): Promise<any> => {
+    try {
+      // Normalize email before sending to backend
+      const normalizedEmail = email.trim().toLowerCase();
 
-  return { fetchData, deleteData, updateStatus, postData };
+      const res = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: normalizedEmail, password }),
+      });
+
+      if (!res.ok) {
+        // Handle error responses
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `HTTP error! Status: ${res.status}`,
+        );
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error('Login request failed:', error);
+      throw error;
+    }
+  };
+  return { fetchData, deleteData, updateStatus, postData, loginUser };
 };
 export default useApi;

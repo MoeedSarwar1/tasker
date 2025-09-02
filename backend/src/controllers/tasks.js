@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 
 const fetchAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 });
+    const { userId } = req.user; // comes from your auth middleware (decoded JWT)
+    const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
     res.status(200).json(tasks);
   } catch (error) {
     console.error("Error fetching tasks:", error);

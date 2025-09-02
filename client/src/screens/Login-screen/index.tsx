@@ -1,21 +1,39 @@
-import { Image, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Text, TextInput, View } from 'react-native';
 import loginStyles from './styles';
 import React from 'react';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from '../../navigation/enums';
+import { useAuth } from '../../context/Auth-context';
+import useApi from '../../network/useApi';
 
 const LoginScreen = () => {
   const styles = loginStyles();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigation = useNavigation();
+  const { login } = useAuth();
+  const { loginUser } = useApi();
 
   const onLinkPress = () => {
     navigation.navigate(NavigationRoutes.REGISTER as never);
   };
 
+  const handleLogin = async () => {
+    try {
+      const data = await loginUser(email, password, '/users');
+      console.log(data);
+      if (data.token) {
+        login(data.user, data.token);
+      } else {
+        Alert.alert('Login Failed', data.message || 'Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Login Error', (error as any).message || 'Unknown error');
+    }
+  };
   return (
     <View style={styles.containaer}>
       <View style={styles.logoContainer}>
@@ -44,10 +62,7 @@ const LoginScreen = () => {
           secureTextEntry
         />
       </View>
-      <Button
-        title="Login"
-        onPress={() => navigation.navigate(NavigationRoutes.HOME as never)}
-      />
+      <Button title="Login" onPress={() => handleLogin(email, password)} />
       <View style={{ alignItems: 'center', marginTop: 20 }}>
         <LinkText
           onPress={() => onLinkPress()}

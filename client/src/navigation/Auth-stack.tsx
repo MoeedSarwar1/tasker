@@ -1,9 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import LoginScreen from '../screens/Login-screen';
-import { NavigationRoutes } from './enums';
 import RegisterationScreen from '../screens/Registeration-screen';
-import HomeScreen from '../screens/Home-screen';
+import { NavigationRoutes } from './enums';
 
 export type RootStackParamList = {
   [NavigationRoutes.LOGIN]: undefined; // no params for Home
@@ -20,7 +19,6 @@ const AuthStack: React.FC = () => {
         name={NavigationRoutes.REGISTER}
         component={RegisterationScreen}
       />
-      <Stack.Screen name={NavigationRoutes.HOME} component={HomeScreen} />
     </Stack.Navigator>
   );
 };
