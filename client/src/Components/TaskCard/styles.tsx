@@ -4,8 +4,8 @@ const cardStyles = () =>
   StyleSheet.create({
     container: {
       backgroundColor: '#FFFFFF',
-      borderRadius: 8,
-      padding: 16,
+      borderRadius: 16,
+      padding: 17,
       marginVertical: 16,
       borderColor: '#E5E7EB',
       shadowColor: '#000',

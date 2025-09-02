@@ -1,0 +1,18 @@
+import { StyleSheet } from 'react-native';
+
+const buttonStyles = () =>
+  StyleSheet.create({
+    container: {
+      borderRadius: 16,
+      backgroundColor: '#2563EB',
+      alignItems: 'center',
+      paddingHorizontal: 24,
+      paddingVertical: 16,
+    },
+    buttonText: {
+      fontSize: 18,
+      color: '#FFFFFF',
+      fontWeight: 'semibold',
+    },
+  });
+export default buttonStyles;

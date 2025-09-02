@@ -11,7 +11,7 @@ const Header: React.FC<HeaderProps> = ({
   subtitle = '',
   iconName = 'add',
 }) => {
-  const styles = headerStyles(bottomSheetHeader);
+  const styles = headerStyles();
   const handleAdd = () => {
     onPressAdd?.();
   };
