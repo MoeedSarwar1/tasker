@@ -85,9 +85,7 @@ const HomeScreen = () => {
         onPressAdd={handlePresentModal}
       />
 
-      <View
-        style={{ paddingHorizontal: 24, flex: 1, backgroundColor: '#F9fafb' }}
-      >
+      <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
         {tasks.length === 0 ? (
           <TaskCard
             loadingCard
@@ -99,7 +97,9 @@ const HomeScreen = () => {
         ) : (
           <FlatList
             data={tasks}
-            style={{ marginTop: 24 }}
+            showsVerticalScrollIndicator
+            style={{ paddingTop: 24 }}
+            contentContainerStyle={{ gap: 16 }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
