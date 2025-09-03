@@ -1,7 +1,7 @@
 const Task = require("../models/taskSchema");
 const mongoose = require("mongoose");
 
-export const fetchAllTasks = async (req, res) => {
+const fetchAllTasks = async (req, res) => {
   try {
     const userId = req.user._id; // JWT middleware should attach user object
 
