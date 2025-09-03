@@ -5,14 +5,14 @@ import SplashScreen from 'react-native-splash-screen';
 import AddTask from '../../Components/AddTask/AddTask';
 import Header from '../../Components/Header/Header';
 import TaskCard from '../../Components/TaskCard/TaskCard';
-import useApi from '../../network/useApi';
+import { useAuth } from '../../context/Auth-context';
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const { deleteData, updateStatus, postData, fetchData } = useApi();
   const [refreshing, setRefreshing] = useState(false);
   const snapPoints = useMemo(() => ['50%'], []);
+  const { user } = useAuth();
 
   const handlePresentModal = () => {
     bottomSheetRef.current?.expand();
@@ -20,74 +20,6 @@ const HomeScreen = () => {
 
   const handleHideModal = () => {
     bottomSheetRef.current?.close();
-  };
-
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    const data = await fetchData('/tasks');
-    setTasks(data);
-    setRefreshing(false);
-  }, [fetchData]);
-
-  const refreshTasks = async () => {
-    try {
-      const data = await fetchData('/tasks');
-      setTasks(data);
-    } catch (error) {
-      console.error('Error refreshing tasks:', error);
-    }
-  };
-
-  const postTask = async (task: { title: string; description: string }) => {
-    try {
-      await postData('/tasks', task);
-      setTasks(prevTasks => [
-        ...prevTasks,
-        { ...task, id: Date.now().toString() },
-      ]);
-      await refreshTasks(); // ✅ fetch latest from server
-      Alert.alert('Task Added Successfully');
-      bottomSheetRef.current?.close();
-    } catch (error) {
-      console.error('Error posting task:', error);
-    }
-  };
-
-  useEffect(() => {
-    Platform.OS === 'android' && SplashScreen.hide();
-
-    const getAllWorkOuts = async () => {
-      try {
-        const data = await fetchData('/tasks');
-
-        console.log('Response:', data);
-        setTasks(data);
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      }
-    };
-
-    getAllWorkOuts();
-  }, []);
-
-  const deleteTask = async (id: string) => {
-    try {
-      await deleteData('/tasks', id);
-      await refreshTasks(); // ✅ fetch latest from server
-      setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    } finally {
-    }
-  };
-
-  const updateTaskStatus = async (id: string, completed: boolean) => {
-    try {
-      await updateStatus('/tasks', id, completed);
-      await refreshTasks(); // ✅ fetch latest from server
-    } catch (error) {
-      console.error('Error updating task status:', error);
-    }
   };
 
   //create a funtion that greets based on time of day
@@ -108,7 +40,7 @@ const HomeScreen = () => {
   return (
     <>
       <Header
-        title={getGreeting()}
+        title={`${getGreeting()} ${user?.firstName}`}
         subtitle={`You have ${tasks.length} tasks today`}
         onPressAdd={() => handlePresentModal()}
       />
@@ -136,8 +68,8 @@ const HomeScreen = () => {
             renderItem={({ item }) => (
               <TaskCard
                 item={item}
-                onDelete={deleteTask}
-                onChange={updateTaskStatus}
+                // onDelete={deleteTask}
+                // onChange={updateTaskStatus}
               />
             )}
           />
@@ -153,7 +85,7 @@ const HomeScreen = () => {
         keyboardBlurBehavior="restore"
       >
         <BottomSheetView>
-          <AddTask onCancle={handleHideModal} onSubmit={postTask} />
+          <AddTask onCancle={handleHideModal} />
         </BottomSheetView>
       </BottomSheet>
     </>

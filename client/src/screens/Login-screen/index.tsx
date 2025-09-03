@@ -1,39 +1,58 @@
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import { Alert, Image, Text, TextInput, View } from 'react-native';
-import loginStyles from './styles';
-import React from 'react';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationRoutes } from '../../navigation/enums';
 import { useAuth } from '../../context/Auth-context';
-import useApi from '../../network/useApi';
+import { NavigationRoutes } from '../../navigation/enums';
+import client from '../../network/Client';
+import { API_ENDPOINTS } from '../../network/Endpoints';
+import loginStyles from './styles';
 
 const LoginScreen = () => {
   const styles = loginStyles();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
   const navigation = useNavigation();
   const { login } = useAuth();
-  const { loginUser } = useApi();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Validation Error', 'Please enter email and password');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await client.post(API_ENDPOINTS.LOGIN, {
+        email,
+        password,
+      });
+      const data = response.data;
+
+      if (data.token) {
+        login(data.user, data.token); // Save user & token in context
+        console.log('Logged in as:', data.user);
+      } else {
+        Alert.alert('Login Failed', data.message || 'Invalid credentials');
+      }
+    } catch (error: any) {
+      console.error('Login Error:', error);
+      Alert.alert(
+        'Login Error',
+        error?.response?.data?.message || error.message || 'Unknown error',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onLinkPress = () => {
     navigation.navigate(NavigationRoutes.REGISTER as never);
   };
 
-  const handleLogin = async () => {
-    try {
-      const data = await loginUser(email, password, '/users');
-      console.log(data);
-      if (data.token) {
-        login(data.user, data.token);
-      } else {
-        Alert.alert('Login Failed', data.message || 'Invalid credentials');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Login Error', (error as any).message || 'Unknown error');
-    }
-  };
   return (
     <View style={styles.containaer}>
       <View style={styles.logoContainer}>
@@ -44,6 +63,7 @@ const LoginScreen = () => {
         <Text style={styles.textStyles}>Get Things Done,</Text>
         <Text style={styles.textStyles}>Beautifully</Text>
       </View>
+
       <View style={styles.inputContaier}>
         <TextInput
           style={styles.input}
@@ -53,7 +73,6 @@ const LoginScreen = () => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -62,10 +81,12 @@ const LoginScreen = () => {
           secureTextEntry
         />
       </View>
-      <Button title="Login" onPress={() => handleLogin(email, password)} />
+
+      <Button title={loading ? '' : 'Login'} onPress={handleLogin} />
+
       <View style={{ alignItems: 'center', marginTop: 20 }}>
         <LinkText
-          onPress={() => onLinkPress()}
+          onPress={onLinkPress}
           text="Don't have an account?"
           pressableText="Sign Up"
         />
@@ -73,4 +94,5 @@ const LoginScreen = () => {
     </View>
   );
 };
+
 export default LoginScreen;

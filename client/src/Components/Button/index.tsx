@@ -2,7 +2,7 @@ import { Pressable, Text } from 'react-native';
 import { ButtonProps } from './interface';
 import buttonStyles from './styles';
 
-const Button = ({ title, onPress }: ButtonProps) => {
+const Button = ({ title, onPress, children }: ButtonProps) => {
   const styles = buttonStyles();
 
   const handlePress = () => {
@@ -10,6 +10,7 @@ const Button = ({ title, onPress }: ButtonProps) => {
   };
   return (
     <Pressable onPress={handlePress} style={styles.container}>
+      {children}
       <Text style={styles.buttonText}>{title}</Text>
     </Pressable>
   );
