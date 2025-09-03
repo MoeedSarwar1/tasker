@@ -3,4 +3,6 @@ export const API_ENDPOINTS = {
   REGISTER: '/users/register',
   GET_USER: '/users',
   GET_USER_BY_ID: (id: string) => `/users/${id}`,
+  POST_TASK: 'users/tasks',
+  GET_TASKS: 'users/tasks',
 };

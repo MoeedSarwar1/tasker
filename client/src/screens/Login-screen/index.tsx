@@ -8,6 +8,7 @@ import { NavigationRoutes } from '../../navigation/enums';
 import client from '../../network/Client';
 import { API_ENDPOINTS } from '../../network/Endpoints';
 import loginStyles from './styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const styles = loginStyles();
@@ -34,6 +35,7 @@ const LoginScreen = () => {
 
       if (data.token) {
         login(data.user, data.token); // Save user & token in context
+        await AsyncStorage.setItem('accessToken', data.token); // store token
         console.log('Logged in as:', data.user);
       } else {
         Alert.alert('Login Failed', data.message || 'Invalid credentials');

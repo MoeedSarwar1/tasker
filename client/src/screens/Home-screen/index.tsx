@@ -1,49 +1,90 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, FlatList, Platform, RefreshControl, View } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Alert, FlatList, RefreshControl, View } from 'react-native';
 import AddTask from '../../Components/AddTask/AddTask';
 import Header from '../../Components/Header/Header';
 import TaskCard from '../../Components/TaskCard/TaskCard';
 import { useAuth } from '../../context/Auth-context';
+import client from '../../network/Client';
+import { API_ENDPOINTS } from '../../network/Endpoints';
+import { fetchTasks } from '../../network/Tasks';
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
-  const bottomSheetRef = React.useRef<BottomSheet>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const bottomSheetRef = React.useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['50%'], []);
   const { user } = useAuth();
 
-  const handlePresentModal = () => {
-    bottomSheetRef.current?.expand();
-  };
+  // Open BottomSheet
+  const handlePresentModal = () => bottomSheetRef.current?.expand();
 
-  const handleHideModal = () => {
-    bottomSheetRef.current?.close();
-  };
+  // Close BottomSheet
+  const handleHideModal = () => bottomSheetRef.current?.close();
 
-  //create a funtion that greets based on time of day
-  const getGreeting = (): string => {
-    const currentHour = new Date().getHours();
-
-    if (currentHour < 12) {
-      return 'Good Morning';
-    } else if (currentHour >= 12 && currentHour < 15) {
-      return 'Good Noon';
-    } else if (currentHour >= 15 && currentHour < 18) {
-      return 'Good Afternoon';
-    } else {
-      return 'Good Evening';
+  // Fetch tasks from backend
+  const loadTasks = async () => {
+    try {
+      setRefreshing(true);
+      const data = await fetchTasks();
+      setTasks(data);
+    } catch (error) {
+      console.error('Fetch Tasks Error:', error);
+      Alert.alert('Error', 'Failed to load tasks');
+    } finally {
+      setRefreshing(false);
     }
+  };
+
+  // Add new task
+  const handleAddTask = async (task: {
+    title: string;
+    description: string;
+  }) => {
+    try {
+      const response = await client.post(API_ENDPOINTS.POST_TASK, task);
+      const newTask = response.data;
+
+      // Update local tasks
+      setTasks(prevTasks => [newTask, ...prevTasks]);
+      Alert.alert('Success', 'Task added successfully!');
+      handleHideModal();
+    } catch (error: any) {
+      console.error('Add Task Error:', error);
+      Alert.alert(
+        'Error',
+        error?.response?.data?.message || 'Failed to add task',
+      );
+    }
+  };
+
+  // Pull-to-refresh
+  const onRefresh = async () => {
+    await loadTasks();
+  };
+
+  // Fetch tasks on mount
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  // Greeting based on time
+  const getGreeting = (): string => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 15) return 'Good Noon';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
   };
 
   return (
     <>
       <Header
-        title={`${getGreeting()} ${user?.firstName}`}
+        title={`${getGreeting()} ${user?.firstName || ''}`}
         subtitle={`You have ${tasks.length} tasks today`}
-        onPressAdd={() => handlePresentModal()}
+        onPressAdd={handlePresentModal}
       />
+
       <View
         style={{ paddingHorizontal: 24, flex: 1, backgroundColor: '#F9fafb' }}
       >
@@ -62,30 +103,23 @@ const HomeScreen = () => {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            keyExtractor={(item, index) =>
-              item.id?.toString() || index.toString()
-            }
-            renderItem={({ item }) => (
-              <TaskCard
-                item={item}
-                // onDelete={deleteTask}
-                // onChange={updateTaskStatus}
-              />
-            )}
+            keyExtractor={(item, index) => item._id || index.toString()}
+            renderItem={({ item }) => <TaskCard item={item} />}
           />
         )}
       </View>
+
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
         onClose={handleHideModal}
         enablePanDownToClose
-        keyboardBehavior="interactive" // 👈 important
+        keyboardBehavior="interactive"
         keyboardBlurBehavior="restore"
       >
         <BottomSheetView>
-          <AddTask onCancle={handleHideModal} />
+          <AddTask onCancle={handleHideModal} onSubmit={handleAddTask} />
         </BottomSheetView>
       </BottomSheet>
     </>
