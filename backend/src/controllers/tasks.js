@@ -50,7 +50,7 @@ const getSingleTask = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const { title, description, completed } = req.body;
-    const { id: userID } = req.user._id; // Assuming auth middleware sets req.user
+    const { id: userID } = req.user; // Assuming auth middleware sets req.user
     const newTask = new Task({ title, description, completed, user: userID });
     await newTask.save();
     res.status(201).json(newTask);
