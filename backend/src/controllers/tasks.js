@@ -10,7 +10,7 @@ const fetchAllTasks = async (req, res) => {
 
     console.log("✅ Decoded user from JWT:", req.user);
 
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -21,7 +21,7 @@ const fetchAllTasks = async (req, res) => {
     console.log("🔍 Fetching tasks for userId:", userId);
 
     const tasks = await Task.find({
-      user: new mongoose.Types.ObjectId(userId),
+      user: userId,
     }).sort({ createdAt: -1 });
 
     console.log("✅ Found tasks:", tasks.length);
