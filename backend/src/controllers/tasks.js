@@ -4,19 +4,31 @@ const mongoose = require("mongoose");
 const fetchAllTasks = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
+      console.error("❌ No user found in request:", req.user);
       return res.status(401).json({ error: "Unauthorized - no user ID" });
     }
 
+    console.log("✅ Decoded user from JWT:", req.user);
+
     const userId = req.user.id;
 
-    // Ensure it's casted to ObjectId
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      console.error("❌ Invalid ObjectId:", userId);
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    console.log("🔍 Fetching tasks for userId:", userId);
+
     const tasks = await Task.find({
       user: new mongoose.Types.ObjectId(userId),
     }).sort({ createdAt: -1 });
 
+    console.log("✅ Found tasks:", tasks.length);
+
     res.status(200).json(tasks);
   } catch (error) {
-    console.error("Error fetching tasks:", error);
+    console.error("🔥 Error fetching tasks:", error.message, error.stack);
     res.status(500).json({ error: error.message || "Internal server error" });
   }
 };
