@@ -19,7 +19,11 @@ const signup = async (req, res) => {
 
     res.json({
       message: "User registered successfully",
-      user: { name: newUser.name, email: newUser.email },
+      user: {
+        firstName: newUser.firstName,
+        email: newUser.email,
+        lastName: newUser.lastName,
+      },
     });
   } catch (error) {
     console.error(error);
