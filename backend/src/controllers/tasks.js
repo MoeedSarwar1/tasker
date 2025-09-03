@@ -3,15 +3,21 @@ const mongoose = require("mongoose");
 
 const fetchAllTasks = async (req, res) => {
   try {
-    const userId = req.user._id; // JWT middleware should attach user object
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: "Unauthorized - no user ID" });
+    }
 
-    // Find tasks where 'user' matches the authenticated user's ID
-    const tasks = await Task.find({ user: userId }).sort({ createdAt: -1 });
+    const userId = req.user.id;
+
+    // Ensure it's casted to ObjectId
+    const tasks = await Task.find({
+      user: new mongoose.Types.ObjectId(userId),
+    }).sort({ createdAt: -1 });
 
     res.status(200).json(tasks);
   } catch (error) {
     console.error("Error fetching tasks:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message || "Internal server error" });
   }
 };
 
