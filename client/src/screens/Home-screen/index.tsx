@@ -99,7 +99,7 @@ const HomeScreen = () => {
             data={tasks}
             showsVerticalScrollIndicator
             style={{ paddingTop: 24 }}
-            contentContainerStyle={{ gap: 16 }}
+            contentContainerStyle={{ gap: 16, paddingBottom: 40 }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
