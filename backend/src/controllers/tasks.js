@@ -10,7 +10,7 @@ const fetchAllTasks = async (req, res) => {
 
     console.log("✅ Decoded user from JWT:", req.user);
 
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -50,7 +50,7 @@ const getSingleTask = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const { title, description, completed } = req.body;
-    const { id: userID } = req.user; // Assuming auth middleware sets req.user
+    const { id: userID } = req.user._id; // Assuming auth middleware sets req.user
     const newTask = new Task({ title, description, completed, user: userID });
     await newTask.save();
     res.status(201).json(newTask);
