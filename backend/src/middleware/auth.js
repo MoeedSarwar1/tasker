@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
 
     // Attach only userId (and optionally email) to request object
     req.user = {
-      id: decoded.id, // user id from token
+      _id: decoded._id, // user id from token
       email: decoded.email, // optional
       firstName: decoded.firstName, // optional
       lastName: decoded.lastName, // optional
