@@ -60,8 +60,8 @@ const LoginScreen = () => {
           source={require('../../assets/images/logo.png')}
           style={styles.imageStyles}
         />
-        <Text style={styles.textStyles}>Get Things Done,</Text>
-        <Text style={styles.textStyles}>Beautifully</Text>
+        <Text style={styles.textStyles}>Organize your day,</Text>
+        <Text style={styles.textStyles}>Effortlessly</Text>
       </View>
 
       <View style={styles.inputContaier}>
@@ -87,8 +87,8 @@ const LoginScreen = () => {
       <View style={{ alignItems: 'center', marginTop: 20 }}>
         <LinkText
           onPress={onLinkPress}
-          text="Don't have an account?"
-          pressableText="Sign Up"
+          text="New Here?"
+          pressableText="Create an account"
         />
       </View>
     </View>

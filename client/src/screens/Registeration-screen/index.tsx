@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import Button from '../../Components/Button';
+import LinkText from '../../Components/link-text';
+import { NavigationRoutes } from '../../navigation/enums';
 import { login, register } from '../../network/Auth';
 
 const RegisterScreen = () => {
@@ -57,49 +52,58 @@ const RegisterScreen = () => {
     }
   };
 
+  const onLinkPress = () => {
+    navigation.navigate(NavigationRoutes.LOGIN as never);
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.imageStyles}
+        />
+        <Text style={styles.textStyles}>Organize your day,</Text>
+        <Text style={styles.textStyles}>Effortlessly</Text>
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={setFirstName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <View style={styles.inputContaier}>
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleRegister}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Register</Text>
-        )}
-      </TouchableOpacity>
+      <Button title={loading ? '' : 'Login'} onPress={handleRegister} />
+      <View style={{ alignItems: 'center', marginTop: 20 }}>
+        <LinkText
+          onPress={onLinkPress}
+          text="Welcome Back!"
+          pressableText="Login"
+        />
+      </View>
     </View>
   );
 };
@@ -108,24 +112,16 @@ export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    paddingHorizontal: 24,
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    marginBottom: 30,
+    flex: 1,
+    backgroundColor: '#faf9fb',
   },
   input: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
   },
   button: {
     height: 50,
@@ -139,5 +135,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContaier: {
+    marginTop: 24,
+    marginBottom: 32,
+  },
+  imageStyles: {
+    height: 108,
+    width: 300,
+  },
+  textStyles: {
+    color: '#4B5563',
   },
 });

@@ -4,6 +4,7 @@ const loginStyles = () =>
   StyleSheet.create({
     containaer: {
       flex: 1,
+      justifyContent: 'center',
       backgroundColor: '#faf9fb',
       paddingHorizontal: 20,
     },
