@@ -35,11 +35,9 @@ const fetchAllTasks = async (req, res) => {
 
 const getSingleTask = async (req, res) => {
   try {
-    const { id } = req.params;
-    const task = await Task.findById(id);
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({ error: "Task not found" });
-    }
+    const { taskID } = req.params; // match route param
+    const userId = req.user.id; // Assuming auth middleware sets req.user
+    const task = await Task.findById({ _id: taskID, user: userId });
     res.status(200).json(task);
   } catch (error) {
     console.error("Error fetching task:", error);
@@ -62,8 +60,25 @@ const addTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   try {
-    const { id } = req.params;
-    await Task.findByIdAndDelete(id);
+    const { taskID } = req.params; // match route param
+    const userId = req.user.id; // assuming `auth` middleware sets this
+
+    console.log("Deleting task:", taskID, "for user:", userId);
+
+    const task = await Task.findOneAndDelete({
+      _id: taskID,
+      user: userId,
+    });
+
+    if (!task) {
+      console.log("Deleting task:", taskID, "for user:", userId);
+      return res.status(404).json({
+        error: "Task not found or not authorized",
+        _id: taskID,
+        userId,
+      });
+    }
+
     res.status(204).send();
   } catch (error) {
     console.error("Error deleting task:", error);
