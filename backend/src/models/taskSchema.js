@@ -16,9 +16,21 @@ const taskSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    dueDate: {
+      type: Date,
+      required: true,
+    },
+    priority: {
+      type: String,
+      required: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // links task to a specific user
+      required: true,
+    },
+    assignedTo: {
+      type: String,
       required: true,
     },
   },

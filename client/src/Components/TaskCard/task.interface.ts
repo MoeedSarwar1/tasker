@@ -4,9 +4,11 @@ export interface Task {
     title: string;
     description: string;
     completed?: boolean;
+    dueDate?: Date;
+    priority?: 'Low priority' | 'Medium priority' | 'High priority';
+    assignedTo?: string;
     createdAt?: Date;
   };
-  onDelete?: (id: string | undefined) => void;
   onChange?: (id: string | undefined, completed: boolean) => void;
-  loadingCard?: boolean;
+  onMorePress?: (id: string | undefined) => void;
 }

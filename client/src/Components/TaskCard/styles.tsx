@@ -33,14 +33,35 @@ const cardStyles = () =>
       justifyContent: 'space-between',
     },
     footer: {
+      paddingTop: 12,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginTop: 8,
+      paddingBottom: 17,
     },
     user: {
       fontSize: 12,
       color: '#6B7280',
+    },
+    deleteText: {
+      color: '#EF4444',
+    },
+    childrenWrapperStyle: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 16,
+      padding: 12,
+      borderColor: '#E5E7EB',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    childView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: 80,
     },
   });
 export default cardStyles;

@@ -5,4 +5,6 @@ export const API_ENDPOINTS = {
   GET_USER_BY_ID: (id: string) => `/users/${id}`,
   POST_TASK: 'users/tasks',
   GET_TASKS: 'users/tasks',
+  DELETE_TASK: 'users/tasks',
+  PATCH_TASK: 'users/tasks',
 };

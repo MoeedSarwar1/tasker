@@ -1,18 +1,18 @@
+import { API_URL } from '@env';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { View, Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
-import AuthStack from './src/navigation/Auth-stack';
 import { AuthProvider, useAuth } from './src/context/Auth-context';
-import HomeStack from './src/navigation/Home-stack';
-import { API_URL } from '@env';
+import AuthStack from './src/navigation/Auth-stack';
+import BottomTabs from './src/navigation/BottomTabs';
 const RootNavigator = () => {
   const { token } = useAuth();
 
   return (
     <NavigationContainer>
-      {token ? <HomeStack /> : <AuthStack />}
+      {token ? <BottomTabs /> : <AuthStack />}
     </NavigationContainer>
   );
 };

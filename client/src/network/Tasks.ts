@@ -19,3 +19,26 @@ export const fetchTasks = async () => {
     return []; // return empty array on error
   }
 };
+
+export const deleteTask = async (taskId: string) => {
+  try {
+    const response = await client.delete(
+      `${API_ENDPOINTS.DELETE_TASK}/${taskId}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error('Delete Task Error:', error);
+  }
+};
+
+export const updateTask = async (taskId: string, completed: boolean) => {
+  try {
+    const response = await client.patch(
+      `${API_ENDPOINTS.PATCH_TASK}/${taskId}`,
+      { completed },
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error('Update Task Error:', error);
+  }
+};
