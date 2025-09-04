@@ -24,14 +24,16 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
       <TextInput
         style={styles.input}
         placeholder="Enter title"
+        placeholderTextColor="#999"
         value={title}
         onChangeText={setTitle}
       />
       <Text style={styles.label}>Description</Text>
       <View style={styles.descriptionInput}>
         <TextInput
-          style={{ width: '100%' }}
+          style={{ width: '100%', color: '#333' }}
           placeholder="Enter description"
+          placeholderTextColor="#999"
           value={description}
           onChangeText={setDescription}
         />
@@ -61,8 +63,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   input: {
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#ccc',
+    color: '#333',
     borderRadius: 4,
     padding: 8,
     marginBottom: 12,

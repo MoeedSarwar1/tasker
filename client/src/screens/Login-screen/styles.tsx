@@ -23,6 +23,7 @@ const loginStyles = () =>
     input: {
       backgroundColor: '#FFFFFF',
       borderRadius: 16,
+      color: '#333',
       padding: 16,
       marginBottom: 16,
     },
