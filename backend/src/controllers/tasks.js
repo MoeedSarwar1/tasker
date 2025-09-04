@@ -88,13 +88,22 @@ const deleteTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { taskID } = req.params; // from URL
+    const userId = req.user.id; // set by auth middleware
     const { title, description, completed } = req.body;
-    const updatedTask = await Task.findByIdAndUpdate(
-      id,
+
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskID, user: userId }, // ✅ match by ID + user
       { title, description, completed },
-      { new: true },
+      { new: true }, // ✅ return the updated task
     );
+
+    if (!updatedTask) {
+      return res
+        .status(404)
+        .json({ error: "Task not found or not authorized" });
+    }
+
     res.json(updatedTask);
   } catch (error) {
     console.error("Error updating task:", error);
