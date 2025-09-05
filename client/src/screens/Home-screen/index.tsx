@@ -27,8 +27,10 @@ import {
   updateTask,
 } from '../../network/Tasks';
 import homeStles from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
+  const insets = useSafeAreaInsets();
   const [tasks, setTasks] = useState([]);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,7 +41,7 @@ const HomeScreen = () => {
     [isKeyboardVisible],
   );
   const moreSnapPoints = useMemo(() => ['25%'], []);
-  const styles = homeStles();
+  const styles = homeStles(insets);
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const homeStles = () =>
+const homeStles = insets =>
   StyleSheet.create({
     childrenWrapperStyle: {
       backgroundColor: '#4B4B4B',
@@ -31,12 +31,12 @@ const homeStles = () =>
     },
 
     parentView: {
-      paddingBottom: 24,
+      paddingBottom: insets.bottom,
       marginHorizontal: 24,
       gap: 16,
     },
     formView: {
-      paddingBottom: 24,
+      paddingBottom: insets.bottom,
     },
 
     modalText: {

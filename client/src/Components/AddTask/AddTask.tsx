@@ -62,7 +62,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
         />
       </View>
       <Text style={styles.label}>Priority</Text>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {chipData.map(chip => (
           <Chip
             key={chip.label}
