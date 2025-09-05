@@ -7,6 +7,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { AuthProvider, useAuth } from './src/context/Auth-context';
 import AuthStack from './src/navigation/Auth-stack';
 import BottomTabs from './src/navigation/BottomTabs';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 const RootNavigator = () => {
   const { token } = useAuth();
 
@@ -23,11 +24,13 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <PortalProvider>
-        <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
-          <AuthProvider>
-            <RootNavigator />
-          </AuthProvider>
-        </View>
+        <SafeAreaProvider>
+          <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
+            <AuthProvider>
+              <RootNavigator />
+            </AuthProvider>
+          </View>
+        </SafeAreaProvider>
       </PortalProvider>
     </GestureHandlerRootView>
   );

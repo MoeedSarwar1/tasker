@@ -4,9 +4,11 @@ import HomeStack from './Home-stack';
 import { tabNames } from './enums';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs.Navigator
@@ -15,8 +17,10 @@ const BottomTabs = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: '#F9fafb',
-          height: Platform.OS === 'ios' ? 80 : 95, // taller on iOS for safe area
+          height:
+            Platform.OS === 'ios' ? 80 + insets.bottom : 65 + insets.bottom,
           paddingTop: 10,
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
           position: 'absolute', // gives a floating look
