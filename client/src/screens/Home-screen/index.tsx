@@ -35,10 +35,10 @@ const HomeScreen = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
   const snapPoints = useMemo(
-    () => (isKeyboardVisible ? ['62%'] : ['52%']),
+    () => (isKeyboardVisible ? ['75%'] : ['55%']),
     [isKeyboardVisible],
   );
-  const moreSnapPoints = useMemo(() => ['23%'], []);
+  const moreSnapPoints = useMemo(() => ['25%'], []);
   const styles = homeStles();
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);

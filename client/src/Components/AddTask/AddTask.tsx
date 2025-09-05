@@ -47,7 +47,6 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
       <TextInput
         style={styles.input}
         placeholder="Enter title"
-        secureTextEntry
         placeholderTextColor="#999"
         value={title}
         onChangeText={setTitle}
@@ -57,7 +56,6 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
         <TextInput
           style={{ width: '100%', color: '#333' }}
           placeholder="Enter description"
-          secureTextEntry
           placeholderTextColor="#999"
           value={description}
           onChangeText={setDescription}
