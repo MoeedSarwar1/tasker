@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
@@ -5,7 +6,6 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -16,8 +16,7 @@ import { NavigationRoutes } from '../../navigation/enums';
 import client from '../../network/Client';
 import { API_ENDPOINTS } from '../../network/Endpoints';
 import loginStyles from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Text from '../../Components/Text';
 
 const LoginScreen = () => {
   const styles = loginStyles();

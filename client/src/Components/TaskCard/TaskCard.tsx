@@ -1,8 +1,9 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getTaskStatusText } from '../../utils/dateFormat';
 import cardStyles from './styles';
 import { Task } from './task.interface';
-import { getTaskStatusText } from '../../utils/dateFormat';
+import Text from '../Text';
 
 const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const style = cardStyles();

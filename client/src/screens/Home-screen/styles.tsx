@@ -31,9 +31,14 @@ const homeStles = () =>
     },
 
     parentView: {
+      paddingBottom: 24,
       marginHorizontal: 24,
       gap: 16,
     },
+    formView: {
+      paddingBottom: 24,
+    },
+
     modalText: {
       fontSize: 12,
       color: '#999',

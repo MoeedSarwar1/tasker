@@ -2,13 +2,16 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
+import { Portal } from '@gorhom/portal';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   RefreshControl,
-  Text,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,6 +19,7 @@ import AddTask from '../../Components/AddTask/AddTask';
 import Header from '../../Components/Header/Header';
 import SimpleModal from '../../Components/Modal';
 import TaskCard from '../../Components/TaskCard/TaskCard';
+import Text from '../../Components/Text';
 import {
   deleteTask,
   fetchTasks,
@@ -26,11 +30,15 @@ import homeStles from './styles';
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['59%'], []);
-  const moreSnapPoints = useMemo(() => ['27%'], []);
+  const snapPoints = useMemo(
+    () => (isKeyboardVisible ? ['62%'] : ['52%']),
+    [isKeyboardVisible],
+  );
+  const moreSnapPoints = useMemo(() => ['23%'], []);
   const styles = homeStles();
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -60,6 +68,19 @@ const HomeScreen = () => {
     }
   };
 
+  useEffect(() => {
+    const showListener = Keyboard.addListener('keyboardDidShow', () =>
+      setIsKeyboardVisible(true),
+    );
+    const hideListener = Keyboard.addListener('keyboardDidHide', () =>
+      setIsKeyboardVisible(false),
+    );
+
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
+  }, []);
   // Add new task
   const handleAddTask = async (task: {
     title: string;
@@ -202,74 +223,89 @@ const HomeScreen = () => {
         )}
       </View>
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        backdropComponent={backdropProps => (
-          <BottomSheetBackdrop
-            {...backdropProps}
-            appearsOnIndex={0} // show when index >= 0
-            disappearsOnIndex={-1} // hide when sheet is closed
-            pressBehavior="close"
-            opacity={0.5}
-          />
-        )}
-        index={-1}
-        snapPoints={snapPoints}
-        onClose={handleHideModal}
-        enablePanDownToClose
-        keyboardBehavior="interactive"
-        keyboardBlurBehavior="restore"
-      >
-        <BottomSheetView>
-          <AddTask onCancle={handleHideModal} onSubmit={handleAddTask} />
-        </BottomSheetView>
-      </BottomSheet>
-      <BottomSheet
-        ref={moreRef}
-        index={-1}
-        snapPoints={moreSnapPoints}
-        onClose={handleHideModal}
-        enablePanDownToClose
-        keyboardBehavior="interactive"
-        keyboardBlurBehavior="restore"
-        backdropComponent={backdropProps => (
-          <BottomSheetBackdrop
-            {...backdropProps}
-            appearsOnIndex={0} // show when index >= 0
-            disappearsOnIndex={-1} // hide when sheet is closed
-            pressBehavior="close"
-            opacity={0.5}
-          />
-        )}
-        style={{ backgroundColor: '#F9fafb', borderRadius: 16 }}
-      >
-        <BottomSheetView style={styles.parentView}>
-          <Pressable
-            onPress={() => {
-              closeMore();
-              setModalVisible(true);
-            }}
-            style={styles.childrenWrapperStyle}
-          >
-            <Text
-              style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
+      <Portal>
+        <BottomSheet
+          ref={bottomSheetRef}
+          backdropComponent={backdropProps => (
+            <BottomSheetBackdrop
+              {...backdropProps}
+              appearsOnIndex={0} // show when index >= 0
+              disappearsOnIndex={-1} // hide when sheet is closed
+              pressBehavior="close"
+              opacity={0.5}
+            />
+          )}
+          index={-1}
+          onClose={handleHideModal}
+          snapPoints={snapPoints}
+          enablePanDownToClose
+          keyboardBehavior="interactive"
+          keyboardBlurBehavior="restore"
+        >
+          <BottomSheetView style={styles.formView}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
             >
-              Delete
-            </Text>
-            <Icon name="delete-outline" size={20} color="#F9fafb" />
-          </Pressable>
-          <View style={styles.editColor}>
-            <Text
-              style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
+              <AddTask onCancle={handleHideModal} onSubmit={handleAddTask} />
+            </KeyboardAvoidingView>
+          </BottomSheetView>
+        </BottomSheet>
+      </Portal>
+
+      <Portal>
+        <BottomSheet
+          ref={moreRef}
+          index={-1}
+          onClose={handleHideModal}
+          snapPoints={moreSnapPoints}
+          enableDynamicSizing
+          enablePanDownToClose
+          keyboardBehavior="interactive"
+          keyboardBlurBehavior="restore"
+          backdropComponent={backdropProps => (
+            <BottomSheetBackdrop
+              {...backdropProps}
+              appearsOnIndex={0} // show when index >= 0
+              disappearsOnIndex={-1} // hide when sheet is closed
+              pressBehavior="close"
+              opacity={0.5}
+            />
+          )}
+          style={{
+            backgroundColor: '#F9fafb',
+            borderRadius: 16,
+            zIndex: 10000,
+          }}
+        >
+          <BottomSheetView style={styles.parentView}>
+            <Pressable
+              onPress={() => {
+                closeMore();
+                setModalVisible(true);
+              }}
+              style={styles.childrenWrapperStyle}
             >
-              Edit
-            </Text>
-            <Pressable hitSlop={10}>
-              <Icon name="square-edit-outline" size={20} color="#F9fafb" />
+              <Text
+                style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
+              >
+                Delete
+              </Text>
+              <Icon name="delete-outline" size={20} color="#F9fafb" />
             </Pressable>
-          </View>
-        </BottomSheetView>
-      </BottomSheet>
+            <View style={styles.editColor}>
+              <Text
+                style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
+              >
+                Edit
+              </Text>
+              <Pressable hitSlop={10}>
+                <Icon name="square-edit-outline" size={20} color="#F9fafb" />
+              </Pressable>
+            </View>
+          </BottomSheetView>
+        </BottomSheet>
+      </Portal>
 
       <SimpleModal
         visible={modalVisible}

@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+
 import React, { useState } from 'react';
 import {
   Alert,
@@ -6,7 +7,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -14,6 +14,7 @@ import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import { NavigationRoutes } from '../../navigation/enums';
 import { login, register } from '../../network/Auth';
+import Text from '../../Components/Text';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();

@@ -1,5 +1,6 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import linkStyles from './styles';
+import Text from '../Text';
 import { LinkTextProps } from './interface';
 
 const LinkText = ({ text, pressableText, onPress }: LinkTextProps) => {
