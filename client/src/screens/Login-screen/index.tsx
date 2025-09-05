@@ -1,6 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Alert, Image, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import { useAuth } from '../../context/Auth-context';
@@ -9,6 +17,7 @@ import client from '../../network/Client';
 import { API_ENDPOINTS } from '../../network/Endpoints';
 import loginStyles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LoginScreen = () => {
   const styles = loginStyles();
@@ -56,7 +65,11 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.containaer}>
+    <KeyboardAvoidingView
+      style={styles.containaer}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={60}
+    >
       <View style={styles.logoContainer}>
         <Image
           source={require('../../assets/images/logo.png')}
@@ -95,7 +108,7 @@ const LoginScreen = () => {
           pressableText="Create an account"
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

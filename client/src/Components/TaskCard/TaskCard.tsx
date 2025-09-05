@@ -8,8 +8,9 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const style = cardStyles();
 
   const onStatusChange = () => {
-    if (typeof item.completed !== 'undefined') {
-      onChange?.(item._id, !item.completed);
+    if (!item.completed) {
+      // Only mark as completed if not already completed
+      onChange?.(item._id, true);
     }
   };
 

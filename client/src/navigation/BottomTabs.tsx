@@ -14,9 +14,8 @@ const BottomTabs = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#fff',
-          height: Platform.OS === 'ios' ? 80 : 60, // taller on iOS for safe area
-          paddingBottom: Platform.OS === 'ios' ? 20 : 10,
+          backgroundColor: '#F9fafb',
+          height: Platform.OS === 'ios' ? 80 : 90, // taller on iOS for safe area
           paddingTop: 10,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,

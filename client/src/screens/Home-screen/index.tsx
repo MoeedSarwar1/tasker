@@ -35,6 +35,7 @@ const HomeScreen = () => {
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   const openMore = () => moreRef.current?.expand();
   const closeMore = () => moreRef.current?.close();
@@ -98,7 +99,7 @@ const HomeScreen = () => {
   const updateTaskStatus = async (taskId: string, completed: boolean) => {
     try {
       const updatedTask = await updateTask(taskId, completed);
-      Alert.alert('Success', 'Task status updated successfully!');
+      setCompleted(true);
       return updatedTask;
     } catch (error: any) {
       Alert.alert(
@@ -300,6 +301,24 @@ const HomeScreen = () => {
           <Text style={styles.successModalHeader}>Success</Text>
 
           <Text style={styles.successModalText}>Task added successfully!</Text>
+        </View>
+      </SimpleModal>
+      <SimpleModal
+        buttonRow={false}
+        visible={completed}
+        onConfirm={() => setCompleted(false)}
+      >
+        <View style={styles.modalContainer}>
+          <Icon
+            name="checkbox-marked-circle-outline"
+            size={64}
+            color="#28A745"
+          />
+          <Text style={styles.successModalHeader}>Success</Text>
+
+          <Text style={styles.successModalText}>
+            Marked complete successfully
+          </Text>
         </View>
       </SimpleModal>
     </>

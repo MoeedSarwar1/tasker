@@ -1,6 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import { NavigationRoutes } from '../../navigation/enums';
@@ -56,7 +65,11 @@ const RegisterScreen = () => {
     navigation.navigate(NavigationRoutes.LOGIN as never);
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={60}
+    >
       <View style={styles.logoContainer}>
         <Image
           source={require('../../assets/images/logo.png')}
@@ -100,7 +113,7 @@ const RegisterScreen = () => {
         />
       </View>
 
-      <Button title={loading ? '' : 'Login'} onPress={handleRegister} />
+      <Button title={loading ? '' : 'Register'} onPress={handleRegister} />
       <View style={{ alignItems: 'center', marginTop: 20 }}>
         <LinkText
           onPress={onLinkPress}
@@ -108,7 +121,7 @@ const RegisterScreen = () => {
           pressableText="Login"
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
