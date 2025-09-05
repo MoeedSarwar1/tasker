@@ -3,10 +3,9 @@ import { StyleSheet } from 'react-native';
 const homeStles = () =>
   StyleSheet.create({
     childrenWrapperStyle: {
-      backgroundColor: 'red',
+      backgroundColor: '#4B4B4B',
       borderRadius: 16,
       padding: 16,
-      borderColor: '#E5E7EB',
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
@@ -18,10 +17,9 @@ const homeStles = () =>
     },
 
     editColor: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: '#C0C0C0',
       borderRadius: 16,
       padding: 16,
-      borderColor: '#E5E7EB',
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
@@ -35,6 +33,29 @@ const homeStles = () =>
     parentView: {
       marginHorizontal: 24,
       gap: 16,
+    },
+    modalText: {
+      fontSize: 12,
+      color: '#999',
+    },
+    successModalHeader: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#218838',
+    },
+    successModalText: {
+      fontSize: 12,
+      color: '#6FCF97',
+    },
+    modalHeader: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#333',
+    },
+
+    modalContainer: {
+      alignItems: 'center',
+      gap: 8,
     },
   });
 

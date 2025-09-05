@@ -14,6 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddTask from '../../Components/AddTask/AddTask';
 import Header from '../../Components/Header/Header';
+import SimpleModal from '../../Components/Modal';
 import TaskCard from '../../Components/TaskCard/TaskCard';
 import {
   deleteTask,
@@ -32,8 +33,11 @@ const HomeScreen = () => {
   const moreSnapPoints = useMemo(() => ['27%'], []);
   const styles = homeStles();
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
 
   const openMore = () => moreRef.current?.expand();
+  const closeMore = () => moreRef.current?.close();
 
   // Open BottomSheet
   const handlePresentModal = () => bottomSheetRef.current?.expand();
@@ -66,7 +70,7 @@ const HomeScreen = () => {
 
       // Update local tasks
       setTasks(prevTasks => [newTask, ...prevTasks]);
-      Alert.alert('Success', 'Task added successfully!');
+      setSuccessModalVisible(true);
       handleHideModal();
     } catch (error: any) {
       console.error('Add Task Error:', error);
@@ -80,10 +84,8 @@ const HomeScreen = () => {
   const handleDeleteTask = async (taskId: string) => {
     try {
       const deletedTask = await deleteTask(taskId);
-      Alert.alert('Success', 'Task deleted successfully!');
       await loadTasks();
-      moreRef.current?.close();
-
+      setModalVisible(false);
       return deletedTask;
     } catch (error: any) {
       Alert.alert(
@@ -206,7 +208,7 @@ const HomeScreen = () => {
             {...backdropProps}
             appearsOnIndex={0} // show when index >= 0
             disappearsOnIndex={-1} // hide when sheet is closed
-            pressBehavior="collapse"
+            pressBehavior="close"
             opacity={0.5}
           />
         )}
@@ -234,7 +236,7 @@ const HomeScreen = () => {
             {...backdropProps}
             appearsOnIndex={0} // show when index >= 0
             disappearsOnIndex={-1} // hide when sheet is closed
-            pressBehavior="collapse"
+            pressBehavior="close"
             opacity={0.5}
           />
         )}
@@ -242,7 +244,10 @@ const HomeScreen = () => {
       >
         <BottomSheetView style={styles.parentView}>
           <Pressable
-            onPress={() => handleDeleteTask(selectedTask._id)}
+            onPress={() => {
+              closeMore();
+              setModalVisible(true);
+            }}
             style={styles.childrenWrapperStyle}
           >
             <Text
@@ -254,16 +259,49 @@ const HomeScreen = () => {
           </Pressable>
           <View style={styles.editColor}>
             <Text
-              style={{ fontWeight: 'semibold', fontSize: 16, color: '#111827' }}
+              style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
             >
               Edit
             </Text>
             <Pressable hitSlop={10}>
-              <Icon name="square-edit-outline" size={20} color="#111827" />
+              <Icon name="square-edit-outline" size={20} color="#F9fafb" />
             </Pressable>
           </View>
         </BottomSheetView>
       </BottomSheet>
+
+      <SimpleModal
+        visible={modalVisible}
+        onConfirm={() => {
+          handleDeleteTask(selectedTask._id);
+        }}
+        onCancle={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <Icon name="delete-outline" size={48} color="#dc2626" />
+          <Text style={styles.modalHeader}>Are You Sure?</Text>
+
+          <Text style={styles.modalText}>
+            You are about to delete this task.
+          </Text>
+        </View>
+      </SimpleModal>
+      <SimpleModal
+        buttonRow={false}
+        visible={successModalVisible}
+        onConfirm={() => setSuccessModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <Icon
+            name="checkbox-marked-circle-outline"
+            size={64}
+            color="#28A745"
+          />
+          <Text style={styles.successModalHeader}>Success</Text>
+
+          <Text style={styles.successModalText}>Task added successfully!</Text>
+        </View>
+      </SimpleModal>
     </>
   );
 };
