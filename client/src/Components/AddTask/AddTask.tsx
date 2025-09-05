@@ -1,20 +1,42 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import Button from '../Button';
+import Chip from '../Chips';
+
+const chipData = [
+  { label: 'High Priority', color: '#333333' }, // Dark grey
+  { label: 'Medium Priority', color: '#666666' }, // Medium grey
+  { label: 'Low Priority', color: '#999999' }, // Light grey
+];
 
 interface AddTaskProps {
-  onSubmit: (task: { title: string; description: string }) => void;
+  onSubmit: (task: {
+    title: string;
+    description: string;
+    priority: 'Low priority' | 'Medium priority' | 'High priority' | null;
+  }) => void;
   onCancle: () => void;
 }
 
 const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [selectedChip, setSelectedChip] = useState(null);
 
   const handleSubmit = () => {
     if (title.trim() && description.trim()) {
-      onSubmit({ title, description });
+      onSubmit({
+        title,
+        description,
+        priority: selectedChip as
+          | 'Low priority'
+          | 'Medium priority'
+          | 'High priority'
+          | null,
+      });
       setTitle('');
       setDescription('');
+      setSelectedChip(null);
     }
   };
 
@@ -38,12 +60,29 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
           onChangeText={setDescription}
         />
       </View>
+      <Text style={styles.label}>Priority</Text>
+      <View style={{ flexDirection: 'row' }}>
+        {chipData.map(chip => (
+          <Chip
+            key={chip.label}
+            label={chip.label}
+            color={chip.color}
+            selected={selectedChip === chip.label}
+            onPress={() => setSelectedChip(chip.label)}
+          />
+        ))}
+      </View>
+
       <View style={styles.buttonRow}>
         <View style={{ flex: 1 }}>
-          <Button title="Cancel" onPress={onCancle} />
+          <Button title="Cancel" onPress={onCancle} style={styles.button} />
         </View>
         <View style={{ flex: 1 }}>
-          <Button title="Add Task" onPress={handleSubmit} />
+          <Button
+            title="Add Task"
+            style={styles.addButton}
+            onPress={handleSubmit}
+          />
         </View>
       </View>
     </View>
@@ -63,7 +102,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   input: {
-    borderWidth: 0,
+    borderWidth: 1,
     borderColor: '#ccc',
     color: '#333',
     borderRadius: 4,
@@ -83,7 +122,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     gap: 8,
-    marginTop: 12,
+    marginTop: 24,
+  },
+  button: {
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+    backgroundColor: '#C0C0C0',
+  },
+  addButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+    backgroundColor: '#4B4B4B',
   },
 });
 

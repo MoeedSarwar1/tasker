@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from './Endpoints';
 export const postTask = async (taskData: {
   title: string;
   description: string;
+  priority: 'Low priority' | 'Medium priority' | 'High priority';
 }) => {
   const response = await client.post(API_ENDPOINTS.POST_TASK, taskData);
   const data = response.data;

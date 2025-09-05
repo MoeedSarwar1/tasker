@@ -28,8 +28,8 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['50%'], []);
-  const moreSnapPoints = useMemo(() => ['20%'], []);
+  const snapPoints = useMemo(() => ['59%'], []);
+  const moreSnapPoints = useMemo(() => ['27%'], []);
   const styles = homeStles();
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
 
@@ -59,9 +59,10 @@ const HomeScreen = () => {
   const handleAddTask = async (task: {
     title: string;
     description: string;
+    priority: 'Low priority' | 'Medium priority' | 'High priority';
   }) => {
     try {
-      const newTask = postTask(task);
+      const newTask = await postTask(task);
 
       // Update local tasks
       setTasks(prevTasks => [newTask, ...prevTasks]);
