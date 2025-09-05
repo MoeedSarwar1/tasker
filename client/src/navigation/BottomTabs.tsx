@@ -39,7 +39,7 @@ const BottomTabs = () => {
             <Icon
               name="home"
               size={26}
-              color={focused ? '#333333' : '#8e8e93'}
+              color={focused ? '#333333' : '#C0C0C0'}
             />
           ),
         }}
@@ -52,7 +52,7 @@ const BottomTabs = () => {
             <Icon
               name="account-group"
               size={26}
-              color={focused ? '#333333' : '#8e8e93'}
+              color={focused ? '#333333' : '#C0C0C0'}
             />
           ),
         }}
