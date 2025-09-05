@@ -1,3 +1,4 @@
+import { PortalProvider } from '@gorhom/portal';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
@@ -21,11 +22,13 @@ const App = () => {
   }, []);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
-        <AuthProvider>
-          <RootNavigator />
-        </AuthProvider>
-      </View>
+      <PortalProvider>
+        <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
+          <AuthProvider>
+            <RootNavigator />
+          </AuthProvider>
+        </View>
+      </PortalProvider>
     </GestureHandlerRootView>
   );
 };
