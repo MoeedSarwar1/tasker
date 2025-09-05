@@ -18,7 +18,7 @@ const taskSchema = new Schema(
     },
     dueDate: {
       type: Date,
-      required: true,
+      required: false,
     },
     priority: {
       type: String,
@@ -31,7 +31,7 @@ const taskSchema = new Schema(
     },
     assignedTo: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   { timestamps: true },
