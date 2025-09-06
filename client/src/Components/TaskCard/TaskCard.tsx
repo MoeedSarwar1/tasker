@@ -4,9 +4,11 @@ import { getTaskStatusText } from '../../utils/dateFormat';
 import cardStyles from './styles';
 import { Task } from './task.interface';
 import Text from '../Text';
+import { useState } from 'react';
 
 const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const style = cardStyles();
+  const [showDescription, setShowDescription] = useState(false);
 
   const onStatusChange = () => {
     if (!item.completed) {
@@ -16,7 +18,10 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   };
 
   return (
-    <View style={style.container}>
+    <Pressable
+      style={style.container}
+      onPress={() => setShowDescription(!showDescription)}
+    >
       <View style={style.header}>
         <Pressable onPress={onStatusChange} hitSlop={10}>
           {item.completed ? (
@@ -26,20 +31,29 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
           )}
         </Pressable>
 
-        <View>
+        <View style={{ width: '85%' }}>
           <Text
             style={[
               style.title,
+
               item.completed && { textDecorationLine: 'line-through' },
             ]}
           >
-            {item.title}
+            {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
           </Text>
           <Text style={style.description}>
             {getTaskStatusText(item.completed, item.dueDate)} • {item.priority}
           </Text>
         </View>
       </View>
+      {showDescription && (
+        <View>
+          <Text style={style.details}>
+            {item.description.charAt(0).toUpperCase() +
+              item.description.slice(1)}
+          </Text>
+        </View>
+      )}
       <View style={style.footer}>
         <Text style={style.user}>{item.assignedTo ?? 'Myself'}</Text>
         <View style={style.date}>
@@ -48,7 +62,7 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
           </Pressable>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
