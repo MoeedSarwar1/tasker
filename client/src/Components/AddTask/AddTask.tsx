@@ -1,34 +1,52 @@
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { Platform, StyleSheet, TextInput, View } from 'react-native';
 import Button from '../Button';
 import Chip from '../Chips';
 import Text from '../Text';
 
 const chipData = [
-  { label: 'High Priority', color: '#333333' }, // Dark grey
-  { label: 'Medium Priority', color: '#666666' }, // Medium grey
-  { label: 'Low Priority', color: '#999999' }, // Light grey
+  { label: 'High Priority', color: '#333333' },
+  { label: 'Medium Priority', color: '#666666' },
+  { label: 'Low Priority', color: '#999999' },
 ];
-
 interface AddTaskProps {
   onSubmit: (task: {
     title: string;
     description: string;
+    dueDate: Date | string;
     priority: 'Low priority' | 'Medium priority' | 'High priority' | null;
   }) => void;
-  onCancle: () => void;
+  onCancel: () => void;
 }
 
-const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
+const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedChip, setSelectedChip] = useState(null);
+  const [selectedChip, setSelectedChip] = useState<string | null>(null);
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const handleDateChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date,
+  ) => {
+    if (event.type === 'set' && selectedDate) {
+      setDate(selectedDate);
+    }
+    // always hide picker on Android after selecting/canceling
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
+  };
   const handleSubmit = () => {
     if (title.trim() && description.trim()) {
       onSubmit({
         title,
         description,
+        dueDate: date.toDateString() as Date | string,
         priority: selectedChip as
           | 'Low priority'
           | 'Medium priority'
@@ -38,6 +56,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
       setTitle('');
       setDescription('');
       setSelectedChip(null);
+      setDate(new Date()); // optional reset
     }
   };
 
@@ -51,6 +70,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
         value={title}
         onChangeText={setTitle}
       />
+
       <Text style={styles.label}>Description</Text>
       <View style={styles.descriptionInput}>
         <TextInput
@@ -59,8 +79,45 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
           placeholderTextColor="#999"
           value={description}
           onChangeText={setDescription}
+          multiline
         />
       </View>
+
+      <Text style={styles.label}>Select Due Date</Text>
+      <View
+        style={{
+          justifyContent: 'center',
+          marginBottom: 12,
+          alignItems: 'center',
+        }}
+      >
+        {Platform.OS === 'android' ? (
+          <>
+            {showDatePicker && (
+              <DateTimePicker
+                mode="date"
+                value={date}
+                dateFormat="shortdate"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+            <Button
+              title={date.toDateString()}
+              onPress={() => setShowDatePicker(true)}
+            />
+          </>
+        ) : (
+          <DateTimePicker
+            mode="date"
+            value={date}
+            dateFormat="shortdate"
+            display="spinner"
+            onChange={handleDateChange}
+          />
+        )}
+      </View>
+
       <Text style={styles.label}>Priority</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {chipData.map(chip => (
@@ -76,7 +133,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancle }) => {
 
       <View style={styles.buttonRow}>
         <View style={{ flex: 1 }}>
-          <Button title="Cancel" onPress={onCancle} style={styles.button} />
+          <Button title="Cancel" onPress={onCancel} style={styles.button} />
         </View>
         <View style={{ flex: 1 }}>
           <Button
@@ -121,7 +178,6 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: 'row',
-    flex: 1,
     gap: 8,
     marginTop: 24,
   },

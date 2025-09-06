@@ -64,50 +64,52 @@ const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.containaer}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={60}
-    >
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/logo.png')}
-          style={styles.imageStyles}
-        />
-        <Text style={styles.textStyles}>Organize your day,</Text>
-        <Text style={styles.textStyles}>Effortlessly</Text>
-      </View>
+    <View style={{ flex: 1, backgroundColor: '#faf9fb' }}>
+      <KeyboardAvoidingView
+        style={styles.containaer}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={60}
+      >
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../assets/images/logo.png')}
+            style={styles.imageStyles}
+          />
+          <Text style={styles.textStyles}>Organize your day,</Text>
+          <Text style={styles.textStyles}>Effortlessly</Text>
+        </View>
 
-      <View style={styles.inputContaier}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#999"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-      </View>
+        <View style={styles.inputContaier}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#999"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
 
-      <Button title={loading ? '' : 'Login'} onPress={handleLogin} />
+        <Button title={loading ? '' : 'Login'} onPress={handleLogin} />
 
-      <View style={{ alignItems: 'center', marginTop: 20 }}>
-        <LinkText
-          onPress={onLinkPress}
-          text="New Here?"
-          pressableText="Create an account"
-        />
-      </View>
-    </KeyboardAvoidingView>
+        <View style={{ alignItems: 'center', marginTop: 20 }}>
+          <LinkText
+            onPress={onLinkPress}
+            text="New Here?"
+            pressableText="Create an account"
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 

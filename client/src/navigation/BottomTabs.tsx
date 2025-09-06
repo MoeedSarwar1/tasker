@@ -18,7 +18,7 @@ const BottomTabs = () => {
         tabBarStyle: {
           backgroundColor: '#F9fafb',
           height:
-            Platform.OS === 'ios' ? 80 + insets.bottom : 65 + insets.bottom,
+            Platform.OS === 'ios' ? 60 + insets.bottom : 45 + insets.bottom,
           paddingTop: 10,
           paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           borderTopLeftRadius: 16,

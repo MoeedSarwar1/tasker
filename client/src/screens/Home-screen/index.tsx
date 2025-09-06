@@ -88,6 +88,7 @@ const HomeScreen = () => {
     title: string;
     description: string;
     priority: 'Low priority' | 'Medium priority' | 'High priority';
+    dueDate: Date | string;
   }) => {
     try {
       const newTask = await postTask(task);
@@ -206,7 +207,10 @@ const HomeScreen = () => {
             data={tasks}
             showsVerticalScrollIndicator
             style={{ paddingTop: 24 }}
-            contentContainerStyle={{ gap: 16, paddingBottom: 150 }}
+            contentContainerStyle={{
+              gap: 16,
+              paddingBottom: insets.bottom + 80,
+            }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }

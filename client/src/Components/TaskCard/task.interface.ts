@@ -4,7 +4,7 @@ export interface Task {
     title: string;
     description: string;
     completed?: boolean;
-    dueDate?: Date;
+    dueDate?: string;
     priority?: 'Low priority' | 'Medium priority' | 'High priority';
     assignedTo?: string;
     createdAt?: Date;

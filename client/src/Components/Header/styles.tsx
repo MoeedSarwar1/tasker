@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-const headerStyles = () =>
+const headerStyles = insets =>
   StyleSheet.create({
     container: {
       padding: 16,
-      paddingTop: 70,
+      paddingTop: insets.top,
       alignItems: 'center',
       backgroundColor: '#FFFFFF',
       flexDirection: 'row',

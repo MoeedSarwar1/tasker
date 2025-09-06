@@ -4,6 +4,7 @@ import Text from '../Text';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { HeaderProps } from './header.interface';
 import headerStyles from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Header: React.FC<HeaderProps> = ({
   title,
@@ -12,7 +13,8 @@ const Header: React.FC<HeaderProps> = ({
   subtitle = '',
   iconName = 'add',
 }) => {
-  const styles = headerStyles();
+  const insets = useSafeAreaInsets();
+  const styles = headerStyles(insets);
   const handleAdd = () => {
     onPressAdd?.();
   };

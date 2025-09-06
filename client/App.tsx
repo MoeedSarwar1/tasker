@@ -1,7 +1,7 @@
 import { PortalProvider } from '@gorhom/portal';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
 import { AuthProvider, useAuth } from './src/context/Auth-context';
@@ -24,13 +24,19 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <PortalProvider>
-        <SafeAreaProvider>
-          <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
+        <StatusBar
+          barStyle="dark-content" // or "light-content" if using dark bg
+          backgroundColor="#F9FAFB" // match your app bg
+          translucent={false} // keep it solid
+        />
+
+        <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
+          <SafeAreaProvider>
             <AuthProvider>
               <RootNavigator />
             </AuthProvider>
-          </View>
-        </SafeAreaProvider>
+          </SafeAreaProvider>
+        </View>
       </PortalProvider>
     </GestureHandlerRootView>
   );
