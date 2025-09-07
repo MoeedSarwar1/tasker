@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from './src/context/Auth-context';
 import AuthStack from './src/navigation/Auth-stack';
 import BottomTabs from './src/navigation/BottomTabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ModalProvider } from './src/context/Modal-context';
 const RootNavigator = () => {
   const { token } = useAuth();
 
@@ -23,21 +24,23 @@ const App = () => {
   }, []);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <PortalProvider>
-        <StatusBar
-          barStyle="dark-content" // or "light-content" if using dark bg
-          backgroundColor="#F9FAFB" // match your app bg
-          translucent={false} // keep it solid
-        />
+      <ModalProvider>
+        <PortalProvider>
+          <StatusBar
+            barStyle="dark-content" // or "light-content" if using dark bg
+            backgroundColor="#F9FAFB" // match your app bg
+            translucent={false} // keep it solid
+          />
 
-        <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
-          <SafeAreaProvider>
-            <AuthProvider>
-              <RootNavigator />
-            </AuthProvider>
-          </SafeAreaProvider>
-        </View>
-      </PortalProvider>
+          <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
+            <SafeAreaProvider>
+              <AuthProvider>
+                <RootNavigator />
+              </AuthProvider>
+            </SafeAreaProvider>
+          </View>
+        </PortalProvider>
+      </ModalProvider>
     </GestureHandlerRootView>
   );
 };

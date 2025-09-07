@@ -42,20 +42,6 @@ const homeStles = insets =>
       fontSize: 12,
       color: '#999',
     },
-    successModalHeader: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: '#218838',
-    },
-    successModalText: {
-      fontSize: 12,
-      color: '#6FCF97',
-    },
-    modalHeader: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: '#333',
-    },
     text: { color: '#F9fafb', fontWeight: 'bold', fontSize: 16 },
 
     bottomshhetContainer: {
@@ -69,20 +55,17 @@ const homeStles = insets =>
     list: {
       paddingTop: 24,
     },
-    emptyTextStyle:{
- color: '#7f7f7f', fontSize: 16 
+    emptyTextStyle: {
+      color: '#7f7f7f',
+      fontSize: 16,
     },
-    emptyContainer:{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 16,
-            },
-    container:{ flex: 1, backgroundColor: '#F9fafb' },
-    modalContainer: {
+    emptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
       alignItems: 'center',
-      gap: 8,
+      gap: 16,
     },
+    container: { flex: 1, backgroundColor: '#F9fafb' },
   });
 
 export default homeStles;

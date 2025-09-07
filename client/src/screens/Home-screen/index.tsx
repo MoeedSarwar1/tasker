@@ -14,12 +14,14 @@ import {
   RefreshControl,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddTask from '../../Components/AddTask/AddTask';
 import Header from '../../Components/Header/Header';
-import SimpleModal from '../../Components/Modal';
+import { Task } from '../../Components/TaskCard/task.interface';
 import TaskCard from '../../Components/TaskCard/TaskCard';
 import Text from '../../Components/Text';
+import { useModal } from '../../context/Modal-context';
 import {
   deleteTask,
   fetchTasks,
@@ -28,8 +30,6 @@ import {
   updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Task } from '../../Components/TaskCard/task.interface';
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
@@ -45,11 +45,9 @@ const HomeScreen = () => {
   const moreSnapPoints = useMemo(() => ['25%'], []);
   const styles = homeStles(insets);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
-  const [completed, setCompleted] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
+  const { showModal } = useModal();
   const openMore = (task: Task) => {
     setSelectedTask(task);
     moreRef.current?.expand();
@@ -107,7 +105,14 @@ const HomeScreen = () => {
 
       // Update local tasks
       setTasks(prevTasks => [newTask, ...prevTasks]);
-      setSuccessModalVisible(true);
+      showModal({
+        title: 'Success',
+        description: 'Task Successfully Added',
+        iconName: 'checkbox-marked-circle-outline',
+        iconColor: '#28A745',
+        onConfirm: () => setEditMode(false),
+        buttonRow: false,
+      });
       handleHideModal();
     } catch (error: any) {
       console.error('Add Task Error:', error);
@@ -122,7 +127,6 @@ const HomeScreen = () => {
     try {
       const deletedTask = await deleteTask(taskId);
       await loadTasks();
-      setModalVisible(false);
       return deletedTask;
     } catch (error: any) {
       Alert.alert(
@@ -135,7 +139,14 @@ const HomeScreen = () => {
   const updateTaskStatus = async (taskId: string, completed: boolean) => {
     try {
       const updatedTask = await updateTaskCompletion(taskId, completed);
-      setCompleted(true);
+      showModal({
+        title: 'Success',
+        description: 'Marked complete successfully',
+        iconName: 'checkbox-marked-circle-outline',
+        iconColor: '#28A745',
+        onConfirm: () => setEditMode(false),
+        buttonRow: false,
+      });
       return updatedTask;
     } catch (error: any) {
       Alert.alert(
@@ -153,7 +164,14 @@ const HomeScreen = () => {
         prev => prev.map(t => (t._id === taskId ? updatedTask : t)), // ✅ replace with updatedTask
       );
 
-      setSuccessModalVisible(true);
+      showModal({
+        title: 'Success',
+        description: 'Task Successfully Updated',
+        iconName: 'checkbox-marked-circle-outline',
+        iconColor: '#28A745',
+        onConfirm: () => setEditMode(false),
+        buttonRow: false,
+      });
       return updatedTask;
     } catch (error: any) {
       console.error('Update Task Error:', error);
@@ -308,7 +326,15 @@ const HomeScreen = () => {
                 <Pressable
                   onPress={() => {
                     closeMore();
-                    setModalVisible(true);
+                    showModal({
+                      title: 'Delete Task',
+                      description: 'Are you sure you want to delete this task?',
+                      iconName: 'delete-outline',
+                      onConfirm: () => {
+                        handleDeleteTask(selectedTask?._id);
+                        closeMore();
+                      },
+                    });
                   }}
                   style={styles.childrenWrapperStyle}
                 >
@@ -346,68 +372,6 @@ const HomeScreen = () => {
           </BottomSheetView>
         </BottomSheet>
       </Portal>
-
-      <SimpleModal
-        visible={modalVisible}
-        onConfirm={() => {
-          handleDeleteTask(selectedTask._id);
-        }}
-        onCancle={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <Icon name="delete-outline" size={48} color="#dc2626" />
-          <Text style={styles.modalHeader}>Are You Sure?</Text>
-
-          <Text style={styles.modalText}>
-            You are about to delete this task.
-          </Text>
-        </View>
-      </SimpleModal>
-      <SimpleModal
-        buttonRow={false}
-        visible={successModalVisible}
-        onConfirm={() => {
-          setEditMode(false);
-          setSuccessModalVisible(false);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Icon
-            name="checkbox-marked-circle-outline"
-            size={64}
-            color="#28A745"
-          />
-          <Text style={styles.successModalHeader}>Success</Text>
-
-          <Text style={styles.successModalText}>
-            <Text style={styles.successModalText}>
-              <Text style={styles.successModalText}>
-                {editMode
-                  ? 'Task updated successfully!'
-                  : 'Task added successfully!'}
-              </Text>
-            </Text>
-          </Text>
-        </View>
-      </SimpleModal>
-      <SimpleModal
-        buttonRow={false}
-        visible={completed}
-        onConfirm={() => setCompleted(false)}
-      >
-        <View style={styles.modalContainer}>
-          <Icon
-            name="checkbox-marked-circle-outline"
-            size={64}
-            color="#28A745"
-          />
-          <Text style={styles.successModalHeader}>Success</Text>
-
-          <Text style={styles.successModalText}>
-            Marked complete successfully
-          </Text>
-        </View>
-      </SimpleModal>
     </>
   );
 };

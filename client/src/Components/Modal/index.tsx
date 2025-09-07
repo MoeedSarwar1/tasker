@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Modal, StyleSheet, View } from 'react-native';
 import Button from '../Button';
 import Text from '../Text';
@@ -7,18 +8,23 @@ interface SimpleModalProps {
   visible: boolean;
   onCancle?: () => void;
   title?: string;
+  iconName?: string;
+  iconColor?: string;
   children?: React.ReactNode;
   onConfirm?: () => void;
   buttonRow?: boolean;
+  description?: string;
 }
 
 const SimpleModal: React.FC<SimpleModalProps> = ({
   visible,
   onCancle,
   title,
-  children,
   onConfirm,
+  description,
   buttonRow = true,
+  iconName,
+  iconColor,
 }) => {
   return (
     <Modal
@@ -29,8 +35,10 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
     >
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          {title && <Text style={styles.title}>{title}</Text>}
-          <View style={styles.content}>{children}</View>
+          <Icon name={iconName} size={64} color={iconColor} />
+          <Text style={styles.successModalHeader}>{title}</Text>
+
+          <Text style={styles.successModalText}>{description}</Text>
           <View style={styles.buttonRow}>
             {buttonRow && (
               <View style={{ flex: 1 }}>
@@ -70,6 +78,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
+    alignItems: 'center',
+    gap: 8,
     padding: 20,
     borderColor: '#E5E7EB',
     marginHorizontal: 24,
@@ -104,5 +114,14 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 12,
+  },
+  successModalHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#218838',
+  },
+  successModalText: {
+    fontSize: 12,
+    color: '#6FCF97',
   },
 });
