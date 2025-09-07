@@ -8,9 +8,9 @@ import Chip from '../Chips';
 import Text from '../Text';
 
 const chipData = [
-  { id: 'high', label: 'High Priority', color: '#333333' },
-  { id: 'medium', label: 'Medium Priority', color: '#666666' },
-  { id: 'low', label: 'Low Priority', color: '#999999' },
+  { id: 'high', label: 'Urgent', color: '#333333' },
+  { id: 'medium', label: 'Normal', color: '#666666' },
+  { id: 'low', label: 'Low Key', color: '#999999' },
 ];
 
 interface AddTaskProps {
@@ -20,7 +20,7 @@ interface AddTaskProps {
     dueDate: Date | string;
     priority: 'Low priority' | 'Medium priority' | 'High priority';
   };
-  mode: 'add' | 'edit'; // ✅ mode prop to determine Add or Edit
+  mode: 'add' | 'edit';
   onSubmit: (task: {
     title: string;
     description: string;
@@ -36,26 +36,27 @@ const AddTask: React.FC<AddTaskProps> = ({
   onCancel,
   mode,
 }) => {
-  const isEditing = mode === 'edit' || !!initialTask; // ✅ determine if editing or adding
+  const isEditing = mode === 'edit' || !!initialTask;
   const [title, setTitle] = useState(initialTask?.title || '');
   const [description, setDescription] = useState(
     initialTask?.description || '',
   );
   const [selectedChip, setSelectedChip] = useState(
-    initialTask?.priority || 'High Priority',
+    initialTask?.priority || 'Urgent',
   );
   const [date, setDate] = useState<Date>(
-    initialTask?.dueDate ? new Date(initialTask.dueDate) : new Date(), // ✅ always Date
+    initialTask?.dueDate ? new Date(initialTask.dueDate) : new Date(),
   );
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
   useEffect(() => {
     if (initialTask) {
       setTitle(initialTask.title);
       setDescription(initialTask.description);
       setSelectedChip(initialTask.priority);
-      setDate(new Date(initialTask.dueDate)); // ✅ ensure Date
+      setDate(new Date(initialTask.dueDate));
     }
   }, [initialTask]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleDateChange = (
     event: DateTimePickerEvent,
@@ -74,7 +75,7 @@ const AddTask: React.FC<AddTaskProps> = ({
       onSubmit({
         title,
         description,
-        dueDate: date.toISOString(), // ✅ correct format for backend
+        dueDate: date.toISOString(),
         priority: selectedChip as
           | 'Low priority'
           | 'Medium priority'
@@ -93,20 +94,20 @@ const AddTask: React.FC<AddTaskProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Title</Text>
+      <Text style={styles.label}>Heading</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter title"
+        placeholder="Write a title"
         placeholderTextColor="#999"
         value={title}
         onChangeText={setTitle}
       />
 
-      <Text style={styles.label}>Description</Text>
+      <Text style={styles.label}>Details</Text>
       <View style={styles.descriptionInput}>
         <TextInput
           style={{ width: '100%', color: '#333' }}
-          placeholder="Enter description"
+          placeholder="Add some notes"
           placeholderTextColor="#999"
           value={description}
           onChangeText={setDescription}
@@ -114,7 +115,7 @@ const AddTask: React.FC<AddTaskProps> = ({
         />
       </View>
 
-      <Text style={styles.label}>Select Due Date</Text>
+      <Text style={styles.label}>Deadline</Text>
       <View
         style={{
           justifyContent: 'center',
@@ -147,7 +148,7 @@ const AddTask: React.FC<AddTaskProps> = ({
         )}
       </View>
 
-      <Text style={styles.label}>Priority</Text>
+      <Text style={styles.label}>Importance</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {chipData.map(chip => (
           <Chip
@@ -163,11 +164,11 @@ const AddTask: React.FC<AddTaskProps> = ({
 
       <View style={styles.buttonRow}>
         <View style={{ flex: 1 }}>
-          <Button title="Cancel" onPress={onCancel} style={styles.button} />
+          <Button title="Dismiss" onPress={onCancel} style={styles.button} />
         </View>
         <View style={{ flex: 1 }}>
           <Button
-            title={mode === 'edit' ? 'Update Task' : 'Add Task'} // ✅ dynamic button text
+            title={mode === 'edit' ? 'Save Changes' : 'Create Task'}
             style={styles.addButton}
             onPress={handleSubmit}
           />
@@ -179,7 +180,6 @@ const AddTask: React.FC<AddTaskProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: '#fff',
     borderRadius: 8,
   },

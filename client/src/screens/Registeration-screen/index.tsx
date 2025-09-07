@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import React, { useState } from 'react';
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -12,9 +11,10 @@ import {
 } from 'react-native';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
-import { NavigationRoutes } from '../../navigation/enums';
-import { login, register } from '../../network/Auth';
 import Text from '../../Components/Text';
+import { useModal } from '../../context/Modal-context';
+import { NavigationRoutes } from '../../navigation/enums';
+import { register } from '../../network/Auth';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -24,11 +24,19 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { showModal } = useModal();
 
   const handleRegister = async () => {
     // Basic validation
     if (!firstName || !lastName || !email || !password) {
-      Alert.alert('Validation Error', 'Please fill all fields');
+      showModal({
+        mode: 'error',
+        buttonRow: false,
+        iconName: 'exclamation',
+        iconColor: '#DC3545',
+        title: 'Signup Failed',
+        description: 'Please fill all the fields',
+      });
       return;
     }
 
@@ -38,25 +46,26 @@ const RegisterScreen = () => {
       // Call register API
       const data = await register(firstName, lastName, email, password);
 
-      console.log('Register response:', data);
-      if (data?.token) {
-        // Optional: auto-login
-        login(data.user, data.token);
-        Alert.alert('Success', 'Account created and logged in!');
-      } else {
-        console.log('Auto-logged in after registration', data.user.firstName);
-        Alert.alert('Success', 'Account created successfully!');
-
-        navigation.goBack(); // Navigate to login
+      if (data?.user) {
+        showModal({
+          iconName: 'checkbox-marked-circle-outline',
+          iconColor: '#28A745',
+          mode: 'success',
+          buttonRow: false,
+          title: 'All Set',
+          description: 'Account created successfully',
+        });
+        navigation.goBack(); // Navigate to login screen
       }
     } catch (error: any) {
-      console.error('Registration error:', error);
-      Alert.alert(
-        'Registration Failed',
-        error?.response?.data?.message ||
-          error.message ||
-          'Something went wrong',
-      );
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Tasks didn’t load. Check your connection and retry.',
+        buttonRow: false,
+      });
     } finally {
       setLoading(false);
     }

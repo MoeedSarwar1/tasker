@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -11,17 +10,19 @@ import {
 } from 'react-native';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
+import Text from '../../Components/Text';
 import { useAuth } from '../../context/Auth-context';
+import { useModal } from '../../context/Modal-context';
 import { NavigationRoutes } from '../../navigation/enums';
 import client from '../../network/Client';
 import { API_ENDPOINTS } from '../../network/Endpoints';
 import loginStyles from './styles';
-import Text from '../../Components/Text';
 
 const LoginScreen = () => {
   const styles = loginStyles();
   const navigation = useNavigation();
   const { login } = useAuth();
+  const { showModal } = useModal();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +30,14 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Validation Error', 'Please enter email and password');
+      showModal({
+        mode: 'error',
+        iconName: 'exclamation',
+        iconColor: '#DC3545',
+        title: 'Validation Error',
+        description: 'Please enter email and password',
+        buttonRow: false,
+      });
       return;
     }
 
@@ -40,20 +48,28 @@ const LoginScreen = () => {
         password,
       });
       const data = response.data;
-
       if (data.token) {
         login(data.user, data.token); // Save user & token in context
         await AsyncStorage.setItem('accessToken', data.token); // store token
-        console.log('Logged in as:', data.user);
       } else {
-        Alert.alert('Login Failed', data.message || 'Invalid credentials');
+        showModal({
+          mode: 'error',
+          iconName: 'exclamation',
+          iconColor: '#DC3545',
+          title: 'Login Failed',
+          description: 'Please check your credentials and try again',
+          buttonRow: false,
+        });
       }
     } catch (error: any) {
-      console.error('Login Error:', error);
-      Alert.alert(
-        'Login Error',
-        error?.response?.data?.message || error.message || 'Unknown error',
-      );
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Tasks didn’t load. Check your connection and retry.',
+        buttonRow: false,
+      });
     } finally {
       setLoading(false);
     }

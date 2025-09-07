@@ -9,6 +9,7 @@ interface ModalOptions {
   buttonRow?: boolean;
   onConfirm?: () => void;
   onCancel?: () => void;
+  mode?: 'success' | 'confirmation' | 'error';
 }
 
 interface ModalContextType {
@@ -38,6 +39,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({
     <ModalContext.Provider value={{ showModal, hideModal }}>
       {children}
       <SimpleModal
+        mode={options.mode}
         visible={visible}
         title={options.title}
         description={options.description}

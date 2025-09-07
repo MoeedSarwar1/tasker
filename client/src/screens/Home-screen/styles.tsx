@@ -16,6 +16,9 @@ const homeStles = insets =>
       elevation: 2,
     },
 
+    parentView: {
+      gap: 16,
+    },
     editColor: {
       backgroundColor: '#C0C0C0',
       borderRadius: 16,
@@ -30,24 +33,12 @@ const homeStles = insets =>
       elevation: 2,
     },
 
-    parentView: {
-      marginHorizontal: 24,
-      gap: 16,
-    },
-    formView: {
-      paddingBottom: insets.bottom,
-    },
-
     modalText: {
       fontSize: 12,
       color: '#999',
     },
     text: { color: '#F9fafb', fontWeight: 'bold', fontSize: 16 },
 
-    bottomshhetContainer: {
-      backgroundColor: '#F9fafb',
-      borderRadius: 16,
-    },
     flatlistContainer: {
       gap: 16,
       paddingBottom: insets.bottom + 80,

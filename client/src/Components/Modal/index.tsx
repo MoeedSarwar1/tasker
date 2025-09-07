@@ -14,6 +14,7 @@ interface SimpleModalProps {
   onConfirm?: () => void;
   buttonRow?: boolean;
   description?: string;
+  mode?: 'success' | 'confirmation' | 'error';
 }
 
 const SimpleModal: React.FC<SimpleModalProps> = ({
@@ -25,7 +26,36 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
   buttonRow = true,
   iconName,
   iconColor,
+  mode = 'success',
 }) => {
+  // 🎨 Mode-based styles
+  const getModeStyles = () => {
+    switch (mode) {
+      case 'success':
+        return {
+          title: styles.successModalHeader,
+          description: styles.successModalText,
+        };
+      case 'confirmation':
+        return {
+          title: styles.confirmModalHeader,
+          description: styles.confirmModalText,
+        };
+      case 'error':
+        return {
+          title: styles.errorModalHeader,
+          description: styles.errorModalText,
+        };
+      default:
+        return {
+          title: styles.modalHeader,
+          description: styles.modalText,
+        };
+    }
+  };
+
+  const { title: titleStyle, description: descriptionStyle } = getModeStyles();
+
   return (
     <Modal
       visible={visible}
@@ -35,10 +65,11 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
     >
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          <Icon name={iconName} size={64} color={iconColor} />
-          <Text style={styles.successModalHeader}>{title}</Text>
+          {iconName && <Icon name={iconName} size={64} color={iconColor} />}
 
-          <Text style={styles.successModalText}>{description}</Text>
+          <Text style={titleStyle}>{title}</Text>
+          <Text style={descriptionStyle}>{description}</Text>
+
           <View style={styles.buttonRow}>
             {buttonRow && (
               <View style={{ flex: 1 }}>
@@ -81,7 +112,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     padding: 20,
-    borderColor: '#E5E7EB',
     marginHorizontal: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -89,39 +119,33 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  content: {
-    marginBottom: 16,
-  },
+
+  // ✅ Success
+  successModalHeader: { fontSize: 24, fontWeight: 'bold', color: '#1E4620' },
+  successModalText: { fontSize: 12, color: '#4CAF50' },
+
+  // ⚠️ Confirmation
+  confirmModalHeader: { fontSize: 24, fontWeight: 'bold', color: '#664D03' },
+  confirmModalText: { fontSize: 12, color: '#D39E00' },
+
+  // ❌ Error
+  errorModalHeader: { fontSize: 24, fontWeight: 'bold', color: '#58151C' },
+  errorModalText: { fontSize: 12, color: '#DC3545' },
+
+  // Default / fallback
+  modalHeader: { fontSize: 24, fontWeight: 'bold', color: '#333' },
+  modalText: { fontSize: 12, color: '#666' },
+
+  buttonRow: { flexDirection: 'row', gap: 8 },
   closeButton: {
     paddingHorizontal: 6,
     paddingVertical: 10,
     backgroundColor: '#C0C0C0',
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 8,
   },
   addButton: {
     paddingHorizontal: 6,
     paddingVertical: 10,
     backgroundColor: '#4B4B4B',
   },
-  buttonText: {
-    fontSize: 12,
-  },
-  successModalHeader: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#218838',
-  },
-  successModalText: {
-    fontSize: 12,
-    color: '#6FCF97',
-  },
+  buttonText: { fontSize: 12 },
 });

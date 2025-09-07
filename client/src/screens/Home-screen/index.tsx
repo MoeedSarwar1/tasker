@@ -1,15 +1,9 @@
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
-import { Portal } from '@gorhom/portal';
+import BottomSheet from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
   RefreshControl,
   View,
@@ -17,6 +11,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddTask from '../../Components/AddTask/AddTask';
+import CustomBottomSheet from '../../Components/BottomSheet';
 import Header from '../../Components/Header/Header';
 import { Task } from '../../Components/TaskCard/task.interface';
 import TaskCard from '../../Components/TaskCard/TaskCard';
@@ -63,6 +58,7 @@ const HomeScreen = () => {
 
   // Close BottomSheet
   const handleHideModal = () => {
+    setEditMode(false);
     bottomSheetRef.current?.close();
   };
 
@@ -73,8 +69,15 @@ const HomeScreen = () => {
       const data = await fetchTasks();
       setTasks(data);
     } catch (error) {
-      console.error('Fetch Tasks Error:', error);
-      Alert.alert('Error', 'Failed to load tasks');
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Tasks didn’t load. Check your connection and retry.',
+        buttonRow: false,
+        onConfirm: () => onRefresh(),
+      });
     } finally {
       setRefreshing(false);
     }
@@ -106,8 +109,8 @@ const HomeScreen = () => {
       // Update local tasks
       setTasks(prevTasks => [newTask, ...prevTasks]);
       showModal({
-        title: 'Success',
-        description: 'Task Successfully Added',
+        title: 'All Set',
+        description: 'Added Successfully',
         iconName: 'checkbox-marked-circle-outline',
         iconColor: '#28A745',
         onConfirm: () => setEditMode(false),
@@ -115,24 +118,40 @@ const HomeScreen = () => {
       });
       handleHideModal();
     } catch (error: any) {
-      console.error('Add Task Error:', error);
-      Alert.alert(
-        'Error',
-        error?.response?.data?.message || 'Failed to add task',
-      );
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Failed to add task. Check your connection and retry.',
+        buttonRow: false,
+        onConfirm: () => onRefresh(),
+      });
     }
   };
 
   const handleDeleteTask = async (taskId: string) => {
     try {
       const deletedTask = await deleteTask(taskId);
+      showModal({
+        title: 'All Set',
+        description: 'Removed Successfully',
+        iconName: 'checkbox-marked-circle-outline',
+        iconColor: '#28A745',
+        buttonRow: false,
+      });
       await loadTasks();
       return deletedTask;
     } catch (error: any) {
-      Alert.alert(
-        'Error',
-        error?.response?.data?.message || 'Failed to delete task',
-      );
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Failed to delete task. Check your connection and retry.',
+        buttonRow: false,
+        onConfirm: () => onRefresh(),
+      });
     }
   };
 
@@ -140,8 +159,8 @@ const HomeScreen = () => {
     try {
       const updatedTask = await updateTaskCompletion(taskId, completed);
       showModal({
-        title: 'Success',
-        description: 'Marked complete successfully',
+        title: 'All Set',
+        description: 'Completed Successfully',
         iconName: 'checkbox-marked-circle-outline',
         iconColor: '#28A745',
         onConfirm: () => setEditMode(false),
@@ -149,10 +168,16 @@ const HomeScreen = () => {
       });
       return updatedTask;
     } catch (error: any) {
-      Alert.alert(
-        'Error',
-        error?.response?.data?.message || 'Failed to update task status',
-      );
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description:
+          'Failed to mark complete. Check your connection and retry.',
+        buttonRow: false,
+        onConfirm: () => onRefresh(),
+      });
     }
   };
 
@@ -165,8 +190,8 @@ const HomeScreen = () => {
       );
 
       showModal({
-        title: 'Success',
-        description: 'Task Successfully Updated',
+        title: 'All Set',
+        description: 'Update Saved',
         iconName: 'checkbox-marked-circle-outline',
         iconColor: '#28A745',
         onConfirm: () => setEditMode(false),
@@ -174,11 +199,15 @@ const HomeScreen = () => {
       });
       return updatedTask;
     } catch (error: any) {
-      console.error('Update Task Error:', error);
-      Alert.alert(
-        'Error',
-        error?.response?.data?.message || 'Failed to update task',
-      );
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Failed to update task. Check your connection and retry.',
+        buttonRow: false,
+        onConfirm: () => onRefresh(),
+      });
     }
   };
 
@@ -195,10 +224,10 @@ const HomeScreen = () => {
   // Greeting based on time
   const getGreeting = (): string => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 15) return 'Good Noon';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return 'Rise & Shine!';
+    if (hour < 15) return 'Midday Vibes!';
+    if (hour < 18) return 'Good Afternoon!';
+    return 'Good Evening!';
   };
 
   const handleToggleTaskCompletion = async (taskId: string) => {
@@ -217,8 +246,16 @@ const HomeScreen = () => {
       // Call backend
       await updateTaskStatus(taskId, newStatus);
     } catch (error) {
-      console.error('Error toggling task completion:', error);
-      Alert.alert('Error', 'Failed to update task status');
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description:
+          'Failed to mark complete. Check your connection and retry.',
+        buttonRow: false,
+        onConfirm: () => onRefresh(),
+      });
 
       // Optionally revert UI if API fails
       setTasks(prevTasks =>
@@ -232,7 +269,7 @@ const HomeScreen = () => {
     <>
       <Header
         title={getGreeting()}
-        subtitle={`You have ${tasks.length} tasks today`}
+        subtitle={`${tasks.length} tasks scheduled`}
         onPressAdd={handlePresentModal}
       />
 
@@ -241,9 +278,7 @@ const HomeScreen = () => {
           <View style={styles.emptyContainer}>
             <Icon name="notebook-edit-outline" size={64} color="#7f7f7f" />
 
-            <Text style={styles.emptyTextStyle}>
-              Looks like you’re all caught up!
-            </Text>
+            <Text style={styles.emptyTextStyle}>You’re clear for now</Text>
           </View>
         ) : (
           <FlatList
@@ -269,109 +304,70 @@ const HomeScreen = () => {
         )}
       </View>
 
-      <Portal>
-        <BottomSheet
-          ref={bottomSheetRef}
-          backdropComponent={backdropProps => (
-            <BottomSheetBackdrop
-              {...backdropProps}
-              appearsOnIndex={0} // show when index >= 0
-              disappearsOnIndex={-1} // hide when sheet is closed
-              pressBehavior="close"
-              opacity={0.5}
-            />
-          )}
-          index={-1}
-          onClose={handleHideModal}
-          snapPoints={snapPoints}
-          enablePanDownToClose
-          keyboardBehavior="interactive"
-          keyboardBlurBehavior="restore"
-        >
-          <BottomSheetView style={styles.formView}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-            >
-              <AddTask onCancel={handleHideModal} onSubmit={handleAddTask} />
-            </KeyboardAvoidingView>
-          </BottomSheetView>
-        </BottomSheet>
-      </Portal>
+      <CustomBottomSheet
+        ref={bottomSheetRef}
+        onClose={handleHideModal}
+        snapPoints={snapPoints}
+        title="Create Task"
+      >
+        <AddTask onCancel={handleHideModal} onSubmit={handleAddTask} />
+      </CustomBottomSheet>
 
-      <Portal>
-        <BottomSheet
-          ref={moreRef}
-          index={-1}
-          onClose={handleHideModal}
-          snapPoints={moreSnapPoints}
-          enableDynamicSizing
-          enablePanDownToClose
-          keyboardBehavior="interactive"
-          keyboardBlurBehavior="restore"
-          backdropComponent={backdropProps => (
-            <BottomSheetBackdrop
-              {...backdropProps}
-              appearsOnIndex={0} // show when index >= 0
-              disappearsOnIndex={-1} // hide when sheet is closed
-              pressBehavior="close"
-              opacity={0.5}
-            />
-          )}
-          style={styles.bottomshhetContainer}
-        >
-          <BottomSheetView style={styles.formView}>
-            {!editMode ? (
-              <View style={styles.parentView}>
-                <Pressable
-                  onPress={() => {
+      <CustomBottomSheet
+        ref={moreRef}
+        onClose={handleHideModal}
+        title={editMode ? 'Update' : 'Actions'}
+        snapPoints={moreSnapPoints}
+      >
+        {!editMode ? (
+          <View style={styles.parentView}>
+            <Pressable
+              onPress={() => {
+                closeMore();
+                showModal({
+                  mode: 'error',
+                  title: 'Are You Sure?',
+                  iconColor: '#DC3545',
+                  description:
+                    'This action can’t be undone. Do you want to proceed?',
+                  iconName: 'delete-outline',
+                  onCancel: () => openMore(),
+                  onConfirm: () => {
+                    handleDeleteTask(selectedTask?._id);
                     closeMore();
-                    showModal({
-                      title: 'Delete Task',
-                      description: 'Are you sure you want to delete this task?',
-                      iconName: 'delete-outline',
-                      onConfirm: () => {
-                        handleDeleteTask(selectedTask?._id);
-                        closeMore();
-                      },
-                    });
-                  }}
-                  style={styles.childrenWrapperStyle}
-                >
-                  <Text style={styles.text}>Delete</Text>
-                  <Icon name="delete-outline" size={20} color="#F9fafb" />
-                </Pressable>
+                  },
+                });
+              }}
+              style={styles.childrenWrapperStyle}
+            >
+              <Text style={styles.text}>Remove</Text>
+              <Icon name="delete-outline" size={20} color="#F9fafb" />
+            </Pressable>
 
-                <Pressable
-                  style={styles.editColor}
-                  onPress={() => setEditMode(true)}
-                >
-                  <Text style={styles.text}>Edit</Text>
-                  <Pressable hitSlop={10}>
-                    <Icon
-                      name="square-edit-outline"
-                      size={20}
-                      color="#F9fafb"
-                    />
-                  </Pressable>
-                </Pressable>
-              </View>
-            ) : (
-              <AddTask
-                mode="edit" // ✅ tell AddTask this is editing
-                initialTask={selectedTask} // ✅ pass the task directly
-                onSubmit={updatedTask => {
-                  if (selectedTask?._id) {
-                    handleUpdateTask(selectedTask._id, updatedTask); // ✅ no `.item`
-                  }
-                  closeMore();
-                }}
-                onCancel={() => setEditMode(false)}
-              />
-            )}
-          </BottomSheetView>
-        </BottomSheet>
-      </Portal>
+            <Pressable
+              style={styles.editColor}
+              onPress={() => setEditMode(true)}
+            >
+              <Text style={styles.text}>Update</Text>
+              <Pressable hitSlop={10}>
+                <Icon name="square-edit-outline" size={20} color="#F9fafb" />
+              </Pressable>
+            </Pressable>
+          </View>
+        ) : (
+          <AddTask
+            mode="edit" // ✅ tell AddTask this is editing
+            initialTask={selectedTask} // ✅ pass the task directly
+            onSubmit={updatedTask => {
+              if (selectedTask?._id) {
+                handleUpdateTask(selectedTask._id, updatedTask); // ✅ no `.item`
+              }
+              closeMore();
+            }}
+            onCancel={() => setEditMode(false)}
+          />
+        )}
+      </CustomBottomSheet>
     </>
   );
 };
