@@ -65,7 +65,6 @@ const HomeScreen = () => {
 
   // Close BottomSheet
   const handleHideModal = () => {
-    editMode && setEditMode(false);
     bottomSheetRef.current?.close();
   };
 
@@ -155,7 +154,6 @@ const HomeScreen = () => {
       );
 
       setSuccessModalVisible(true);
-      setEditMode(false);
       return updatedTask;
     } catch (error: any) {
       console.error('Update Task Error:', error);
@@ -368,7 +366,10 @@ const HomeScreen = () => {
       <SimpleModal
         buttonRow={false}
         visible={successModalVisible}
-        onConfirm={() => setSuccessModalVisible(false)}
+        onConfirm={() => {
+          setEditMode(false);
+          setSuccessModalVisible(false);
+        }}
       >
         <View style={styles.modalContainer}>
           <Icon

@@ -36,6 +36,7 @@ const AddTask: React.FC<AddTaskProps> = ({
   onCancel,
   mode,
 }) => {
+  const isEditing = mode === 'edit' || !!initialTask; // ✅ determine if editing or adding
   const [title, setTitle] = useState(initialTask?.title || '');
   const [description, setDescription] = useState(
     initialTask?.description || '',
@@ -81,7 +82,12 @@ const AddTask: React.FC<AddTaskProps> = ({
           | null,
       });
 
-      // ✅ Only reset if adding new task
+      if (!isEditing) {
+        setTitle('');
+        setDescription('');
+        setSelectedChip(null);
+        setDate(new Date());
+      }
     }
   };
 
