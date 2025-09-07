@@ -7,9 +7,11 @@ export interface ChipProps {
   selected?: boolean;
   onPress?: () => void;
   color?: string; // background color when selected
+  id?: string;
 }
 
 const Chip: React.FC<ChipProps> = ({
+  id,
   label,
   selected = false,
   onPress,
@@ -17,6 +19,7 @@ const Chip: React.FC<ChipProps> = ({
 }) => {
   return (
     <Pressable
+      id={id}
       onPress={onPress}
       style={[
         styles.chip,

@@ -25,9 +25,11 @@ import {
   fetchTasks,
   postTask,
   updateTask,
+  updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Task } from '../../Components/TaskCard/task.interface';
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
@@ -42,19 +44,30 @@ const HomeScreen = () => {
   );
   const moreSnapPoints = useMemo(() => ['25%'], []);
   const styles = homeStles(insets);
-  const [selectedTask, setSelectedTask] = useState<any | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
-  const openMore = () => moreRef.current?.expand();
-  const closeMore = () => moreRef.current?.close();
+  const openMore = (task: Task) => {
+    setSelectedTask(task);
+    moreRef.current?.expand();
+  };
+
+  const closeMore = () => {
+    setSelectedTask(null);
+    moreRef.current?.close();
+  };
 
   // Open BottomSheet
   const handlePresentModal = () => bottomSheetRef.current?.expand();
 
   // Close BottomSheet
-  const handleHideModal = () => bottomSheetRef.current?.close();
+  const handleHideModal = () => {
+    editMode && setEditMode(false);
+    bottomSheetRef.current?.close();
+  };
 
   // Fetch tasks from backend
   const loadTasks = async () => {
@@ -122,7 +135,7 @@ const HomeScreen = () => {
 
   const updateTaskStatus = async (taskId: string, completed: boolean) => {
     try {
-      const updatedTask = await updateTask(taskId, completed);
+      const updatedTask = await updateTaskCompletion(taskId, completed);
       setCompleted(true);
       return updatedTask;
     } catch (error: any) {
@@ -132,6 +145,27 @@ const HomeScreen = () => {
       );
     }
   };
+
+  const handleUpdateTask = async (taskId: string, task: Task) => {
+    try {
+      const updatedTask = await updateTask(taskId, task);
+
+      setTasks(
+        prev => prev.map(t => (t._id === taskId ? updatedTask : t)), // ✅ replace with updatedTask
+      );
+
+      setSuccessModalVisible(true);
+      setEditMode(false);
+      return updatedTask;
+    } catch (error: any) {
+      console.error('Update Task Error:', error);
+      Alert.alert(
+        'Error',
+        error?.response?.data?.message || 'Failed to update task',
+      );
+    }
+  };
+
   // Pull-to-refresh
   const onRefresh = async () => {
     await loadTasks();
@@ -186,19 +220,12 @@ const HomeScreen = () => {
         onPressAdd={handlePresentModal}
       />
 
-      <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
+      <View style={styles.container}>
         {tasks.length === 0 ? (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 16,
-            }}
-          >
+          <View style={styles.emptyContainer}>
             <Icon name="notebook-edit-outline" size={64} color="#7f7f7f" />
 
-            <Text style={{ color: '#7f7f7f', fontSize: 16 }}>
+            <Text style={styles.emptyTextStyle}>
               Looks like you’re all caught up!
             </Text>
           </View>
@@ -206,22 +233,19 @@ const HomeScreen = () => {
           <FlatList
             data={tasks}
             showsVerticalScrollIndicator
-            style={{ paddingTop: 24 }}
-            contentContainerStyle={{
-              gap: 16,
-              paddingBottom: insets.bottom + 80,
-            }}
+            style={styles.list}
+            contentContainerStyle={styles.flatlistContainer}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            keyExtractor={(item, index) => item.id || index.toString()}
+            keyExtractor={(item, index) => item._id || index.toString()}
             renderItem={({ item }) => (
               <TaskCard
                 item={item}
                 onChange={() => handleToggleTaskCompletion(item._id)}
                 onMorePress={() => {
                   setSelectedTask(item); // save which task we want to act on
-                  openMore(); // open the "More" bottom sheet
+                  openMore(item); // open the "More" bottom sheet
                 }}
               />
             )}
@@ -253,7 +277,7 @@ const HomeScreen = () => {
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
               keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
             >
-              <AddTask onCancle={handleHideModal} onSubmit={handleAddTask} />
+              <AddTask onCancel={handleHideModal} onSubmit={handleAddTask} />
             </KeyboardAvoidingView>
           </BottomSheetView>
         </BottomSheet>
@@ -278,37 +302,49 @@ const HomeScreen = () => {
               opacity={0.5}
             />
           )}
-          style={{
-            backgroundColor: '#F9fafb',
-            borderRadius: 16,
-            zIndex: 10000,
-          }}
+          style={styles.bottomshhetContainer}
         >
-          <BottomSheetView style={styles.parentView}>
-            <Pressable
-              onPress={() => {
-                closeMore();
-                setModalVisible(true);
-              }}
-              style={styles.childrenWrapperStyle}
-            >
-              <Text
-                style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
-              >
-                Delete
-              </Text>
-              <Icon name="delete-outline" size={20} color="#F9fafb" />
-            </Pressable>
-            <View style={styles.editColor}>
-              <Text
-                style={{ color: '#F9fafb', fontWeight: 'bold', fontSize: 16 }}
-              >
-                Edit
-              </Text>
-              <Pressable hitSlop={10}>
-                <Icon name="square-edit-outline" size={20} color="#F9fafb" />
-              </Pressable>
-            </View>
+          <BottomSheetView style={styles.formView}>
+            {!editMode ? (
+              <View style={styles.parentView}>
+                <Pressable
+                  onPress={() => {
+                    closeMore();
+                    setModalVisible(true);
+                  }}
+                  style={styles.childrenWrapperStyle}
+                >
+                  <Text style={styles.text}>Delete</Text>
+                  <Icon name="delete-outline" size={20} color="#F9fafb" />
+                </Pressable>
+
+                <Pressable
+                  style={styles.editColor}
+                  onPress={() => setEditMode(true)}
+                >
+                  <Text style={styles.text}>Edit</Text>
+                  <Pressable hitSlop={10}>
+                    <Icon
+                      name="square-edit-outline"
+                      size={20}
+                      color="#F9fafb"
+                    />
+                  </Pressable>
+                </Pressable>
+              </View>
+            ) : (
+              <AddTask
+                mode="edit" // ✅ tell AddTask this is editing
+                initialTask={selectedTask} // ✅ pass the task directly
+                onSubmit={updatedTask => {
+                  if (selectedTask?._id) {
+                    handleUpdateTask(selectedTask._id, updatedTask); // ✅ no `.item`
+                  }
+                  closeMore();
+                }}
+                onCancel={() => setEditMode(false)}
+              />
+            )}
           </BottomSheetView>
         </BottomSheet>
       </Portal>
@@ -342,7 +378,15 @@ const HomeScreen = () => {
           />
           <Text style={styles.successModalHeader}>Success</Text>
 
-          <Text style={styles.successModalText}>Task added successfully!</Text>
+          <Text style={styles.successModalText}>
+            <Text style={styles.successModalText}>
+              <Text style={styles.successModalText}>
+                {editMode
+                  ? 'Task updated successfully!'
+                  : 'Task added successfully!'}
+              </Text>
+            </Text>
+          </Text>
         </View>
       </SimpleModal>
       <SimpleModal

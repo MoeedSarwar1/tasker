@@ -1,18 +1,26 @@
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, TextInput, View } from 'react-native';
 import Button from '../Button';
 import Chip from '../Chips';
 import Text from '../Text';
 
 const chipData = [
-  { label: 'High Priority', color: '#333333' },
-  { label: 'Medium Priority', color: '#666666' },
-  { label: 'Low Priority', color: '#999999' },
+  { id: 'high', label: 'High Priority', color: '#333333' },
+  { id: 'medium', label: 'Medium Priority', color: '#666666' },
+  { id: 'low', label: 'Low Priority', color: '#999999' },
 ];
+
 interface AddTaskProps {
+  initialTask?: {
+    title: string;
+    description: string;
+    dueDate: Date | string;
+    priority: 'Low priority' | 'Medium priority' | 'High priority';
+  };
+  mode: 'add' | 'edit'; // ✅ mode prop to determine Add or Edit
   onSubmit: (task: {
     title: string;
     description: string;
@@ -22,11 +30,30 @@ interface AddTaskProps {
   onCancel: () => void;
 }
 
-const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedChip, setSelectedChip] = useState<string | null>(null);
-  const [date, setDate] = useState(new Date());
+const AddTask: React.FC<AddTaskProps> = ({
+  initialTask,
+  onSubmit,
+  onCancel,
+  mode,
+}) => {
+  const [title, setTitle] = useState(initialTask?.title || '');
+  const [description, setDescription] = useState(
+    initialTask?.description || '',
+  );
+  const [selectedChip, setSelectedChip] = useState(
+    initialTask?.priority || 'High Priority',
+  );
+  const [date, setDate] = useState<Date>(
+    initialTask?.dueDate ? new Date(initialTask.dueDate) : new Date(), // ✅ always Date
+  );
+  useEffect(() => {
+    if (initialTask) {
+      setTitle(initialTask.title);
+      setDescription(initialTask.description);
+      setSelectedChip(initialTask.priority);
+      setDate(new Date(initialTask.dueDate)); // ✅ ensure Date
+    }
+  }, [initialTask]);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleDateChange = (
@@ -36,27 +63,25 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
     if (event.type === 'set' && selectedDate) {
       setDate(selectedDate);
     }
-    // always hide picker on Android after selecting/canceling
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
     }
   };
+
   const handleSubmit = () => {
     if (title.trim() && description.trim()) {
       onSubmit({
         title,
         description,
-        dueDate: date.toDateString() as Date | string,
+        dueDate: date.toISOString(), // ✅ correct format for backend
         priority: selectedChip as
           | 'Low priority'
           | 'Medium priority'
           | 'High priority'
           | null,
       });
-      setTitle('');
-      setDescription('');
-      setSelectedChip(null);
-      setDate(new Date()); // optional reset
+
+      // ✅ Only reset if adding new task
     }
   };
 
@@ -97,7 +122,6 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
               <DateTimePicker
                 mode="date"
                 value={date}
-                dateFormat="shortdate"
                 display="default"
                 onChange={handleDateChange}
               />
@@ -111,7 +135,6 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
           <DateTimePicker
             mode="date"
             value={date}
-            dateFormat="shortdate"
             display="spinner"
             onChange={handleDateChange}
           />
@@ -122,6 +145,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {chipData.map(chip => (
           <Chip
+            id={chip.id}
             key={chip.label}
             label={chip.label}
             color={chip.color}
@@ -137,7 +161,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onSubmit, onCancel }) => {
         </View>
         <View style={{ flex: 1 }}>
           <Button
-            title="Add Task"
+            title={mode === 'edit' ? 'Update Task' : 'Add Task'} // ✅ dynamic button text
             style={styles.addButton}
             onPress={handleSubmit}
           />

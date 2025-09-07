@@ -31,7 +31,6 @@ const homeStles = insets =>
     },
 
     parentView: {
-      paddingBottom: insets.bottom,
       marginHorizontal: 24,
       gap: 16,
     },
@@ -57,7 +56,29 @@ const homeStles = insets =>
       fontWeight: 'bold',
       color: '#333',
     },
+    text: { color: '#F9fafb', fontWeight: 'bold', fontSize: 16 },
 
+    bottomshhetContainer: {
+      backgroundColor: '#F9fafb',
+      borderRadius: 16,
+    },
+    flatlistContainer: {
+      gap: 16,
+      paddingBottom: insets.bottom + 80,
+    },
+    list: {
+      paddingTop: 24,
+    },
+    emptyTextStyle:{
+ color: '#7f7f7f', fontSize: 16 
+    },
+    emptyContainer:{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 16,
+            },
+    container:{ flex: 1, backgroundColor: '#F9fafb' },
     modalContainer: {
       alignItems: 'center',
       gap: 8,

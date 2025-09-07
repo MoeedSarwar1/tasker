@@ -1,3 +1,4 @@
+import { Task } from '../Components/TaskCard/task.interface';
 import client from './Client';
 import { API_ENDPOINTS } from './Endpoints';
 
@@ -33,11 +34,25 @@ export const deleteTask = async (taskId: string) => {
   }
 };
 
-export const updateTask = async (taskId: string, completed: boolean) => {
+export const updateTaskCompletion = async (
+  taskId: string,
+  completed: boolean,
+) => {
   try {
     const response = await client.patch(
       `${API_ENDPOINTS.PATCH_TASK}/${taskId}`,
       { completed },
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error('Update Task Error:', error);
+  }
+};
+export const updateTask = async (taskId: string, updatedTask: Task) => {
+  try {
+    const response = await client.patch(
+      `${API_ENDPOINTS.PATCH_TASK}/${taskId}`,
+      updatedTask,
     );
     return response.data;
   } catch (error: any) {
