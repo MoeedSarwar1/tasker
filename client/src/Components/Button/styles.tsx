@@ -12,7 +12,7 @@ const buttonStyles = () =>
     buttonText: {
       fontSize: 18,
       color: '#FFFFFF',
-      fontWeight: 'semibold',
+      fontFamily: 'Poppins-SemiBold', // <-- change font here
     },
   });
 export default buttonStyles;

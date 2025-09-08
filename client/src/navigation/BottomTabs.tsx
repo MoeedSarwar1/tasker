@@ -1,10 +1,10 @@
-import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeStack from './Home-stack';
-import { tabNames } from './enums';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from 'react';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { tabNames } from './enums';
+import { FriendsStack, HomeStack } from './Home-stack';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
@@ -50,7 +50,7 @@ const BottomTabs = () => {
       />
       <Tabs.Screen
         name={tabNames.FRIENDS}
-        component={HomeStack}
+        component={FriendsStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon

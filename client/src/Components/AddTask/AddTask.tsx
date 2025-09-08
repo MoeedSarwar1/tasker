@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   label: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold', // <-- change font here
     fontSize: 16,
     marginBottom: 8,
     marginTop: 8,

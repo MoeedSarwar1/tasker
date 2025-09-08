@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold', // <-- change font here
     color: '#333',
   },
   separator: {

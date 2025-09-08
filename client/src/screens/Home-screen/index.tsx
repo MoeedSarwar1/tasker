@@ -32,7 +32,7 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
-  const [filter, setFilter] = useState('all'); // all | pending | completed
+  const [filter, setFilter] = useState('All'); // all | pending | completed
   const snapPoints = useMemo(
     () => (isKeyboardVisible ? ['65%'] : ['55%']),
     [isKeyboardVisible],
@@ -267,17 +267,24 @@ const HomeScreen = () => {
     }
   };
   const filteredTasks = tasks.filter(task => {
-    if (filter === 'All') return true;
     if (filter === 'Pending') return !task.completed;
     if (filter === 'Completed') return task.completed;
-    return true;
+    return true; // for 'All'
   });
+
+  const subtitle =
+    filter === 'All'
+      ? `${tasks.length} tasks in total`
+      : filter === 'Pending'
+      ? `${filteredTasks.length} pending tasks`
+      : `${filteredTasks.length} completed tasks`;
   return (
     <>
       <Header
         title={getGreeting()}
         showChips
-        subtitle={`${filteredTasks.length} tasks scheduled`}
+        showAdd
+        subtitle={subtitle}
         onPressAdd={handlePresentModal}
         onFilterChange={setFilter} // ✅ update filter state when chip is tapped
       />

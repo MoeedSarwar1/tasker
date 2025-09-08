@@ -22,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({
   iconName = 'add',
   onFilterChange,
   showChips,
+  showAdd,
 }) => {
   const insets = useSafeAreaInsets();
   const styles = headerStyles(insets);
@@ -35,15 +36,17 @@ const Header: React.FC<HeaderProps> = ({
       <View style={styles.headerRow}>
         <View>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
+          {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
         </View>
-        <Pressable onPress={handleAdd} hitSlop={10}>
-          <Icon
-            name={iconName}
-            size={bottomSheetHeader ? 16 : 24}
-            color="#14a3c7"
-          />
-        </Pressable>
+        {showAdd && (
+          <Pressable onPress={handleAdd} hitSlop={10}>
+            <Icon
+              name={iconName}
+              size={bottomSheetHeader ? 16 : 24}
+              color="#14a3c7"
+            />
+          </Pressable>
+        )}
       </View>
       {showChips && (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 16 }}>

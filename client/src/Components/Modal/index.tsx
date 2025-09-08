@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   successModalHeader: {
     textAlign: 'center',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold', // <-- change font here
     color: '#1E4620',
   },
   successModalText: { textAlign: 'center', fontSize: 12, color: '#4CAF50' },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   confirmModalHeader: {
     textAlign: 'center',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold', // <-- change font here
     color: '#664D03',
   },
   confirmModalText: { textAlign: 'center', fontSize: 12, color: '#D39E00' },
@@ -142,13 +142,17 @@ const styles = StyleSheet.create({
   errorModalHeader: {
     textAlign: 'center',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold', // <-- change font here
     color: '#58151C',
   },
   errorModalText: { textAlign: 'center', fontSize: 12, color: '#DC3545' },
 
   // Default / fallback
-  modalHeader: { fontSize: 24, fontWeight: 'bold', color: '#333' },
+  modalHeader: {
+    fontSize: 24,
+    fontFamily: 'Poppins-Bold', // <-- change font here
+    color: '#333',
+  },
   modalText: { fontSize: 12, color: '#666' },
 
   buttonRow: { flexDirection: 'row', gap: 8, marginTop: 8 },

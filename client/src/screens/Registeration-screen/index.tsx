@@ -85,7 +85,7 @@ const RegisterScreen = () => {
     >
       <View style={styles.logoContainer}>
         <Image
-          source={require('../../assets/images/logo.png')}
+          source={require('../../../assets/images/logo.png')}
           style={styles.imageStyles}
         />
         <Text style={styles.textStyles}>Organize your day,</Text>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontWeight: 'bold',
+      fontFamily: 'Poppins-Bold', // <-- change font here
     fontSize: 16,
   },
   logoContainer: {

@@ -17,7 +17,7 @@ const cardStyles = () =>
     },
     title: {
       fontSize: 16,
-      fontWeight: 'semibold',
+      fontFamily: 'Poppins-SemiBold', // <-- change font here
       color: '#111827',
       marginBottom: 4,
     },

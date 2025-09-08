@@ -18,11 +18,11 @@ const headerStyles = insets =>
     headerRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent:'space-between'
+      justifyContent: 'space-between',
     },
     title: {
       fontSize: 32,
-      fontWeight: 'bold',
+      fontFamily: 'Poppins-Bold', // <-- change font here
       color: '#333',
     },
     subtitle: {

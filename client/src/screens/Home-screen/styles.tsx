@@ -17,7 +17,7 @@ const homeStles = insets =>
     },
 
     parentView: {
-      paddingBottom:insets.bottom,
+      paddingBottom: insets.bottom,
       gap: 16,
     },
     editColor: {
@@ -38,7 +38,11 @@ const homeStles = insets =>
       fontSize: 12,
       color: '#999',
     },
-    text: { color: '#F9fafb', fontWeight: 'bold', fontSize: 16 },
+    text: {
+      color: '#F9fafb',
+      fontFamily: 'Poppins-Bold', // <-- change font here
+      fontSize: 16,
+    },
 
     flatlistContainer: {
       gap: 16,
