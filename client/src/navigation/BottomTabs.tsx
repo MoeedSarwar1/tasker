@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { tabNames } from './enums';
-import { FriendsStack, HomeStack } from './Home-stack';
+import { FriendsStack, HomeStack, SettingsStack } from './Home-stack';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
@@ -55,6 +55,19 @@ const BottomTabs = () => {
           tabBarIcon: ({ focused }) => (
             <Icon
               name="account-group"
+              size={26}
+              color={focused ? '#333333' : '#C0C0C0'}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name={tabNames.SETTINGS}
+        component={SettingsStack}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name="account-settings"
               size={26}
               color={focused ? '#333333' : '#C0C0C0'}
             />

@@ -34,6 +34,8 @@ const Chip: React.FC<ChipProps> = ({
 const styles = StyleSheet.create({
   chip: {
     paddingVertical: 6,
+    justifyContent:'center',
+    alignItems:'center',
     paddingHorizontal: 12,
     borderRadius: 16,
     borderWidth: 1,

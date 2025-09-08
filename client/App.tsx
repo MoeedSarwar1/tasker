@@ -10,8 +10,16 @@ import BottomTabs from './src/navigation/BottomTabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ModalProvider } from './src/context/Modal-context';
 const RootNavigator = () => {
-  const { token } = useAuth();
+  const { token, loading } = useAuth();
 
+  if (loading) {
+    // temporary splash or loader
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
       {token ? <BottomTabs /> : <AuthStack />}

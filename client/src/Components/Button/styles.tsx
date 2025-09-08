@@ -5,6 +5,7 @@ const buttonStyles = () =>
     container: {
       borderRadius: 16,
       backgroundColor: '#4B4B4B',
+      justifyContent:'center',
       alignItems: 'center',
       paddingHorizontal: 24,
       paddingVertical: 16,
