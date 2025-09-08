@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   bottomshhetContainer: {
-    backgroundColor: '#F9fafb',
     borderRadius: 16,
   },
   parentView: {

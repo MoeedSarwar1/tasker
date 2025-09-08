@@ -18,6 +18,7 @@ const homeStles = insets =>
 
     parentView: {
       paddingBottom: insets.bottom,
+    marginTop: 8,
       gap: 16,
     },
     editColor: {

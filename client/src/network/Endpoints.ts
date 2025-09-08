@@ -7,4 +7,6 @@ export const API_ENDPOINTS = {
   GET_TASKS: 'users/tasks',
   DELETE_TASK: 'users/tasks',
   PATCH_TASK: 'users/tasks',
+  ADD_FRIENDS: '/friends/add',
+  GET_FRIENDS: '/friends/',
 };

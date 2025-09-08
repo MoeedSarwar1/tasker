@@ -6,6 +6,8 @@ const searchBarStyles = () =>
       flexDirection: 'row-reverse',
       gap: '8',
       alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#ccc',
       backgroundColor: '#FFFFFF',
       borderRadius: 16,
       color: '#333',
