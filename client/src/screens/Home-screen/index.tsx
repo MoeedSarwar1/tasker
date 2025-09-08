@@ -1,7 +1,6 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
   FlatList,
   Keyboard,
   Pressable,
@@ -33,6 +32,7 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
+  const [filter, setFilter] = useState('all'); // all | pending | completed
   const snapPoints = useMemo(
     () => (isKeyboardVisible ? ['65%'] : ['55%']),
     [isKeyboardVisible],
@@ -266,16 +266,24 @@ const HomeScreen = () => {
       );
     }
   };
+  const filteredTasks = tasks.filter(task => {
+    if (filter === 'All') return true;
+    if (filter === 'Pending') return !task.completed;
+    if (filter === 'Completed') return task.completed;
+    return true;
+  });
   return (
     <>
       <Header
         title={getGreeting()}
-        subtitle={`${tasks.length} tasks scheduled`}
+        showChips
+        subtitle={`${filteredTasks.length} tasks scheduled`}
         onPressAdd={handlePresentModal}
+        onFilterChange={setFilter} // ✅ update filter state when chip is tapped
       />
 
       <View style={styles.container}>
-        {tasks.length === 0 ? (
+        {filteredTasks.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Icon name="notebook-edit-outline" size={64} color="#7f7f7f" />
 
@@ -283,7 +291,7 @@ const HomeScreen = () => {
           </View>
         ) : (
           <FlatList
-            data={tasks}
+            data={filteredTasks} // ✅ only filtered tasks shown
             showsVerticalScrollIndicator
             style={styles.list}
             contentContainerStyle={styles.flatlistContainer}

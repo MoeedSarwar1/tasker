@@ -1,10 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   TextInput,
   View,
 } from 'react-native';
@@ -24,6 +26,7 @@ const LoginScreen = () => {
   const { login } = useAuth();
   const { showModal } = useModal();
 
+  const [isHidden, setIsHidden] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -105,14 +108,23 @@ const LoginScreen = () => {
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#999"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+          <View style={styles.input}>
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#999"
+              value={password}
+              style={{ flex: 1 }}
+              onChangeText={setPassword}
+              secureTextEntry={isHidden}
+            />
+            <Pressable onPress={() => setIsHidden(prev => !prev)}>
+              <Icon
+                name={isHidden ? 'eye-off' : 'eye'}
+                size={16}
+                color="#999"
+              />
+            </Pressable>
+          </View>
         </View>
 
         <Button title={loading ? '' : 'Login'} onPress={handleLogin} />

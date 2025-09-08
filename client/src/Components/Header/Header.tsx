@@ -5,6 +5,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { HeaderProps } from './header.interface';
 import headerStyles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Chip from '../Chips';
+import { useState } from 'react';
+
+const chipData = [
+  { id: 'all', label: 'All', color: '#666666' },
+  { id: 'pending', label: 'Pending', color: '#666666' },
+  { id: 'completed', label: 'Completed', color: '#666666' },
+];
 
 const Header: React.FC<HeaderProps> = ({
   title,
@@ -12,6 +20,8 @@ const Header: React.FC<HeaderProps> = ({
   bottomSheetHeader = false,
   subtitle = '',
   iconName = 'add',
+  onFilterChange,
+  showChips,
 }) => {
   const insets = useSafeAreaInsets();
   const styles = headerStyles(insets);
@@ -19,19 +29,39 @@ const Header: React.FC<HeaderProps> = ({
     onPressAdd?.();
   };
 
+  const [selectedChip, setSelectedChip] = useState('All');
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
+      <View style={styles.headerRow}>
+        <View>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
+        </View>
+        <Pressable onPress={handleAdd} hitSlop={10}>
+          <Icon
+            name={iconName}
+            size={bottomSheetHeader ? 16 : 24}
+            color="#14a3c7"
+          />
+        </Pressable>
       </View>
-      <Pressable onPress={handleAdd} hitSlop={10}>
-        <Icon
-          name={iconName}
-          size={bottomSheetHeader ? 16 : 24}
-          color="#14a3c7"
-        />
-      </Pressable>
+      {showChips && (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 16 }}>
+          {chipData.map(chip => (
+            <Chip
+              id={chip.id}
+              key={chip.label}
+              label={chip.label}
+              color={chip.color}
+              selected={selectedChip === chip.label}
+              onPress={() => {
+                setSelectedChip(chip.label);
+                onFilterChange?.(chip.label);
+              }}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 };

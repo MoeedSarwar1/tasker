@@ -21,6 +21,10 @@ const loginStyles = () =>
       color: '#4B5563',
     },
     input: {
+      flexDirection: 'row',
+      gap: '8',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       backgroundColor: '#FFFFFF',
       borderRadius: 16,
       color: '#333',

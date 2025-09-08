@@ -13,7 +13,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const AuthStack: React.FC = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
       <Stack.Screen name={NavigationRoutes.LOGIN} component={LoginScreen} />
       <Stack.Screen
         name={NavigationRoutes.REGISTER}

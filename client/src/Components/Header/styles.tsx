@@ -5,9 +5,7 @@ const headerStyles = insets =>
     container: {
       padding: 16,
       paddingTop: insets.top,
-      alignItems: 'center',
       backgroundColor: '#FFFFFF',
-      flexDirection: 'row',
       borderBottomWidth: 1,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
@@ -16,6 +14,11 @@ const headerStyles = insets =>
       elevation: 2,
       justifyContent: 'space-between',
       borderBottomColor: '#eee',
+    },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent:'space-between'
     },
     title: {
       fontSize: 32,

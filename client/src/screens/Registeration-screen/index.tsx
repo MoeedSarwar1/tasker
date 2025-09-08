@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   TextInput,
   View,
@@ -26,6 +28,7 @@ const RegisterScreen = () => {
   const [loading, setLoading] = useState(false);
   const { showModal } = useModal();
 
+  const [isHidden, setIsHidden] = useState(true);
   const handleRegister = async () => {
     // Basic validation
     if (!firstName || !lastName || !email || !password) {
@@ -72,7 +75,7 @@ const RegisterScreen = () => {
   };
 
   const onLinkPress = () => {
-    navigation.navigate(NavigationRoutes.LOGIN as never);
+    navigation.goBack();
   };
   return (
     <KeyboardAvoidingView
@@ -113,14 +116,19 @@ const RegisterScreen = () => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          placeholderTextColor="#999"
-          secureTextEntry
-        />
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#999"
+            value={password}
+            style={{ flex: 1 }}
+            onChangeText={setPassword}
+            secureTextEntry={isHidden}
+          />
+          <Pressable onPress={() => setIsHidden(prev => !prev)}>
+            <Icon name={isHidden ? 'eye-off' : 'eye'} size={16} color="#999" />
+          </Pressable>
+        </View>
       </View>
 
       <Button title={loading ? '' : 'Register'} onPress={handleRegister} />
@@ -145,9 +153,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#faf9fb',
   },
   input: {
-    color: '#333',
+    flexDirection: 'row',
+    gap: '8',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
+    color: '#333',
     padding: 16,
     marginBottom: 16,
   },

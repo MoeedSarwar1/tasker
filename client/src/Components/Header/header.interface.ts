@@ -4,4 +4,6 @@ export interface HeaderProps {
   bottomSheetHeader?: boolean;
   iconName?: string;
   subtitle?: string;
+  onFilterChange?: (filter: string) => void; // 🔥 new prop
+  showChips?: boolean;
 }

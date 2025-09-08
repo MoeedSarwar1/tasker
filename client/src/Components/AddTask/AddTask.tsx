@@ -8,9 +8,9 @@ import Chip from '../Chips';
 import Text from '../Text';
 
 const chipData = [
-  { id: 'high', label: 'Urgent', color: '#333333' },
-  { id: 'medium', label: 'Normal', color: '#666666' },
-  { id: 'low', label: 'Low Key', color: '#999999' },
+  { label: 'Urgent', color: '#333333' },
+  { label: 'Normal', color: '#666666' },
+  { label: 'Low Key', color: '#999999' },
 ];
 
 interface AddTaskProps {
@@ -18,14 +18,14 @@ interface AddTaskProps {
     title: string;
     description: string;
     dueDate: Date | string;
-    priority: 'Low priority' | 'Medium priority' | 'High priority';
+    priority: 'Urgent' | 'Medium' | 'Low Key' | null;
   };
   mode: 'add' | 'edit';
   onSubmit: (task: {
     title: string;
     description: string;
     dueDate: Date | string;
-    priority: 'Low priority' | 'Medium priority' | 'High priority' | null;
+    priority: 'Urgent' | 'Medium' | 'Low Key' | null;
   }) => void;
   onCancel: () => void;
 }
@@ -42,7 +42,7 @@ const AddTask: React.FC<AddTaskProps> = ({
     initialTask?.description || '',
   );
   const [selectedChip, setSelectedChip] = useState(
-    initialTask?.priority || 'Urgent',
+    initialTask?.priority || 'Normal',
   );
   const [date, setDate] = useState<Date>(
     initialTask?.dueDate ? new Date(initialTask.dueDate) : new Date(),
