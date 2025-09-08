@@ -10,3 +10,15 @@ export const fetchFriends = async () => {
     return []; // return empty array on error
   }
 };
+export const addFriends = async (firstName: string, lastName: string) => {
+  try {
+    const response = await client.post(API_ENDPOINTS.ADD_FRIENDS, {
+      firstName,
+      lastName,
+    });
+    return response.data; // new friend object or updated list
+  } catch (error: any) {
+    console.error('Add Friend Error:', error?.response?.data || error.message);
+    throw error; // let caller handle it
+  }
+};

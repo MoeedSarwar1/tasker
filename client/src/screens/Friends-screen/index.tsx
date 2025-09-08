@@ -7,37 +7,47 @@ import Header from '../../Components/Header/Header';
 import Searchbar from '../../Components/SearchBar';
 import Text from '../../Components/Text';
 import { useModal } from '../../context/Modal-context';
-import { fetchFriends } from '../../network/Friends';
+import { addFriends, fetchFriends } from '../../network/Friends';
 import friendsStyles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { fetchUsers } from '../../network/User';
 
 const FriendsScreen = () => {
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['90%'], []);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const [friends, setFriends] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const { showModal } = useModal();
 
-  const handlePresentModal = () => bottomSheetRef.current?.expand();
+  const [friends, setFriends] = useState<any[]>([]);
+  const [filteredFriends, setFilteredFriends] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchResetKey, setSearchResetKey] = useState(0);
+
   const handleHideModal = () => {
     bottomSheetRef.current?.close();
+    setSearchResetKey(prev => prev + 1); // trigger reset
   };
+
+  const { showModal } = useModal();
   const insets = useSafeAreaInsets();
   const styles = friendsStyles(insets);
 
-  const loadTasks = async () => {
+  const handlePresentModal = () => bottomSheetRef.current?.expand();
+
+  // ✅ Load current friends
+  const loadFriends = async () => {
     try {
       setRefreshing(true);
-      const data = await fetchFriends();
-
+      const data = await fetchFriends(); // returns user objects of friends
       setFriends(data);
+      setFilteredFriends(data);
     } catch (error) {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
         iconColor: '#DC3545',
         title: 'Something Went Wrong,',
-        description: 'Tasks didn’t load. Check your connection and retry.',
+        description: 'Friends didn’t load. Check your connection and retry.',
         buttonRow: false,
         onConfirm: () => onRefresh(),
       });
@@ -45,35 +55,138 @@ const FriendsScreen = () => {
       setRefreshing(false);
     }
   };
-  const onRefresh = async () => {
-    await loadTasks();
+
+  // ✅ Load all users
+  const loadUsers = async () => {
+    try {
+      const data = await fetchUsers();
+      setUsers(data);
+      setFilteredUsers([]); // empty until search
+    } catch (error) {
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Users didn’t load. Check your connection and retry.',
+        buttonRow: false,
+      });
+    }
   };
 
-  // Fetch tasks on mount
+  // ✅ Add Friend
+  const handleAddFriend = async (firstName: string, lastName: string) => {
+    try {
+      console.log('Adding friend:', firstName, lastName); // 👀 debug
+      const addedFriend = await addFriends(firstName, lastName);
+
+      setFriends(prev => [...prev, addedFriend]);
+      setFilteredFriends(prev => [...prev, addedFriend]);
+
+      showModal({
+        title: 'All Set',
+        description: `${firstName} ${lastName} added successfully 🎉`,
+        iconName: 'checkbox-marked-circle-outline',
+        iconColor: '#28A745',
+        buttonRow: false,
+      });
+
+      handleHideModal();
+    } catch (error: any) {
+      console.error(
+        'Add friend failed:',
+        error?.response?.data || error.message,
+      );
+      showModal({
+        mode: 'error',
+        iconName: 'account-cancel-outline',
+        iconColor: '#DC3545',
+        title: 'Could not add friend',
+        description: error?.response?.data?.message || 'User not found',
+        buttonRow: false,
+      });
+    }
+  };
+
+  // ✅ Refresh
+  const onRefresh = async () => {
+    await loadFriends();
+  };
+
   useEffect(() => {
-    loadTasks();
+    loadFriends();
+    loadUsers();
   }, []);
+
+  // ✅ Search users
+  const handleSearchUsers = (text: string) => {
+    if (!text.trim()) {
+      setFilteredUsers([]);
+      return;
+    }
+
+    const results = users.filter(
+      user =>
+        (user?.firstName?.includes(text) || user?.lastName?.includes(text)) ??
+        false,
+    );
+    setFilteredUsers(results);
+  };
+
+  // ✅ Search friends
+  const handleSearch = (text: string) => {
+    if (!text.trim()) {
+      setFilteredFriends(friends);
+      return;
+    }
+
+    const results = friends.filter(
+      friend =>
+        (friend?.firstName?.includes(text) ||
+          friend?.lastName?.includes(text)) ??
+        false,
+    );
+    setFilteredFriends(results);
+  };
+
+  // ✅ Add friend status to search results
+  const usersWithStatus = filteredUsers.map(u => ({
+    ...u,
+    isFriend: friends.some(f => f._id === u._id),
+  }));
 
   return (
     <>
-      <Header title="Friends" showAdd onPressAdd={() => handlePresentModal()} />
+      <Header title="Friends" showAdd onPressAdd={handlePresentModal} />
 
       <View style={styles.container}>
-        <Searchbar />
-        <Text style={styles.subtitle}>All Friends ({friends.length})</Text>
-        <View>
-          <FlatList
-            data={friends} // ✅ only filtered tasks shown
-            showsVerticalScrollIndicator
-            style={styles.list}
-            contentContainerStyle={styles.flatlistContainer}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            keyExtractor={(item, index) => item._id || index.toString()}
-            renderItem={({ item }) => <FriendsCard item={item} />}
-          />
-        </View>
+        <Searchbar onSearch={handleSearch} />
+
+        <Text style={styles.subtitle}>
+          All Friends ({filteredFriends.length})
+        </Text>
+
+        <FlatList
+          data={filteredFriends.sort((a, b) =>
+            `${a.firstName} ${a.lastName}`.localeCompare(
+              `${b.firstName} ${b.lastName}`,
+            ),
+          )}
+          showsVerticalScrollIndicator
+          style={styles.list}
+          contentContainerStyle={styles.flatlistContainer}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          keyExtractor={(item, index) => item._id || index.toString()}
+          renderItem={({ item }) => (
+            <FriendsCard
+              item={{ ...item, isFriend: true }} // ✅ always a friend in this list
+              onPrimaryPress={() => console.log('Remove friend TBD')}
+              onSecondaryPress={() => {}}
+            />
+          )}
+        />
       </View>
 
       <CustomBottomSheet
@@ -83,7 +196,41 @@ const FriendsScreen = () => {
         title="Add Friends"
       >
         <View style={styles.top}>
-          <Searchbar />
+          <Searchbar
+            onSearch={handleSearchUsers}
+            clearTrigger={searchResetKey}
+          />
+
+          {usersWithStatus.length > 0 && (
+            <>
+              <Text style={styles.subtitle}>
+                Search Results ({usersWithStatus.length})
+              </Text>
+
+              <FlatList
+                data={usersWithStatus.sort((a, b) =>
+                  `${a.firstName} ${a.lastName}`.localeCompare(
+                    `${b.firstName} ${b.lastName}`,
+                  ),
+                )}
+                showsVerticalScrollIndicator
+                style={styles.list}
+                contentContainerStyle={styles.flatlistContainer}
+                keyExtractor={(item, index) => item._id || index.toString()}
+                renderItem={({ item }) => (
+                  <FriendsCard
+                    item={item}
+                    onPrimaryPress={() =>
+                      item.isFriend
+                        ? console.log('Remove friend TBD')
+                        : handleAddFriend(item.firstName, item.lastName)
+                    }
+                    onSecondaryPress={() => {}}
+                  />
+                )}
+              />
+            </>
+          )}
         </View>
       </CustomBottomSheet>
     </>

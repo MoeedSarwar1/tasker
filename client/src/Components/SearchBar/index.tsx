@@ -1,27 +1,42 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { TextInput, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import searchBarStyles from './styles';
 import debounce from 'lodash.debounce';
+import searchBarStyles from './styles';
 
-const Searchbar = ({ onSearch }: { onSearch?: (text: string) => void }) => {
+const Searchbar = ({
+  onSearch,
+  clearTrigger,
+}: {
+  onSearch?: (text: string) => void;
+  clearTrigger?: any; // changes whenever you want it to reset
+}) => {
   const styles = searchBarStyles();
   const [query, setQuery] = useState('');
 
-  // debounce the onSearch function (only trigger after 500ms of no typing)
   const debouncedSearch = useCallback(
     debounce((text: string) => {
-      if (onSearch) {
-        onSearch(text);
-      }
+      onSearch?.(text);
     }, 500),
-    [],
+    [onSearch],
   );
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const handleChange = (text: string) => {
     setQuery(text);
     debouncedSearch(text);
   };
+
+  // ✅ reset whenever `clearTrigger` changes
+  useEffect(() => {
+    setQuery('');
+    onSearch?.('');
+  }, [clearTrigger]);
 
   return (
     <View style={styles.input}>

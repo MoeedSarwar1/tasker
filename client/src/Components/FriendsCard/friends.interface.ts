@@ -4,5 +4,9 @@ export interface Friends {
     firstName: string;
     lastName: string;
     email?: boolean;
+    avatar?: string;
+    isFriend?: boolean;
   };
+  onSecondaryPress: () => {};
+  onPrimaryPress: () => {};
 }

@@ -4,7 +4,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
 import React, { forwardRef, useMemo } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Text from '../Text';
@@ -20,14 +20,7 @@ interface ReusableBottomSheetProps {
 
 const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
   (
-    {
-      children,
-      snapPoints = ['50%'],
-      initialIndex = -1,
-      onClose,
-      title,
-      subtitle,
-    },
+    { children, snapPoints = ['50%'], initialIndex = -1, onClose, title },
     ref,
   ) => {
     const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
@@ -57,19 +50,17 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
           <BottomSheetView
             style={[styles.container, { paddingBottom: insets.bottom }]}
           >
-            <KeyboardAwareScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.scrollContent}
-              keyboardShouldPersistTaps="handled"
-            >
-              <View style={styles.parentView}>
-                <Text style={styles.title}>{title}</Text>
+            <View style={styles.parentView}>
+              <Text style={styles.title}>{title}</Text>
 
-                <View style={styles.separator} />
+              <View style={styles.separator} />
 
+              <KeyboardAvoidingView
+                contentContainerStyle={styles.scrollContent}
+              >
                 {children}
-              </View>
-            </KeyboardAwareScrollView>
+              </KeyboardAvoidingView>
+            </View>
           </BottomSheetView>
         </BottomSheet>
       </Portal>

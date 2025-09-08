@@ -8,6 +8,7 @@ const searchBarStyles = () =>
       alignItems: 'center',
       borderWidth: 1,
       borderColor: '#ccc',
+      marginHorizontal: 24,
       backgroundColor: '#FFFFFF',
       borderRadius: 16,
       color: '#333',
