@@ -1,10 +1,11 @@
-import React, { forwardRef, useMemo } from 'react';
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import React, { forwardRef, useMemo } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Text from '../Text';
 
@@ -56,17 +57,19 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
           <BottomSheetView
             style={[styles.container, { paddingBottom: insets.bottom }]}
           >
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+            <KeyboardAwareScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scrollContent}
+              keyboardShouldPersistTaps="handled"
             >
               <View style={styles.parentView}>
                 <Text style={styles.title}>{title}</Text>
 
                 <View style={styles.separator} />
+
                 {children}
               </View>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
           </BottomSheetView>
         </BottomSheet>
       </Portal>
@@ -97,5 +100,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E7EB', // light gray line
     marginVertical: 8, // spacing above & below
     alignSelf: 'stretch',
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
 });

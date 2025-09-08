@@ -34,7 +34,7 @@ const HomeScreen = () => {
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
   const snapPoints = useMemo(
-    () => (isKeyboardVisible ? ['75%'] : ['55%']),
+    () => (isKeyboardVisible ? ['65%'] : ['55%']),
     [isKeyboardVisible],
   );
   const moreSnapPoints = useMemo(() => ['25%'], []);
