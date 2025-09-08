@@ -64,10 +64,10 @@ const LoginScreen = () => {
     } catch (error: any) {
       showModal({
         mode: 'error',
-        iconName: 'wifi-alert',
+        iconName: 'exclamation',
         iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Tasks didn’t load. Check your connection and retry.',
+        title: 'Login Failed',
+        description: 'Please check your credentials and try again',
         buttonRow: false,
       });
     } finally {

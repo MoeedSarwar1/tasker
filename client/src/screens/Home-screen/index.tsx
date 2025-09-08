@@ -67,6 +67,7 @@ const HomeScreen = () => {
     try {
       setRefreshing(true);
       const data = await fetchTasks();
+
       setTasks(data);
     } catch (error) {
       showModal({

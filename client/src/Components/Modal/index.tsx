@@ -118,25 +118,41 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    width: '50%',
   },
 
   // ✅ Success
-  successModalHeader: { fontSize: 24, fontWeight: 'bold', color: '#1E4620' },
-  successModalText: { fontSize: 12, color: '#4CAF50' },
+  successModalHeader: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1E4620',
+  },
+  successModalText: { textAlign: 'center', fontSize: 12, color: '#4CAF50' },
 
   // ⚠️ Confirmation
-  confirmModalHeader: { fontSize: 24, fontWeight: 'bold', color: '#664D03' },
-  confirmModalText: { fontSize: 12, color: '#D39E00' },
+  confirmModalHeader: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#664D03',
+  },
+  confirmModalText: { textAlign: 'center', fontSize: 12, color: '#D39E00' },
 
   // ❌ Error
-  errorModalHeader: { fontSize: 24, fontWeight: 'bold', color: '#58151C' },
-  errorModalText: { fontSize: 12, color: '#DC3545' },
+  errorModalHeader: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#58151C',
+  },
+  errorModalText: { textAlign: 'center', fontSize: 12, color: '#DC3545' },
 
   // Default / fallback
   modalHeader: { fontSize: 24, fontWeight: 'bold', color: '#333' },
   modalText: { fontSize: 12, color: '#666' },
 
-  buttonRow: { flexDirection: 'row', gap: 8 },
+  buttonRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
   closeButton: {
     paddingHorizontal: 6,
     paddingVertical: 10,
