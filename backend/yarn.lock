@@ -344,6 +344,15 @@ gopd@^1.2.0:
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.2.0.tgz#89f56b8217bdbc8802bd299df6d7f1081d7e51a1"
   integrity sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
 
+gradient-avatar@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/gradient-avatar/-/gradient-avatar-1.0.2.tgz#42bb408e402b1f21aafba3878858721055515224"
+  integrity sha512-Od9KI2YImV60wnsvU/u6GEyBm2fiHUUHgiLySE243GYl/T/tiJMJ5QYey8o7tepugmlnUGQRaCItHv19UnUjUg==
+  dependencies:
+    hsl-rgb "^1.0.0"
+    hsl-triad "^1.0.0"
+    string-hash "^1.1.3"
+
 has-flag@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -360,6 +369,16 @@ hasown@^2.0.2:
   integrity sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==
   dependencies:
     function-bind "^1.1.2"
+
+hsl-rgb@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hsl-rgb/-/hsl-rgb-1.0.0.tgz#05ca49f6d960c9d8e237f27d7bdf284b656de5ab"
+  integrity sha512-cNq+7sfwzSDoiG/jiu8wZpOmjScUZrMKiI33tH3aQ1MZsXWQd0yJjMpPwu2OZFYa4D/bOT1aCbB5gS1kOqFx1A==
+
+hsl-triad@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hsl-triad/-/hsl-triad-1.0.0.tgz#0d27f397f75e8beb6cf9c361970ffbe104652220"
+  integrity sha512-PKnjrMugS6sHC5dVh4VQZYOHEKG2QILjVwbpEtNjEV19RyswuIxrIiGhumVJjya/FjK/p9gX6+zRMXFGTvaQAA==
 
 http-errors@2.0.0, http-errors@^2.0.0:
   version "2.0.0"
@@ -830,6 +849,11 @@ statuses@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.2.tgz#8f75eecef765b5e1cfcdc080da59409ed424e382"
   integrity sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==
+
+string-hash@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/string-hash/-/string-hash-1.1.3.tgz#e8aafc0ac1855b4666929ed7dd1275df5d6c811b"
+  integrity sha512-kJUvRUFK49aub+a7T1nNE66EJbZBMnBgoC1UbCZ5n6bsZKBRga4KgBRTMn/pFkeCZSYtNeSyMxPDM0AXWELk2A==
 
 supports-color@^5.5.0:
   version "5.5.0"

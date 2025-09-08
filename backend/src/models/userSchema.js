@@ -19,6 +19,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  avatar: {
+    type: String,
+  },
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,

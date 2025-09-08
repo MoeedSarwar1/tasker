@@ -1,4 +1,5 @@
 const User = require("../models/userSchema");
+const avatar = require("gradient-avatar");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -12,6 +13,7 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "Email already taken" });
     }
+    const svgAvatar = avatar(firstName + email);
 
     const hash = await bcrypt.hash(password, 10);
     const newUser = new User({ firstName, lastName, email, password: hash });
@@ -23,6 +25,7 @@ const signup = async (req, res) => {
         firstName: newUser.firstName,
         email: newUser.email,
         lastName: newUser.lastName,
+        avatar: svgAvatar,
       },
     });
   } catch (error) {
