@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const taskRoutes = require("./src/routes/taskRoutes");
 const authRoutes = require("./src/routes/authRoutes");
+const friendRoutes = require("./src/routes/friendsRoutes");
 require("dotenv").config();
 
 const URI = process.env.MONGO_URI;
@@ -16,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users/tasks", taskRoutes);
 app.use("/api/users", authRoutes);
-
+app.use("/api/friends", friendRoutes);
 
 mongoose
 
