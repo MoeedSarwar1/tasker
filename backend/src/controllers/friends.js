@@ -54,7 +54,7 @@ exports.getFriends = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate(
       "friends",
-      "firstName lastName email",
+      "firstName lastName email avatar",
     );
     res.json(user.friends);
   } catch (err) {

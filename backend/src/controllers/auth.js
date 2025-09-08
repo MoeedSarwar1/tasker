@@ -16,7 +16,13 @@ const signup = async (req, res) => {
     const svgAvatar = avatar(firstName + email);
 
     const hash = await bcrypt.hash(password, 10);
-    const newUser = new User({ firstName, lastName, email, password: hash });
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password: hash,
+      avatar: svgAvatar,
+    });
     await newUser.save();
 
     res.json({
