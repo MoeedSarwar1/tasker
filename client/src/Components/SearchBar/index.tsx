@@ -3,6 +3,7 @@ import { TextInput, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import debounce from 'lodash.debounce';
 import searchBarStyles from './styles';
+import { useTheme } from '../../context/Theme-context';
 
 const Searchbar = ({
   onSearch,
@@ -11,7 +12,8 @@ const Searchbar = ({
   onSearch?: (text: string) => void;
   clearTrigger?: any; // changes whenever you want it to reset
 }) => {
-  const styles = searchBarStyles();
+  const { theme } = useTheme();
+  const styles = searchBarStyles(theme);
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useCallback(
@@ -42,12 +44,12 @@ const Searchbar = ({
     <View style={styles.input}>
       <TextInput
         placeholder="Search"
-        placeholderTextColor="#999"
+        style={{ flex: 1, color: theme.colors.inputTextColor }}
+        placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
         value={query}
-        style={{ flex: 1 }}
         onChangeText={handleChange}
       />
-      <Ionicons name="search" size={18} color="#333" />
+      <Ionicons name="search" size={18} color={theme.colors.primaryIcon} />
     </View>
   );
 };

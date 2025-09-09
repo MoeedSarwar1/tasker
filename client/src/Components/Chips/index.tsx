@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Text from '../Text';
+import { useTheme } from '../../context/Theme-context';
+import { chipStyles } from './styles';
 
 export interface ChipProps {
   label: string;
@@ -17,6 +19,8 @@ const Chip: React.FC<ChipProps> = ({
   onPress,
   color = '#2563EB', // default primary color
 }) => {
+  const { theme } = useTheme();
+  const styles = chipStyles(theme);
   return (
     <Pressable
       id={id}
@@ -30,24 +34,5 @@ const Chip: React.FC<ChipProps> = ({
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  chip: {
-    paddingVertical: 6,
-    justifyContent:'center',
-    alignItems:'center',
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#fff',
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  text: {
-    fontSize: 14,
-    color: '#111827',
-  },
-});
 
 export default Chip;

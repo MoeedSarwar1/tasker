@@ -9,14 +9,20 @@ import AuthStack from './src/navigation/Auth-stack';
 import BottomTabs from './src/navigation/BottomTabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ModalProvider } from './src/context/Modal-context';
+import { ThemeProvider, useTheme } from './src/context/Theme-context';
 const RootNavigator = () => {
   const { token, loading } = useAuth();
+  const { isDark, theme } = useTheme(); // <-- get theme here
 
   if (loading) {
     // temporary splash or loader
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        <StatusBar
+          barStyle={isDark ? 'light-content' : 'dark-content'}
+          backgroundColor={theme.colors.background}
+          translucent={false}
+        />
       </View>
     );
   }
@@ -27,30 +33,34 @@ const RootNavigator = () => {
   );
 };
 const App = () => {
+  const { theme, isDark } = useTheme(); // <-- get theme here
+
   useEffect(() => {
     SplashScreen.hide();
   }, []);
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ModalProvider>
-        <PortalProvider>
-          <StatusBar
-            barStyle="dark-content" // or "light-content" if using dark bg
-            backgroundColor="#F9FAFB" // match your app bg
-            translucent={false} // keep it solid
-          />
 
-          <View style={{ flex: 1, backgroundColor: '#F9fafb' }}>
-            <SafeAreaProvider>
-              <AuthProvider>
-                <RootNavigator />
-              </AuthProvider>
-            </SafeAreaProvider>
-          </View>
-        </PortalProvider>
-      </ModalProvider>
-    </GestureHandlerRootView>
+  return (
+    <ThemeProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ModalProvider>
+          <PortalProvider>
+            <StatusBar
+              barStyle={isDark ? 'light-content' : 'dark-content'}
+              backgroundColor={theme.colors.background}
+              translucent={false}
+            />
+
+            <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+              <SafeAreaProvider>
+                <AuthProvider>
+                  <RootNavigator />
+                </AuthProvider>
+              </SafeAreaProvider>
+            </View>
+          </PortalProvider>
+        </ModalProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 };
-
 export default App;

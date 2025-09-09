@@ -5,9 +5,11 @@ import cardStyles from './styles';
 import { Task } from './task.interface';
 import Text from '../Text';
 import { useState } from 'react';
+import { useTheme } from '../../context/Theme-context';
 
 const TaskCard = ({ item, onChange, onMorePress }: Task) => {
-  const style = cardStyles();
+  const { theme } = useTheme();
+  const style = cardStyles(theme);
   const [showDescription, setShowDescription] = useState(false);
 
   const onStatusChange = () => {
@@ -25,9 +27,17 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
       <View style={style.header}>
         <Pressable onPress={onStatusChange} hitSlop={10}>
           {item.completed ? (
-            <Icon name="checkbox-marked-outline" size={24} color="#22C55E" />
+            <Icon
+              name="checkbox-marked-outline"
+              size={24}
+              color={theme.colors.primaryIcon}
+            />
           ) : (
-            <Icon name="checkbox-blank-outline" size={24} color="#D1D5DB" />
+            <Icon
+              name="checkbox-blank-outline"
+              size={24}
+              color={theme.colors.secondaryIcon}
+            />
           )}
         </Pressable>
 

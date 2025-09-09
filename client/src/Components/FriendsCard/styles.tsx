@@ -1,28 +1,27 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { shadows } from '../../theme/shadows';
+import { typography } from '../../theme/typography';
 
-const cardStyles = () =>
+const cardStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 16,
+      borderColor: theme.colors.border,
       padding: 17,
-      borderColor: '#E5E7EB',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
       marginHorizontal: 24,
-      shadowRadius: 4,
-      elevation: 2,
+      ...shadows.medium,
     },
     title: {
-      fontSize: 14,
-      fontFamily: 'Poppins-SemiBold', // <-- change font here
-      color: '#111827',
-      marginBottom: 4,
+      color: theme.colors.headerText,
+      marginBottom: 1,
+      ...typography.body,
     },
     description: {
-      fontSize: 12,
-      color: '#4B5563',
+      color: theme.colors.subtitleTextColor,
+      marginBottom: 1,
+      ...typography.micro,
     },
     footer: {
       paddingTop: 12,
@@ -49,16 +48,13 @@ const cardStyles = () =>
       gap: 8,
       marginTop: 8,
     },
-    button: {
-      paddingVertical: 8,
-      backgroundColor: '#C0C0C0',
-    },
     addButton: {
       paddingVertical: 8,
-      backgroundColor: '#4B4B4B',
+      backgroundColor: theme.colors.primaryButtonBackground,
     },
-    text: {
-      fontSize: 12,
+    addButtonText: {
+      color: theme.colors.primaryButtonText,
+      ...typography.buttonMedium,
     },
   });
 export default cardStyles;

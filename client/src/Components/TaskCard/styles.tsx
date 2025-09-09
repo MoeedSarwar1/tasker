@@ -1,30 +1,28 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { typography } from '../../theme/typography';
+import { shadows } from '../../theme/shadows';
 
-const cardStyles = () =>
+const cardStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 16,
+      borderColor: theme.colors.border,
       padding: 17,
-      borderColor: '#E5E7EB',
       marginHorizontal: 24,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
+      ...shadows.medium,
     },
     title: {
-      fontSize: 16,
-      fontFamily: 'Poppins-SemiBold', // <-- change font here
-      color: '#111827',
-      marginBottom: 4,
+      color: theme.colors.headerText,
+      marginBottom: theme.spacing.xs,
+      ...typography.title,
     },
     description: {
-      fontSize: 14,
-      color: '#4B5563',
-      marginBottom: 12,
+      color: theme.colors.subtitleTextColor,
+      marginBottom: 4,
+      ...typography.small,
     },
     date: {
       alignItems: 'flex-end',
@@ -42,32 +40,12 @@ const cardStyles = () =>
       paddingBottom: 17,
     },
     details: {
-      fontSize: 14,
-      color: '#6B7280',
+      color: theme.colors.linkText,
+      ...typography.body,
     },
     user: {
-      fontSize: 12,
-      color: '#6B7280',
-    },
-    deleteText: {
-      color: '#EF4444',
-    },
-    childrenWrapperStyle: {
-      backgroundColor: '#FFFFFF',
-      borderRadius: 16,
-      padding: 12,
-      borderColor: '#E5E7EB',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
-    },
-    childView: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      width: 80,
+      ...typography.small,
+      color: theme.colors.subtitleTextColor,
     },
   });
 export default cardStyles;

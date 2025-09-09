@@ -24,8 +24,10 @@ import {
   updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
+import { useTheme } from '../../context/Theme-context';
 
 const HomeScreen = () => {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [tasks, setTasks] = useState([]);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -38,7 +40,7 @@ const HomeScreen = () => {
     [isKeyboardVisible],
   );
   const moreSnapPoints = useMemo(() => ['25%'], []);
-  const styles = homeStles(insets);
+  const styles = homeStles(insets, theme);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editMode, setEditMode] = useState(false);
 
@@ -292,14 +294,18 @@ const HomeScreen = () => {
       <View style={styles.container}>
         {filteredTasks.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Icon name="notebook-edit-outline" size={64} color="#7f7f7f" />
+            <Icon
+              name="notebook-edit-outline"
+              size={64}
+              color={theme.colors.secondaryIcon}
+            />
 
             <Text style={styles.emptyTextStyle}>You’re clear for now</Text>
           </View>
         ) : (
           <FlatList
             data={filteredTasks} // ✅ only filtered tasks shown
-            showsVerticalScrollIndicator
+            showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={styles.flatlistContainer}
             refreshControl={
@@ -357,16 +363,24 @@ const HomeScreen = () => {
               style={styles.childrenWrapperStyle}
             >
               <Text style={styles.text}>Remove</Text>
-              <Icon name="delete-outline" size={20} color="#F9fafb" />
+              <Icon
+                name="delete-outline"
+                size={20}
+                color={theme.colors.primaryButtonText}
+              />
             </Pressable>
 
             <Pressable
               style={styles.editColor}
               onPress={() => setEditMode(true)}
             >
-              <Text style={styles.text}>Update</Text>
+              <Text style={styles.modalText}>Update</Text>
               <Pressable hitSlop={10}>
-                <Icon name="square-edit-outline" size={20} color="#F9fafb" />
+                <Icon
+                  name="square-edit-outline"
+                  size={20}
+                  color={theme.colors.secondaryButtonText}
+                />
               </Pressable>
             </Pressable>
           </View>

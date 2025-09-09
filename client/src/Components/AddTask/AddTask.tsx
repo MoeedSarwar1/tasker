@@ -2,16 +2,13 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, TextInput, View } from 'react-native';
+import { Platform, TextInput, View } from 'react-native';
+import { useTheme } from '../../context/Theme-context';
 import Button from '../Button';
 import Chip from '../Chips';
 import Text from '../Text';
-
-const chipData = [
-  { label: 'Urgent', color: '#333333' },
-  { label: 'Normal', color: '#666666' },
-  { label: 'Low Key', color: '#999999' },
-];
+import { bottomSheetStyles } from './styles';
+import { colors } from '../../theme/colors';
 
 interface AddTaskProps {
   initialTask?: {
@@ -36,11 +33,14 @@ const AddTask: React.FC<AddTaskProps> = ({
   onCancel,
   mode,
 }) => {
+  const { theme } = useTheme();
+  const styles = bottomSheetStyles(theme);
   const isEditing = mode === 'edit' || !!initialTask;
   const [title, setTitle] = useState(initialTask?.title || '');
   const [description, setDescription] = useState(
     initialTask?.description || '',
   );
+
   const [selectedChip, setSelectedChip] = useState(
     initialTask?.priority || 'Normal',
   );
@@ -49,6 +49,23 @@ const AddTask: React.FC<AddTaskProps> = ({
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const chipData = [
+    {
+      label: 'Urgent',
+      color: theme.colors.chips.urgentBackground,
+      textColor: theme.colors.chips.urgentText,
+    },
+    {
+      label: 'Normal',
+      color: theme.colors.chips.normalBackground,
+      textColor: theme.colors.chips.normalText,
+    },
+    {
+      label: 'Low Key',
+      color: theme.colors.chips.lowKeyBackground,
+      textColor: theme.colors.chips.lowKeyText,
+    },
+  ];
   useEffect(() => {
     if (initialTask) {
       setTitle(initialTask.title);
@@ -106,7 +123,7 @@ const AddTask: React.FC<AddTaskProps> = ({
       <Text style={styles.label}>Details</Text>
       <View style={styles.descriptionInput}>
         <TextInput
-          style={{ width: '100%', color: '#333' }}
+          style={{ width: '100%', color: theme.colors.inputTextColor }}
           placeholder="Add some notes"
           placeholderTextColor="#999"
           value={description}
@@ -156,6 +173,7 @@ const AddTask: React.FC<AddTaskProps> = ({
             key={chip.label}
             label={chip.label}
             color={chip.color}
+            textColor={chip.color}
             selected={selectedChip === chip.label}
             onPress={() => setSelectedChip(chip.label)}
           />
@@ -164,11 +182,17 @@ const AddTask: React.FC<AddTaskProps> = ({
 
       <View style={styles.buttonRow}>
         <View style={{ flex: 1 }}>
-          <Button title="Dismiss" onPress={onCancel} style={styles.button} />
+          <Button
+            title="Dismiss"
+            textStyle={styles.buttonText}
+            onPress={onCancel}
+            style={styles.button}
+          />
         </View>
         <View style={{ flex: 1 }}>
           <Button
             title={mode === 'edit' ? 'Save Changes' : 'Create Task'}
+            textStyle={styles.addButtonText}
             style={styles.addButton}
             onPress={handleSubmit}
           />
@@ -177,50 +201,4 @@ const AddTask: React.FC<AddTaskProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-  },
-  label: {
-    fontFamily: 'Poppins-Bold', // <-- change font here
-    fontSize: 16,
-    marginBottom: 8,
-    marginTop: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    color: '#333',
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 12,
-  },
-  descriptionInput: {
-    alignItems: 'flex-start',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 8,
-    height: 100,
-    marginBottom: 12,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 24,
-  },
-  button: {
-    paddingHorizontal: 8,
-    paddingVertical: 12,
-    backgroundColor: '#C0C0C0',
-  },
-  addButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 12,
-    backgroundColor: '#4B4B4B',
-  },
-});
-
 export default AddTask;

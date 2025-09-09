@@ -1,19 +1,21 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
 
-const searchBarStyles = () =>
+const searchBarStyles = (theme: Theme) =>
   StyleSheet.create({
     input: {
       flexDirection: 'row-reverse',
-      gap: '8',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: '#ccc',
       marginHorizontal: 24,
-      backgroundColor: '#FFFFFF',
-      borderRadius: 16,
-      color: '#333',
-      padding: 16,
-      marginBottom: 16,
+      gap: theme.spacing.sm,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: theme.colors.inputBackground,
+      borderColor: theme.colors.border,
+      borderWidth: 1,
+      borderRadius: theme.borderRadius.xl,
+      color: theme.colors.inputTextColor,
+      padding: theme.spacing.md,
+      marginBottom: theme.spacing.md,
     },
   });
 export default searchBarStyles;

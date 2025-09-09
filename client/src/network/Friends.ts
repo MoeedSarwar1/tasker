@@ -22,3 +22,15 @@ export const addFriends = async (firstName: string, lastName: string) => {
     throw error; // let caller handle it
   }
 };
+export const removeFriend = async (firstName: string, lastName: string) => {
+  try {
+    const response = await client.post(API_ENDPOINTS.REMOVE_FRIEND, {
+      firstName,
+      lastName,
+    });
+    return response.data; // new friend object or updated list
+  } catch (error: any) {
+    console.error('Add Friend Error:', error?.response?.data || error.message);
+    throw error; // let caller handle it
+  }
+};

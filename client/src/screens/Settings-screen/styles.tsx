@@ -1,11 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { typography } from '../../theme/typography';
+import { shadows } from '../../theme/shadows';
 
-const settingStyles = (Platform, insets) =>
+const settingStyles = (Platform, insets, theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#F9fafb',
+      backgroundColor: theme.colors.background,
       paddingTop: 24,
+      gap: 8,
     },
 
     logoutWrapper: {
@@ -16,20 +20,29 @@ const settingStyles = (Platform, insets) =>
         Platform.OS === 'ios' ? insets.bottom + 38 : insets.bottom + 16,
     },
     childrenWrapperStyle: {
-      backgroundColor: '#4B4B4B',
+      backgroundColor: theme.colors.secondaryButtonBackground,
       borderRadius: 16,
       padding: 16,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       elevation: 2,
+      position: 'absolute',
+      bottom: 12,
+      left: 24,
+      right: 24,
     },
+    themeButton: {
+      borderRadius: 16,
+      marginHorizontal: '24',
+      padding: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+
     text: {
-      color: '#F9fafb',
+      color: theme.colors.headerText,
       fontFamily: 'Poppins-Bold', // <-- change font here
       fontSize: 16,
     },

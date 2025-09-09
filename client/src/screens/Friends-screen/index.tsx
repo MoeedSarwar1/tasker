@@ -7,10 +7,13 @@ import Header from '../../Components/Header/Header';
 import Searchbar from '../../Components/SearchBar';
 import Text from '../../Components/Text';
 import { useModal } from '../../context/Modal-context';
-import { addFriends, fetchFriends } from '../../network/Friends';
+import { addFriends, fetchFriends, removeFriend } from '../../network/Friends';
 import friendsStyles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fetchUsers } from '../../network/User';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Material from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../../context/Theme-context';
 
 const FriendsScreen = () => {
   const snapPoints = useMemo(() => ['90%'], []);
@@ -30,10 +33,31 @@ const FriendsScreen = () => {
 
   const { showModal } = useModal();
   const insets = useSafeAreaInsets();
-  const styles = friendsStyles(insets);
+  const { theme } = useTheme();
+  const styles = friendsStyles(theme, insets);
 
   const handlePresentModal = () => bottomSheetRef.current?.expand();
 
+  const nothingToShow = (
+    hasData: boolean,
+    message: string = 'Nothing To Show',
+    icon: string,
+  ) => {
+    return (
+      <View style={styles.emptyContainer}>
+        {!hasData && (
+          <>
+            <Material
+              name={icon}
+              size={64}
+              color={theme.colors.secondaryIcon}
+            />
+            <Text style={styles.emptyTextStyle}>{message}</Text>
+          </>
+        )}
+      </View>
+    );
+  };
   // ✅ Load current friends
   const loadFriends = async () => {
     try {
@@ -108,6 +132,39 @@ const FriendsScreen = () => {
     }
   };
 
+  const handleRemoveFriend = async (firstName: string, lastName: string) => {
+    try {
+      const removedFriend = await removeFriend(firstName, lastName);
+
+      setFriends(prev => prev.filter(f => f._id !== removedFriend));
+      setFilteredFriends(prev => prev.filter(f => f._id !== removedFriend));
+
+      showModal({
+        title: 'All Set',
+        description: `${firstName} ${lastName} Removed successfully 🎉`,
+        iconName: 'checkbox-marked-circle-outline',
+        iconColor: '#28A745',
+        buttonRow: false,
+      });
+
+      handleHideModal();
+      loadFriends();
+    } catch (error: any) {
+      console.error(
+        'Add friend failed:',
+        error?.response?.data || error.message,
+      );
+      showModal({
+        mode: 'error',
+        iconName: 'account-cancel-outline',
+        iconColor: '#DC3545',
+        title: 'Could not remove friend',
+        description: error?.response?.data?.message || 'User not found',
+        buttonRow: false,
+      });
+    }
+  };
+
   // ✅ Refresh
   const onRefresh = async () => {
     await loadFriends();
@@ -166,27 +223,33 @@ const FriendsScreen = () => {
           All Friends ({filteredFriends.length})
         </Text>
 
-        <FlatList
-          data={filteredFriends.sort((a, b) =>
-            `${a.firstName} ${a.lastName}`.localeCompare(
-              `${b.firstName} ${b.lastName}`,
-            ),
-          )}
-          showsVerticalScrollIndicator
-          style={styles.list}
-          contentContainerStyle={styles.flatlistContainer}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          keyExtractor={(item, index) => item._id || index.toString()}
-          renderItem={({ item }) => (
-            <FriendsCard
-              item={{ ...item, isFriend: true }} // ✅ always a friend in this list
-              onPrimaryPress={() => console.log('Remove friend TBD')}
-              onSecondaryPress={() => {}}
-            />
-          )}
-        />
+        {filteredFriends.length === 0 ? (
+          nothingToShow(false, 'Connect to Continue', 'person-add-alt')
+        ) : (
+          <FlatList
+            data={filteredFriends.sort((a, b) =>
+              `${a.firstName} ${a.lastName}`.localeCompare(
+                `${b.firstName} ${b.lastName}`,
+              ),
+            )}
+            showsVerticalScrollIndicator={false}
+            style={styles.list}
+            contentContainerStyle={styles.flatlistContainer}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            keyExtractor={(item, index) => item._id || index.toString()}
+            renderItem={({ item }) => (
+              <FriendsCard
+                item={{ ...item, isFriend: true }} // ✅ always a friend in this list
+                onPrimaryPress={() =>
+                  handleRemoveFriend(item.firstName, item.lastName)
+                }
+                onSecondaryPress={() => {}}
+              />
+            )}
+          />
+        )}
       </View>
 
       <CustomBottomSheet
@@ -201,7 +264,7 @@ const FriendsScreen = () => {
             clearTrigger={searchResetKey}
           />
 
-          {usersWithStatus.length > 0 && (
+          {usersWithStatus.length > 0 ? (
             <>
               <Text style={styles.subtitle}>
                 Search Results ({usersWithStatus.length})
@@ -213,7 +276,7 @@ const FriendsScreen = () => {
                     `${b.firstName} ${b.lastName}`,
                   ),
                 )}
-                showsVerticalScrollIndicator
+                showsVerticalScrollIndicator={false}
                 style={styles.list}
                 contentContainerStyle={styles.flatlistContainer}
                 keyExtractor={(item, index) => item._id || index.toString()}
@@ -222,7 +285,7 @@ const FriendsScreen = () => {
                     item={item}
                     onPrimaryPress={() =>
                       item.isFriend
-                        ? console.log('Remove friend TBD')
+                        ? handleRemoveFriend(item.firstName, item.lastName)
                         : handleAddFriend(item.firstName, item.lastName)
                     }
                     onSecondaryPress={() => {}}
@@ -230,6 +293,8 @@ const FriendsScreen = () => {
                 )}
               />
             </>
+          ) : (
+            nothingToShow(false, 'No users found', 'no-accounts')
           )}
         </View>
       </CustomBottomSheet>

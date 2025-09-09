@@ -1,48 +1,42 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { shadows } from '../../theme/shadows';
+import { typography } from '../../theme/typography';
 
-const homeStles = insets =>
+const homeStles = (insets, theme: Theme) =>
   StyleSheet.create({
     childrenWrapperStyle: {
-      backgroundColor: '#4B4B4B',
       borderRadius: 16,
       padding: 16,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
+      backgroundColor: theme.colors.primaryButtonBackground,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      elevation: 2,
+      ...shadows.medium,
     },
 
     parentView: {
       paddingBottom: insets.bottom,
-    marginTop: 8,
+      marginTop: 8,
       gap: 16,
     },
     editColor: {
-      backgroundColor: '#C0C0C0',
+      backgroundColor: theme.colors.secondaryButtonBackground,
       borderRadius: 16,
       padding: 16,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      elevation: 2,
+      ...shadows.medium,
     },
 
     modalText: {
-      fontSize: 12,
-      color: '#999',
+      color: theme.colors.secondaryButtonText,
+      ...typography.buttonMedium,
     },
     text: {
-      color: '#F9fafb',
-      fontFamily: 'Poppins-Bold', // <-- change font here
-      fontSize: 16,
+      color: theme.colors.primaryButtonText,
+      ...typography.buttonMedium,
     },
 
     flatlistContainer: {
@@ -53,8 +47,8 @@ const homeStles = insets =>
       paddingTop: 24,
     },
     emptyTextStyle: {
-      color: '#7f7f7f',
-      fontSize: 16,
+      color: theme.colors.subtitleTextColor,
+      ...typography.title,
     },
     emptyContainer: {
       flex: 1,
@@ -62,7 +56,7 @@ const homeStles = insets =>
       alignItems: 'center',
       gap: 16,
     },
-    container: { flex: 1, backgroundColor: '#F9fafb' },
+    container: { flex: 1, backgroundColor: theme.colors.background },
   });
 
 export default homeStles;

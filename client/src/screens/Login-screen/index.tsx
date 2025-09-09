@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
@@ -10,18 +9,23 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import Text from '../../Components/Text';
 import { useAuth } from '../../context/Auth-context';
 import { useModal } from '../../context/Modal-context';
+import { useTheme } from '../../context/Theme-context';
 import { NavigationRoutes } from '../../navigation/enums';
 import client from '../../network/Client';
 import { API_ENDPOINTS } from '../../network/Endpoints';
 import loginStyles from './styles';
 
 const LoginScreen = () => {
-  const styles = loginStyles();
+  const { theme, toggleTheme } = useTheme();
+  const styles = loginStyles(theme);
+
   const navigation = useNavigation();
   const { login } = useAuth();
   const { showModal } = useModal();
@@ -82,17 +86,35 @@ const LoginScreen = () => {
     navigation.navigate(NavigationRoutes.REGISTER as never);
   };
 
+  const insets = useSafeAreaInsets();
   return (
-    <View style={{ flex: 1, backgroundColor: '#faf9fb' }}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <KeyboardAvoidingView
         style={styles.containaer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={60}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       >
+        <View
+          style={{
+            position: 'absolute',
+            top: insets.top,
+            right: insets.left + 32,
+          }}
+        >
+          <Pressable onPress={toggleTheme} hitSlop={20}>
+            <Icon
+              name="theme-light-dark"
+              size={26}
+              color={theme.colors.primaryIcon}
+            />
+          </Pressable>
+        </View>
+
         <View style={styles.logoContainer}>
           <Image
             source={require('../../../assets/images/logo.png')}
             style={styles.imageStyles}
+            resizeMode="contain"
           />
           <Text style={styles.textStyles}>Organize your day,</Text>
           <Text style={styles.textStyles}>Effortlessly</Text>
@@ -102,7 +124,7 @@ const LoginScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#999"
+            placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
             value={email}
             onChangeText={text => setEmail(text.toLowerCase())} // ✅ force lowercase
             keyboardType="email-address"
@@ -111,9 +133,9 @@ const LoginScreen = () => {
           <View style={styles.input}>
             <TextInput
               placeholder="Password"
-              placeholderTextColor="#999"
+              placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
               value={password}
-              style={{ flex: 1 }}
+              style={{ flex: 1, color: theme.colors.inputTextColor }}
               onChangeText={setPassword}
               secureTextEntry={isHidden}
             />
@@ -121,15 +143,20 @@ const LoginScreen = () => {
               <Icon
                 name={isHidden ? 'eye-off' : 'eye'}
                 size={16}
-                color="#999"
+                color={theme.colors.primaryIcon}
               />
             </Pressable>
           </View>
         </View>
 
-        <Button title={loading ? '' : 'Login'} onPress={handleLogin} />
+        <Button
+          title={loading ? '' : 'Login'}
+          style={styles.button}
+          textStyle={styles.buttonText}
+          onPress={handleLogin}
+        />
 
-        <View style={{ alignItems: 'center', marginTop: 20 }}>
+        <View style={styles.linkText}>
           <LinkText
             onPress={onLinkPress}
             text="New Here?"

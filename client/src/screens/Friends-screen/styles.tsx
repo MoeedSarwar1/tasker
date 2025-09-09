@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { typography } from '../../theme/typography';
 
-const friendsStyles = insets =>
+const friendsStyles = (theme: Theme, insets) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#F9fafb',
+      backgroundColor: theme.colors.background,
       paddingTop: 24,
     },
     top: { marginTop: 8, marginHorizontal: -24 },
@@ -17,9 +19,19 @@ const friendsStyles = insets =>
       paddingTop: 24,
     },
     subtitle: {
-      fontSize: 16,
-      color: '#4b5563',
+      color: theme.colors.subtitleTextColor,
+      ...typography.small,
       marginHorizontal: 24,
+    },
+    emptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 16,
+    },
+    emptyTextStyle: {
+      color: theme.colors.subtitleTextColor,
+      ...typography.title,
     },
   });
 

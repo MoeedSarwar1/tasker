@@ -1,0 +1,63 @@
+// darkTheme.ts
+import { colors } from './colors';
+import { fonts } from './fonts';
+import { spacing } from './spacing';
+import { borderRadius } from './borderRadius';
+import { shadows } from './shadows';
+import { Theme } from './theme.interface';
+
+export const darkTheme: Theme = {
+  colors: {
+    background: colors.backgroundDark,
+    cardBackground: colors.cardDark,
+    headerBackground: colors.headerDark,
+    headerText: colors.headerTextDark,
+    bottomNavActive: colors.bottomNavActiveDark,
+    bottomNavInactive: colors.bottomNavInactiveDark,
+    primaryButtonBackground: colors.primaryButtonDark,
+    primaryButtonText: colors.primaryButtonTextDark,
+    secondaryButtonBackground: colors.secondaryButtonDark,
+    secondaryButtonText: colors.secondaryButtonTextDark,
+    headerTextColor: colors.headerTextDark,
+    subtitleTextColor: colors.subtitleTextDark,
+    placeholderTextColor: colors.placeholderTextDark,
+    inputTextColor: colors.inputTextDark,
+    primaryIcon: colors.primaryIconDark,
+    secondaryIcon: colors.secondaryIconDark,
+    linkText: colors.linkTextDark,
+    modals: {
+      errorBackground: colors.errorBackgroundDark,
+      errorText: colors.errorTextDark,
+      successBackground: colors.successBackgroundDark,
+      successText: colors.successTextDark,
+      confirmationBackground: colors.confirmationBackgroundDark,
+      errorHeader: colors.errorHeaderDark,
+      successHeader: colors.successHeaderDark,
+      confirmationHeader: colors.confirmationHeaderDark,
+      confirmationText: colors.confirmationTextDark,
+    },
+    chips: {
+      allBackground: colors.allBackgroundDark,
+      allText: colors.allTextDark,
+      pendingBackground: colors.pendingBackgroundDark,
+      pendingText: colors.pendingTextDark,
+      completedBackground: colors.completedBackgroundDark,
+      completedText: colors.completedTextDark,
+      urgentBackground: colors.urgentBackgroundDark,
+      urgentText: colors.urgentTextDark,
+      normalBackground: colors.normalBackgroundDark,
+      normalText: colors.normalTextDark,
+      lowKeyBackground: colors.lowKeyBackgroundDark,
+      lowKeyText: colors.lowKeyTextDark,
+      defaultChipText: colors.defaultChipTextDark,
+      defaultChipBakground: colors.defaultChipBackgroundDark,
+    },
+    inputBackground: colors.inputBackgroundDark,
+    border: colors.borderDark,
+  },
+  fontSizes: fonts.sizes,
+  spacing,
+  borderRadius,
+  shadow: shadows,
+  buttonSizes: { small: 32, medium: 48, large: 56 },
+};

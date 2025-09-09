@@ -5,6 +5,7 @@ import Text from '../Text';
 import { Friends } from './friends.interface';
 import cardStyles from './styles';
 import Button from '../Button';
+import { useTheme } from '../../context/Theme-context';
 
 const FriendsCard = ({
   item,
@@ -12,7 +13,8 @@ const FriendsCard = ({
   onPrimaryPress,
   buttons = true,
 }: Friends) => {
-  const style = cardStyles();
+  const { theme } = useTheme();
+  const style = cardStyles(theme);
   const [showButtons, setShowButtons] = useState(false);
 
   return (
@@ -37,15 +39,7 @@ const FriendsCard = ({
           <View style={style.buttonRow}>
             <View style={{ flex: 1 }}>
               <Button
-                title="Dismiss"
-                style={style.button}
-                textStyle={style.text}
-                onPress={onSecondaryPress}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Button
-                textStyle={style.text}
+                textStyle={style.addButtonText}
                 title={item.isFriend ? 'Remove' : 'Add'} // ✅ derived from array
                 style={style.addButton}
                 onPress={onPrimaryPress}

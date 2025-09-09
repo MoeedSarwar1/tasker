@@ -7,17 +7,11 @@ import headerStyles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Chip from '../Chips';
 import { useState } from 'react';
-
-const chipData = [
-  { id: 'all', label: 'All', color: '#666666' },
-  { id: 'pending', label: 'Pending', color: '#666666' },
-  { id: 'completed', label: 'Completed', color: '#666666' },
-];
+import { useTheme } from '../../context/Theme-context';
 
 const Header: React.FC<HeaderProps> = ({
   title,
   onPressAdd,
-  bottomSheetHeader = false,
   subtitle = '',
   iconName = 'add',
   onFilterChange,
@@ -25,12 +19,34 @@ const Header: React.FC<HeaderProps> = ({
   showAdd,
 }) => {
   const insets = useSafeAreaInsets();
-  const styles = headerStyles(insets);
+  const { theme } = useTheme();
+  const styles = headerStyles(insets, theme);
   const handleAdd = () => {
     onPressAdd?.();
   };
 
   const [selectedChip, setSelectedChip] = useState('All');
+  const chipData = [
+    {
+      id: 'all',
+      label: 'All',
+      color: theme.colors.chips.allBackground,
+      textColor: theme.colors.chips.allText,
+    },
+    {
+      id: 'pending',
+      label: 'Pending',
+      color: theme.colors.chips.pendingBackground,
+      textColor: theme.colors.chips.pendingText,
+    },
+    {
+      id: 'completed',
+      label: 'Completed',
+      color: theme.colors.chips.completedBackground,
+      textColor: theme.colors.chips.completedText,
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
@@ -40,11 +56,7 @@ const Header: React.FC<HeaderProps> = ({
         </View>
         {showAdd && (
           <Pressable onPress={handleAdd} hitSlop={10}>
-            <Icon
-              name={iconName}
-              size={bottomSheetHeader ? 16 : 24}
-              color="#14a3c7"
-            />
+            <Icon name={iconName} size={24} color={theme.colors.primaryIcon} />
           </Pressable>
         )}
       </View>

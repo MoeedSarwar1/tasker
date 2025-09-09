@@ -1,20 +1,22 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { typography } from '../../theme/typography';
 
-const linkStyles = () =>
+const linkStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      gap: 4,
+      gap: theme.spacing.xs,
       alignItems: 'center',
     },
     textStyle: {
-      fontSize: 16,
       color: '#4B5563',
+      ...typography.small,
     },
     linkText: {
-      fontSize: 16,
       fontWeight: 'semibold',
-      color: '#9333EA',
+      color: theme.colors.linkText,
+      ...typography.small,
     },
   });
 

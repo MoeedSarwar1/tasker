@@ -1,19 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
+import { typography } from '../../theme/typography';
+import { shadows } from '../../theme/shadows';
 
-const headerStyles = insets =>
+const headerStyles = (insets, theme: Theme) =>
   StyleSheet.create({
     container: {
       padding: 16,
       paddingTop: insets.top,
-      backgroundColor: '#FFFFFF',
-      borderBottomWidth: 1,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
-      justifyContent: 'space-between',
-      borderBottomColor: '#eee',
+      backgroundColor: theme.colors.headerBackground,
+      ...shadows.heavy,
     },
     headerRow: {
       flexDirection: 'row',
@@ -21,13 +17,12 @@ const headerStyles = insets =>
       justifyContent: 'space-between',
     },
     title: {
-      fontSize: 32,
-      fontFamily: 'Poppins-Bold', // <-- change font here
-      color: '#333',
+      color: theme.colors.headerText,
+      ...typography.header,
     },
     subtitle: {
-      fontSize: 16,
-      color: '#4b5563',
+      color: theme.colors.subtitleTextColor,
+      ...typography.small,
     },
   });
 

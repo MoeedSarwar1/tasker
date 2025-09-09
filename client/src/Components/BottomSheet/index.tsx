@@ -4,10 +4,11 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
 import React, { forwardRef, useMemo } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../context/Theme-context';
 import Text from '../Text';
+import { bottomSheetStyles } from './styles';
 
 interface ReusableBottomSheetProps {
   children: React.ReactNode;
@@ -23,6 +24,8 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
     { children, snapPoints = ['50%'], initialIndex = -1, onClose, title },
     ref,
   ) => {
+    const { theme } = useTheme();
+    const styles = bottomSheetStyles(theme);
     const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
     const insets = useSafeAreaInsets();
 
@@ -34,6 +37,7 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
           snapPoints={memoizedSnapPoints}
           enablePanDownToClose
           onClose={onClose}
+          backgroundStyle={{ backgroundColor: theme.colors.cardBackground }}
           keyboardBehavior="interactive"
           style={styles.bottomshhetContainer}
           keyboardBlurBehavior="restore"
@@ -69,32 +73,3 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
 );
 
 export default CustomBottomSheet;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  bottomshhetContainer: {
-    borderRadius: 16,
-  },
-  parentView: {
-    marginHorizontal: 24,
-  },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Poppins-Bold', // <-- change font here
-    color: '#333',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#E5E7EB', // light gray line
-    marginHorizontal: -24,
-
-    marginVertical: 8, // spacing above & below
-    alignSelf: 'stretch',
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-});
