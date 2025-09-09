@@ -61,3 +61,45 @@ exports.getFriends = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.removeFirend = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Case-insensitive search by firstName
+    const { firstName, lastName } = req.body;
+    let friend;
+
+    if (lastName) {
+      friend = await User.findOne({
+        firstName: { $regex: `^${firstName.trim()}$`, $options: "i" },
+        lastName: { $regex: `^${lastName.trim()}$`, $options: "i" },
+      });
+    } else {
+      friend = await User.findOne({
+        firstName: { $regex: `^${firstName.trim()}$`, $options: "i" },
+      });
+    }
+
+    if (!friend) {
+      console.log("Friend not found in DB");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Requesting user not found" });
+    }
+
+    user.friends.pop(friend.id);
+    friend.friends.pop(user.id);
+
+    await user.save();
+    await friend.save();
+
+    res.status(200).json({ message: "Friend Removed", friend });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
