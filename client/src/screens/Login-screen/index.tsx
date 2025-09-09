@@ -104,7 +104,7 @@ const LoginScreen = () => {
             placeholder="Email"
             placeholderTextColor="#999"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={text => setEmail(text.toLowerCase())} // ✅ force lowercase
             keyboardType="email-address"
             autoCapitalize="none"
           />

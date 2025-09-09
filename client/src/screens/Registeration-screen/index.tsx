@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useState } from 'react';
 import {
   Image,
@@ -11,12 +10,14 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import Text from '../../Components/Text';
 import { useModal } from '../../context/Modal-context';
-import { NavigationRoutes } from '../../navigation/enums';
 import { register } from '../../network/Auth';
+
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i; // case-insensitive
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -30,8 +31,13 @@ const RegisterScreen = () => {
 
   const [isHidden, setIsHidden] = useState(true);
   const handleRegister = async () => {
-    // Basic validation
-    if (!firstName || !lastName || !email || !password) {
+    const trimmedFirst = firstName.trim();
+    const trimmedLast = lastName.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedPass = password.trim();
+
+    // ✅ Basic validation
+    if (!trimmedFirst || !trimmedLast || !trimmedEmail || !trimmedPass) {
       showModal({
         mode: 'error',
         buttonRow: false,
@@ -43,11 +49,29 @@ const RegisterScreen = () => {
       return;
     }
 
+    // ✅ Validate email format
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      showModal({
+        mode: 'error',
+        buttonRow: false,
+        iconName: 'email-remove',
+        iconColor: '#DC3545',
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address',
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Call register API
-      const data = await register(firstName, lastName, email, password);
+      // ✅ Call register API with trimmed values
+      const data = await register(
+        trimmedFirst,
+        trimmedLast,
+        trimmedEmail,
+        trimmedPass,
+      );
 
       if (data?.user) {
         showModal({
@@ -58,7 +82,7 @@ const RegisterScreen = () => {
           title: 'All Set',
           description: 'Account created successfully',
         });
-        navigation.goBack(); // Navigate to login screen
+        navigation.goBack();
       }
     } catch (error: any) {
       showModal({
@@ -66,7 +90,7 @@ const RegisterScreen = () => {
         iconName: 'wifi-alert',
         iconColor: '#DC3545',
         title: 'Something Went Wrong,',
-        description: 'Tasks didn’t load. Check your connection and retry.',
+        description: 'Signup failed. Please try again.',
         buttonRow: false,
       });
     } finally {
@@ -173,7 +197,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-      fontFamily: 'Poppins-Bold', // <-- change font here
+    fontFamily: 'Poppins-Bold', // <-- change font here
     fontSize: 16,
   },
   logoContainer: {
