@@ -6,7 +6,12 @@ import { Friends } from './friends.interface';
 import cardStyles from './styles';
 import Button from '../Button';
 
-const FriendsCard = ({ item, onSecondaryPress, onPrimaryPress }: Friends) => {
+const FriendsCard = ({
+  item,
+  onSecondaryPress,
+  onPrimaryPress,
+  buttons = true,
+}: Friends) => {
   const style = cardStyles();
   const [showButtons, setShowButtons] = useState(false);
 
@@ -27,7 +32,7 @@ const FriendsCard = ({ item, onSecondaryPress, onPrimaryPress }: Friends) => {
           <Text style={style.description}>{item.email}</Text>
         </View>
       </View>
-      {showButtons && (
+      {buttons && showButtons && (
         <View style={style.footer}>
           <View style={style.buttonRow}>
             <View style={{ flex: 1 }}>

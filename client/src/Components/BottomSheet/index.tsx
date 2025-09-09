@@ -89,6 +89,8 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#E5E7EB', // light gray line
+    marginHorizontal: -24,
+
     marginVertical: 8, // spacing above & below
     alignSelf: 'stretch',
   },

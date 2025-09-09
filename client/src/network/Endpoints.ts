@@ -9,4 +9,5 @@ export const API_ENDPOINTS = {
   PATCH_TASK: 'users/tasks',
   ADD_FRIENDS: '/friends/add',
   GET_FRIENDS: '/friends/',
+  GET_ME: '/users/me',
 };

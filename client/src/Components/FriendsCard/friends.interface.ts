@@ -9,4 +9,5 @@ export interface Friends {
   };
   onSecondaryPress: () => {};
   onPrimaryPress: () => {};
+  buttons?:boolean
 }

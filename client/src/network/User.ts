@@ -10,3 +10,13 @@ export const fetchUsers = async () => {
     return [];
   }
 };
+
+export const fetchMe = async () => {
+  try {
+    const response = await client.get(API_ENDPOINTS.GET_ME);
+    return response.data; // should be an array of users
+  } catch (error: any) {
+    console.error('Fetch Users Error:', error);
+    return [];
+  }
+};

@@ -1,16 +1,19 @@
 import { StyleSheet } from 'react-native';
 
-const settingStyles = () =>
+const settingStyles = (Platform, insets) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#F9fafb',
-      paddingHorizontal: 24,
       paddingTop: 24,
     },
 
     logoutWrapper: {
+      flex: 1,
+      marginHorizontal: 24,
       justifyContent: 'flex-end',
+      paddingBottom:
+        Platform.OS === 'ios' ? insets.bottom + 38 : insets.bottom + 16,
     },
     childrenWrapperStyle: {
       backgroundColor: '#4B4B4B',

@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchMe } from '../network/User';
 
 interface User {
   firstName: string;
@@ -32,9 +33,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const loadAuthState = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('accessToken');
-        const storedUser = await AsyncStorage.getItem('user');
-        if (storedToken) setToken(storedToken);
-        if (storedUser) setUser(JSON.parse(storedUser));
+        if (storedToken) {
+          setToken(storedToken);
+
+          // 🔹 fetch the user details from /me
+          const me = await fetchMe();
+          if (me) setUser(me); // no need for JSON.parse
+        }
       } catch (error) {
         console.error('Failed to load auth state', error);
       } finally {

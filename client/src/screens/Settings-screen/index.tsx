@@ -9,26 +9,22 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import FriendsCard from '../../Components/FriendsCard';
 
 const SettingsScreen = () => {
   const { showModal } = useModal();
   const { logout } = useAuth();
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
 
-  const styles = friendsStyles();
+  const styles = friendsStyles(Platform, insets);
   return (
     <>
       <Header title="Account Settings" />
 
       <View style={styles.container}>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            paddingBottom:
-              Platform.OS === 'ios' ? insets.bottom + 38 : insets.bottom + 16,
-          }}
-        >
+        <FriendsCard item={user} buttons={false} />
+        <SafeAreaView style={styles.logoutWrapper}>
           <Pressable
             onPress={() => {
               showModal({
