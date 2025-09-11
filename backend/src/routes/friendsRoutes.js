@@ -12,7 +12,7 @@ const {
 const auth = require("../middleware/auth");
 
 router.post("/request/send", auth, sendFriendRequest);
-router.get("/request/received", auth, getReceivedRequests);
+router.get("/request/", auth, getReceivedRequests);
 router.put("/request/:requestId/accept", auth, acceptFriendRequest);
 router.put("/request/:requestId/reject", auth, rejectFriendRequest);
 router.post("/remove", auth, removeFirend);
