@@ -23,7 +23,7 @@ import { API_ENDPOINTS } from '../../network/Endpoints';
 import loginStyles from './styles';
 
 const LoginScreen = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isDark } = useTheme();
   const styles = loginStyles(theme);
 
   const navigation = useNavigation();
@@ -111,11 +111,19 @@ const LoginScreen = () => {
         </View>
 
         <View style={styles.logoContainer}>
-          <Image
-            source={require('../../../assets/images/logo.png')}
-            style={styles.imageStyles}
-            resizeMode="contain"
-          />
+          {isDark ? (
+            <Image
+              source={require('../../../assets/images/logo.png')}
+              style={styles.imageStyles}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              source={require('../../../assets/images/logoDark.png')}
+              style={styles.imageStyles}
+              resizeMode="contain"
+            />
+          )}
           <Text style={styles.textStyles}>Organize your day,</Text>
           <Text style={styles.textStyles}>Effortlessly</Text>
         </View>

@@ -146,6 +146,7 @@ const AddTask: React.FC<AddTaskProps> = ({
               <DateTimePicker
                 mode="date"
                 value={date}
+                textColor={theme.colors.inputTextColor}
                 display="default"
                 onChange={handleDateChange}
               />
@@ -153,11 +154,13 @@ const AddTask: React.FC<AddTaskProps> = ({
             <Button
               title={date.toDateString()}
               onPress={() => setShowDatePicker(true)}
+              style={styles.buttonText}
             />
           </>
         ) : (
           <DateTimePicker
             mode="date"
+            textColor={theme.colors.inputTextColor}
             value={date}
             display="spinner"
             onChange={handleDateChange}

@@ -3,10 +3,11 @@
     android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2f2a24">
+    android:background="#3a332c">
+
     <ImageView 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
+        android:layout_width="match_parent" 
+        android:layout_height="match_parent" 
         android:src="@drawable/screen" 
         android:scaleType="centerCrop" 
         android:layout_centerInParent="true" />

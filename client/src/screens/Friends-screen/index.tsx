@@ -214,13 +214,13 @@ const FriendsScreen = () => {
 
   return (
     <>
-      <Header title="Friends" showAdd onPressAdd={handlePresentModal} />
+      <Header title="Co-workers" showAdd onPressAdd={handlePresentModal} />
 
       <View style={styles.container}>
         <Searchbar onSearch={handleSearch} />
 
         <Text style={styles.subtitle}>
-          All Friends ({filteredFriends.length})
+          All Co-workers ({filteredFriends.length})
         </Text>
 
         {filteredFriends.length === 0 ? (
@@ -256,7 +256,7 @@ const FriendsScreen = () => {
         ref={bottomSheetRef}
         onClose={handleHideModal}
         snapPoints={snapPoints}
-        title="Add Friends"
+        title="Add Co-workers"
       >
         <View style={styles.top}>
           <Searchbar

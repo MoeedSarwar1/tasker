@@ -30,7 +30,7 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { showModal } = useModal();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = registerationStyles(theme);
 
@@ -130,11 +130,19 @@ const RegisterScreen = () => {
         </View>
 
         <View style={styles.logoContainer}>
-          <Image
-            source={require('../../../assets/images/logo.png')}
-            style={styles.imageStyles}
-            resizeMode="contain"
-          />
+          {isDark ? (
+            <Image
+              source={require('../../../assets/images/logo.png')}
+              style={styles.imageStyles}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              source={require('../../../assets/images/logoDark.png')}
+              style={styles.imageStyles}
+              resizeMode="contain"
+            />
+          )}
           <Text style={styles.textStyles}>Organize your day,</Text>
           <Text style={styles.textStyles}>Effortlessly</Text>
         </View>
