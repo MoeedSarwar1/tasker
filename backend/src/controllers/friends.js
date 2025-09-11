@@ -44,7 +44,23 @@ exports.sendFriendRequest = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+exports.getReceivedRequests = async (req, res) => {
+  try {
+    const userId = req.user.id; // assuming you use auth middleware
 
+    const requests = await FriendRequest.find({
+      receiver: userId,
+      status: "pending",
+    })
+      .populate("sender", "firstName lastName email") // get sender details
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(requests);
+  } catch (error) {
+    console.error("Error fetching received requests:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 exports.rejectFriendRequest = async (req, res) => {
   try {
     const { requestId } = req.params;

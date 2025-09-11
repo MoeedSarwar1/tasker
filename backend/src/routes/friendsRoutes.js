@@ -7,10 +7,12 @@ const {
   sendFriendRequest,
   acceptFriendRequest,
   rejectFriendRequest,
+  getReceivedRequests,
 } = require("../controllers/friends");
 const auth = require("../middleware/auth");
 
-router.post("/request", auth, sendFriendRequest);
+router.post("/request/send", auth, sendFriendRequest);
+router.get("/request/received", auth, getReceivedRequests);
 router.put("/request/:requestId/accept", auth, acceptFriendRequest);
 router.put("/request/:requestId/reject", auth, rejectFriendRequest);
 router.post("/remove", auth, removeFirend);
