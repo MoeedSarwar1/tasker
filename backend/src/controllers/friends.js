@@ -6,32 +6,25 @@ exports.addFriend = async (req, res) => {
     const userId = req.user.id;
     const { firstName, lastName, email } = req.body;
 
+    let friend;
     // Build dynamic OR conditions
-    const query = [];
-
-    if (firstName) {
-      query.push({
+    if (email) {
+      // Email is unique, check that first
+      friend = await User.findOne({
+        email: { $regex: `^${email.trim()}$`, $options: "i" },
+      });
+    } else if (firstName && lastName) {
+      // If no email, fallback to name combo
+      friend = await User.findOne({
+        firstName: { $regex: `^${firstName.trim()}$`, $options: "i" },
+        lastName: { $regex: `^${lastName.trim()}$`, $options: "i" },
+      });
+    } else if (firstName) {
+      // Just first name as last resort
+      friend = await User.findOne({
         firstName: { $regex: `^${firstName.trim()}$`, $options: "i" },
       });
     }
-
-    if (lastName) {
-      query.push({
-        lastName: { $regex: `^${lastName.trim()}$`, $options: "i" },
-      });
-    }
-
-    if (email) {
-      query.push({
-        email: { $regex: `^${email.trim()}$`, $options: "i" },
-      });
-    }
-
-    if (query.length === 0) {
-      return res.status(400).json({ message: "Provide name or email" });
-    }
-
-    const friend = await User.findOne({ $or: query });
 
     if (!friend) {
       return res.status(404).json({ message: "User not found" });
