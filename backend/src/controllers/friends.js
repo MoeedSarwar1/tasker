@@ -4,40 +4,53 @@ const Task = require("../models/taskSchema.js");
 exports.addFriend = async (req, res) => {
   try {
     const userId = req.user.id;
+    const { firstName, lastName, email } = req.body;
 
-    // Case-insensitive search by firstName
-    const { firstName, lastName } = req.body;
-    let friend;
+    // Build dynamic OR conditions
+    const query = [];
 
-    if (lastName) {
-      friend = await User.findOne({
-        firstName: { $regex: `^${firstName.trim()}$`, $options: "i" },
-        lastName: { $regex: `^${lastName.trim()}$`, $options: "i" },
-      });
-    } else {
-      friend = await User.findOne({
+    if (firstName) {
+      query.push({
         firstName: { $regex: `^${firstName.trim()}$`, $options: "i" },
       });
     }
 
+    if (lastName) {
+      query.push({
+        lastName: { $regex: `^${lastName.trim()}$`, $options: "i" },
+      });
+    }
+
+    if (email) {
+      query.push({
+        email: { $regex: `^${email.trim()}$`, $options: "i" },
+      });
+    }
+
+    if (query.length === 0) {
+      return res.status(400).json({ message: "Provide name or email" });
+    }
+
+    const friend = await User.findOne({ $or: query });
+
     if (!friend) {
-      console.log("Friend not found in DB");
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (friend.id.toString() === userId)
+    if (friend.id.toString() === userId) {
       return res.status(400).json({ message: "You can't add yourself" });
+    }
 
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "Requesting user not found" });
     }
 
-    // Already friends?
     if (user.friends.includes(friend.id)) {
       return res.status(400).json({ message: "Already friends" });
     }
 
+    // Make them friends
     user.friends.push(friend.id);
     friend.friends.push(user.id);
 
@@ -46,7 +59,7 @@ exports.addFriend = async (req, res) => {
 
     res.status(200).json({ message: "Friend added", friend });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error in addFriend:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -116,7 +129,10 @@ exports.getFriendTasks = async (req, res) => {
       return res.status(403).json({ message: "Not authorized" });
     }
 
-    const tasks = await Task.find({ user: friendId });
+    const tasks = await Task.find({ user: friendId })
+      .populate("user", "firstName lastName _id")
+      .sort({ createdAt: -1 });
+
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
