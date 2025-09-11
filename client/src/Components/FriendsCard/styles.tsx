@@ -48,13 +48,21 @@ const cardStyles = (theme: Theme) =>
       gap: 8,
       marginTop: 8,
     },
+    button: {
+      paddingVertical: 8,
+      backgroundColor: theme.colors.secondaryButtonBackground,
+    },
     addButton: {
       paddingVertical: 8,
       backgroundColor: theme.colors.primaryButtonBackground,
     },
     addButtonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonMedium,
+      ...typography.buttonMicro,
+    },
+    buttonText: {
+      color: theme.colors.secondaryButtonText,
+      ...typography.buttonMicro,
     },
   });
 export default cardStyles;

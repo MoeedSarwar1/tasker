@@ -16,8 +16,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="394" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" semanticContentAttribute="spatial" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashScreen" id="tlE-ao-23c">
-                                <rect key="frame" x="16" y="18" width="394" height="874"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" semanticContentAttribute="spatial" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashScreen" id="tlE-ao-23c">
+                                <rect key="frame" x="0.0" y="0.0" width="394" height="874"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
                         </subviews>

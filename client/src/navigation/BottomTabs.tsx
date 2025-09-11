@@ -1,16 +1,27 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
-import { Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Platform, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../context/Theme-context';
 import { tabNames } from './enums';
 import { FriendsStack, HomeStack, SettingsStack } from './Home-stack';
+import { allRequests } from '../network/Friends';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
+  const [requests, setRequests] = useState([]);
+
+  const loadRequests = async () => {
+    const data = await allRequests(); // returns user objects of friends
+    setRequests(data);
+  };
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests()]);
 
   return (
     <Tabs.Navigator
@@ -46,13 +57,39 @@ const BottomTabs = () => {
         component={FriendsStack}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Icon
-              name="account-group"
-              size={26}
-              color={
-                focused ? theme.colors.primaryIcon : theme.colors.secondaryIcon
-              }
-            />
+            <View style={{ position: 'relative' }}>
+              <Icon
+                name="account-group"
+                size={26}
+                color={
+                  focused
+                    ? theme.colors.primaryIcon
+                    : theme.colors.secondaryIcon
+                }
+              />
+              {requests.length > 0 && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: -6,
+                    top: -3,
+                    backgroundColor: 'red',
+                    borderRadius: 8,
+                    minWidth: 16,
+                    height: 16,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 2,
+                  }}
+                >
+                  <Text
+                    style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}
+                  >
+                    {requests.length}
+                  </Text>
+                </View>
+              )}
+            </View>
           ),
         }}
       />

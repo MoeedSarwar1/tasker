@@ -16,6 +16,8 @@ import { Task } from '../../Components/TaskCard/task.interface';
 import TaskCard from '../../Components/TaskCard/TaskCard';
 import Text from '../../Components/Text';
 import { useModal } from '../../context/Modal-context';
+import { useTheme } from '../../context/Theme-context';
+import { fetchFriends, getFriendTasks } from '../../network/Friends';
 import {
   deleteTask,
   fetchTasks,
@@ -24,7 +26,7 @@ import {
   updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
-import { useTheme } from '../../context/Theme-context';
+import { useAuth } from '../../context/Auth-context';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -68,9 +70,17 @@ const HomeScreen = () => {
   const loadTasks = async () => {
     try {
       setRefreshing(true);
-      const data = await fetchTasks();
 
-      setTasks(data);
+      const myTasks = await fetchTasks(); // logged-in user
+      const friends = await fetchFriends();
+
+      const friendsTasks = await Promise.all(
+        friends.map(friend => getFriendTasks(friend._id)),
+      );
+
+      setTasks([...myTasks, ...friendsTasks.flat()]);
+
+      // Merge them
     } catch (error) {
       showModal({
         mode: 'error',

@@ -11,11 +11,28 @@ const FriendsCard = ({
   item,
   onSecondaryPress,
   onPrimaryPress,
+  buttonRow = false,
+  title,
   buttons = true,
 }: Friends) => {
   const { theme } = useTheme();
   const style = cardStyles(theme);
   const [showButtons, setShowButtons] = useState(false);
+
+  const user = item.sender ?? item.receiver ?? item;
+  // Derive button title from FriendRequest status
+  const getButtonTitle = () => {
+    if (user.isFriend) return 'Remove';
+    if (user.status === 'pending') return 'Accept Request';
+    if (user.status === 'rejected') return 'Send Request';
+    if (user.status === 'sent') return 'Requested';
+    return title ?? 'Send Request';
+  };
+
+  const isButtonDisabled = () => {
+    // disable when request is already sent or pending
+    return user.status === 'sent' || user.status === 'pending';
+  };
 
   return (
     <Pressable
@@ -24,24 +41,40 @@ const FriendsCard = ({
     >
       <View style={style.header}>
         <View style={style.avatar}>
-          <SvgXml xml={item.avatar} width={35} height={35} />
+          <SvgXml xml={user.avatar} width={35} height={35} />
         </View>
 
         <View>
           <Text style={[style.title]}>
-            {item.firstName} {item.lastName}
+            {user.firstName} {user.lastName}
           </Text>
-          <Text style={style.description}>{item.email}</Text>
+          <Text style={style.description}>{user.email}</Text>
         </View>
       </View>
+
       {buttons && showButtons && (
         <View style={style.footer}>
           <View style={style.buttonRow}>
+            {buttonRow && (
+              <View style={{ flex: 1 }}>
+                <Button
+                  title="Reject"
+                  style={style.button}
+                  textStyle={style.buttonText}
+                  onPress={onSecondaryPress}
+                />
+              </View>
+            )}
+
             <View style={{ flex: 1 }}>
               <Button
                 textStyle={style.addButtonText}
-                title={item.isFriend ? 'Remove' : 'Add'} // ✅ derived from array
-                style={style.addButton}
+                title={getButtonTitle()}
+                style={[
+                  style.addButton,
+                  isButtonDisabled() && { opacity: 0.6 }, // dim the button if disabled
+                ]}
+                disabled={isButtonDisabled()}
                 onPress={onPrimaryPress}
               />
             </View>

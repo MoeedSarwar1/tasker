@@ -10,4 +10,6 @@ export interface Friends {
   onSecondaryPress: () => {};
   onPrimaryPress: () => {};
   buttons?:boolean
+  buttonRow?:boolean
+  title?:string
 }

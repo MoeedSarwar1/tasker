@@ -6,11 +6,13 @@ import { Task } from './task.interface';
 import Text from '../Text';
 import { useState } from 'react';
 import { useTheme } from '../../context/Theme-context';
+import { useAuth } from '../../context/Auth-context';
 
 const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const { theme } = useTheme();
   const style = cardStyles(theme);
   const [showDescription, setShowDescription] = useState(false);
+  const { user } = useAuth();
 
   const onStatusChange = () => {
     if (!item.completed) {
@@ -65,7 +67,11 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
         </View>
       )}
       <View style={style.footer}>
-        <Text style={style.user}>{item.assignedTo ?? 'Myself'}</Text>
+        <Text style={style.user}>
+          {item.user?._id?.toString() === user?.id?.toString()
+            ? `${user?.firstName} ${user?.lastName}`
+            : `${item.user?.firstName || ''} ${item.user?.lastName || ''}`}
+        </Text>
         <View style={style.date}>
           <Pressable onPress={onMorePress} hitSlop={10}>
             <Icon name="dots-horizontal" size={20} color="#9ca3af" />

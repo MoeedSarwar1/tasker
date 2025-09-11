@@ -10,12 +10,12 @@ import BottomTabs from './src/navigation/BottomTabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ModalProvider } from './src/context/Modal-context';
 import { ThemeProvider, useTheme } from './src/context/Theme-context';
+
 const RootNavigator = () => {
   const { token, loading } = useAuth();
-  const { isDark, theme } = useTheme(); // <-- get theme here
+  const { isDark, theme } = useTheme();
 
   if (loading) {
-    // temporary splash or loader
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <StatusBar
@@ -26,15 +26,15 @@ const RootNavigator = () => {
       </View>
     );
   }
+
   return (
     <NavigationContainer>
       {token ? <BottomTabs /> : <AuthStack />}
     </NavigationContainer>
   );
 };
-const App = () => {
-  const { theme, isDark } = useTheme(); // <-- get theme here
 
+const App = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -44,23 +44,31 @@ const App = () => {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ModalProvider>
           <PortalProvider>
-            <StatusBar
-              barStyle={isDark ? 'light-content' : 'dark-content'}
-              backgroundColor={theme.colors.background}
-              translucent={false}
-            />
-
-            <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-              <SafeAreaProvider>
-                <AuthProvider>
-                  <RootNavigator />
-                </AuthProvider>
-              </SafeAreaProvider>
-            </View>
+            <SafeAreaProvider>
+              <AuthProvider>
+                <ThemedApp />
+              </AuthProvider>
+            </SafeAreaProvider>
           </PortalProvider>
         </ModalProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
   );
 };
+
+// ✅ Now safely use theme inside this child
+const ThemedApp = () => {
+  const { theme, isDark } = useTheme();
+
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={isDark ? '#000' : '#fff'}
+      />
+      <RootNavigator />
+    </View>
+  );
+};
+
 export default App;

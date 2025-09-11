@@ -47,6 +47,7 @@ const Searchbar = ({
         style={{ flex: 1, color: theme.colors.inputTextColor }}
         placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
         value={query}
+        autoCapitalize="none" // <-- add this
         onChangeText={handleChange}
       />
       <Ionicons name="search" size={18} color={theme.colors.primaryIcon} />

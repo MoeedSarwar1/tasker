@@ -7,8 +7,12 @@ export const API_ENDPOINTS = {
   GET_TASKS: 'users/tasks',
   DELETE_TASK: 'users/tasks',
   PATCH_TASK: 'users/tasks',
-  ADD_FRIENDS: '/friends/add',
+  SEND_FRIEND_REQUEST: '/friends/request/send',
+  ACCEPT_FRIENDS_REQUEST: '/friends/request',
+  REJECT_FRIENDS_REQUEST: '/friends/request',
+  FRIENDS_REQUESTS: '/friends/request/received',
   REMOVE_FRIEND: '/friends/remove',
   GET_FRIENDS: '/friends/',
   GET_ME: '/users/me',
+  GET_FRIEND_TASK: (id: string) => `friends/${id}/tasks`,
 };
