@@ -1,4 +1,5 @@
 const User = require("../models/userSchema.js");
+const Task = require("../models/taskSchema.js");
 
 exports.addFriend = async (req, res) => {
   try {
@@ -100,6 +101,24 @@ exports.removeFirend = async (req, res) => {
     res.status(200).json({ message: "Friend Removed", friend });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.getFriendTasks = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const friendId = req.params.id;
+
+    const user = await User.findById(userId);
+
+    if (!user.friends.includes(friendId)) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    const tasks = await Task.find({ user: friendId });
+    res.json(tasks);
+  } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 };
