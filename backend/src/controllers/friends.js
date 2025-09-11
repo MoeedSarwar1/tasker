@@ -46,7 +46,7 @@ exports.addFriend = async (req, res) => {
       return res.status(404).json({ message: "Requesting user not found" });
     }
 
-    if (user.friends.includes(friend.id)) {
+    if (user.friends.includes(friend.email)) {
       return res.status(400).json({ message: "Already friends" });
     }
 
