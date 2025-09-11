@@ -20,7 +20,7 @@ const fetchAllTasks = async (req, res) => {
 
     console.log("🔍 Fetching tasks for userId:", userId);
 
-    const tasks = await Task.find({ user: friendId })
+    const tasks = await Task.find({ user: userID })
       .populate("user", "firstName lastName _id")
       .sort({ createdAt: -1 });
 
