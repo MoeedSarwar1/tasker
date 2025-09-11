@@ -20,9 +20,9 @@ const fetchAllTasks = async (req, res) => {
 
     console.log("🔍 Fetching tasks for userId:", userId);
 
-    const tasks = await Task.find({ user: userId })
-      .populate("user", "firstName lastName _id")
-      .sort({ createdAt: -1 });
+    const tasks = await Task.find({
+      user: userId,
+    }).sort({ createdAt: -1 });
 
     console.log("✅ Found tasks:", tasks.length);
 
