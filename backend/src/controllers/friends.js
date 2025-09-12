@@ -104,6 +104,32 @@ exports.acceptFriendRequest = async (req, res) => {
     await sender.save();
     await receiver.save();
 
+    const senderSocket = global.onlineUsers.get(sender.id.toString());
+    const receiverSocket = global.onlineUsers.get(receiver.id.toString());
+
+    if (senderSocket) {
+      global.io.to(senderSocket).emit("friends:added", {
+        friendId: receiver.id,
+        friend: {
+          id: receiver.id,
+          firstName: receiver.firstName,
+          lastName: receiver.lastName,
+          email: receiver.email,
+        },
+      });
+    }
+
+    if (receiverSocket) {
+      global.io.to(receiverSocket).emit("friends:added", {
+        friendId: sender.id,
+        friend: {
+          id: sender.id,
+          firstName: sender.firstName,
+          lastName: sender.lastName,
+          email: sender.email,
+        },
+      });
+    }
     res.status(200).json({ message: "Friend request accepted" });
   } catch (err) {
     console.error("❌ Error accepting friend request:", err);
