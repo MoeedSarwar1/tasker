@@ -273,6 +273,9 @@ const FriendsScreen = () => {
         iconColor: '#28A745',
         buttonRow: false,
       });
+      setUsers(prev =>
+        prev.map(u => (u.email === email ? { ...u, status: 'sent' } : u)),
+      );
       bottomSheetRef?.current?.close();
       return setRequests(data);
     } catch (error) {

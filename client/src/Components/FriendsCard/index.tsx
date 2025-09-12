@@ -12,7 +12,6 @@ const FriendsCard = ({
   onSecondaryPress,
   onPrimaryPress,
   buttonRow = false,
-  title,
   buttons = true,
 }: Friends) => {
   const { theme } = useTheme();
@@ -23,10 +22,15 @@ const FriendsCard = ({
   // Derive button title from FriendRequest status
   const getButtonTitle = () => {
     if (user.isFriend) return 'Remove';
-    if (user.status === 'pending') return 'Accept Request';
-    if (user.status === 'rejected') return 'Send Request';
+
+    // If the request was sent by me
     if (user.status === 'sent') return 'Requested';
-    return title ?? 'Send Request';
+
+    // If the request was received by me
+    if (user.status === 'pending') return 'Accept';
+    if (user.status === 'rejected') return 'Send Request';
+
+    return 'Send Request';
   };
 
   const isButtonDisabled = () => {
@@ -68,6 +72,7 @@ const FriendsCard = ({
 
             <View style={{ flex: 1 }}>
               <Button
+                disabled={user.status === 'sent'}
                 textStyle={style.addButtonText}
                 title={getButtonTitle()}
                 style={[

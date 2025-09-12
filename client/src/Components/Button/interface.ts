@@ -6,4 +6,5 @@ export interface ButtonProps {
   children?: React.ReactNode;
   style?: ViewStyle;
   textStyle?: ViewStyle;
+  disabled?: boolean;
 }

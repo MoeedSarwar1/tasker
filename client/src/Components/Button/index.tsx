@@ -8,6 +8,7 @@ const Button = ({
   onPress,
   children,
   style,
+  disabled,
   textStyle,
 }: ButtonProps) => {
   const styles = buttonStyles();
@@ -16,7 +17,11 @@ const Button = ({
     onPress && onPress();
   };
   return (
-    <Pressable onPress={handlePress} style={[styles.container, style]}>
+    <Pressable
+      disabled={disabled}
+      onPress={handlePress}
+      style={[styles.container, style]}
+    >
       {children}
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
     </Pressable>
