@@ -5,8 +5,12 @@ const onlineUsers = new Map(); // userId -> socketId
 
 export const initSocket = (httpServer) => {
   io = new Server(httpServer, {
-    cors: { origin: "*" }, // tighten in prod
+    cors: { origin: "*" },
   });
+
+  // ✅ expose globally so controllers can access
+  global.io = io;
+  global.onlineUsers = onlineUsers;
 
   io.on("connection", (socket) => {
     console.log("⚡ User connected:", socket.id);
