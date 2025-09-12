@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ModalProvider } from './src/context/Modal-context';
 import { ThemeProvider, useTheme } from './src/context/Theme-context';
 import { FriendsProvider } from './src/context/Friends-context';
+import SocketManager from './src/context/Socket-context';
 
 const RootNavigator = () => {
   const { token, loading } = useAuth();
@@ -32,6 +33,7 @@ const RootNavigator = () => {
     <NavigationContainer>
       {token ? (
         <FriendsProvider>
+          <SocketManager />
           <BottomTabs />
         </FriendsProvider>
       ) : (
