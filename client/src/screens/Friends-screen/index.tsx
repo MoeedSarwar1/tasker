@@ -399,7 +399,7 @@ const FriendsScreen = () => {
               }
               renderItem={({ item }) => (
                 <FriendsCard
-                  title="Accept Request"
+                  title="Accept"
                   buttonRow
                   item={{ ...item, isFriend: false }}
                   onPrimaryPress={() => handleAddFriend(item._id)}

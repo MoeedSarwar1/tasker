@@ -78,7 +78,7 @@ const RegisterScreen = () => {
         trimmedPass,
       );
 
-      if (data?.primaryButtonTextuser) {
+      if (data) {
         showModal({
           iconName: 'checkbox-marked-circle-outline',
           iconColor: '#28A745',
@@ -90,14 +90,27 @@ const RegisterScreen = () => {
         navigation.goBack();
       }
     } catch (error: any) {
-      showModal({
-        mode: 'error',
-        iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Signup failed. Please try again.',
-        buttonRow: false,
-      });
+      const errorMessage = error?.response?.data?.message || error.message;
+
+      if (errorMessage?.toLowerCase().includes('email')) {
+        showModal({
+          mode: 'error',
+          iconName: 'email-remove-outline',
+          iconColor: '#DC3545',
+          title: 'Email Already Exists',
+          description: 'Please use a different email address.',
+          buttonRow: false,
+        });
+      } else {
+        showModal({
+          mode: 'error',
+          iconName: 'wifi-alert',
+          iconColor: '#DC3545',
+          title: 'Something Went Wrong',
+          description: 'Signup failed. Please try again.',
+          buttonRow: false,
+        });
+      }
     } finally {
       setLoading(false);
     }

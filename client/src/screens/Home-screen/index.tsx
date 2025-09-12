@@ -62,11 +62,13 @@ const HomeScreen = () => {
 
   // Open BottomSheet
   const handlePresentModal = () => bottomSheetRef.current?.expand();
+
   useEffect(() => {
     if (!loading) {
       loadTasks(); // reload tasks when a friend is added/removed
     }
   }, [friendsUpdated]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);

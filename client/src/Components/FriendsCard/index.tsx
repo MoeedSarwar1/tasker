@@ -12,6 +12,7 @@ const FriendsCard = ({
   onSecondaryPress,
   onPrimaryPress,
   buttonRow = false,
+  title,
   buttons = true,
 }: Friends) => {
   const { theme } = useTheme();
@@ -30,7 +31,7 @@ const FriendsCard = ({
     if (user.status === 'pending') return 'Accept';
     if (user.status === 'rejected') return 'Send Request';
 
-    return 'Send Request';
+    return title ?? 'Send Request';
   };
 
   const isButtonDisabled = () => {
