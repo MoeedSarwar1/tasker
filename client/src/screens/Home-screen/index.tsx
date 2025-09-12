@@ -27,6 +27,7 @@ import {
   updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
+import { useFriendsContext } from '../../context/Friends-context';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -46,6 +47,7 @@ const HomeScreen = () => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { friendsUpdated } = useFriendsContext();
 
   const { showModal } = useModal();
   const openMore = (task: Task) => {
@@ -60,7 +62,11 @@ const HomeScreen = () => {
 
   // Open BottomSheet
   const handlePresentModal = () => bottomSheetRef.current?.expand();
-
+  useEffect(() => {
+    if (!loading) {
+      loadTasks(); // reload tasks when a friend is added/removed
+    }
+  }, [friendsUpdated]);
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
