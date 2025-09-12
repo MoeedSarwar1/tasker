@@ -51,6 +51,8 @@ export interface ThemeColors {
   primaryIcon: string;
   border: string; // ✅ added border option
   secondaryIcon: string;
+  disabledPrimaryIcon: string;
+  disabledSecondaryIcon: string;
   modals: ModalsColors;
   linkText: string; // ✅ Added for link text
   chips: ChipsColors;

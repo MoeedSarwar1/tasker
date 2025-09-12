@@ -23,6 +23,8 @@ export const lightTheme: Theme = {
     inputTextColor: colors.inputTextLight,
     primaryIcon: colors.primaryIconLight,
     secondaryIcon: colors.secondaryIconLight,
+    disabledPrimaryIcon: colors.primaryIconLightDisabled,
+    disabledSecondaryIcon: colors.secondaryIconLightDisabled,
     linkText: colors.linkTextLight,
     modals: {
       errorBackground: colors.errorBackgroundLight,

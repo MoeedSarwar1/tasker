@@ -294,18 +294,13 @@ const FriendsScreen = () => {
       return;
     }
 
-    const lower = text.toLowerCase();
-
     const friendResults = friends.filter(
       friend =>
-        friend?.firstName?.toLowerCase().includes(lower) ||
-        friend?.lastName?.toLowerCase().includes(lower),
+        friend?.firstName?.includes(text) || friend?.lastName?.includes(text),
     );
 
     const requestResults = requests.filter(
-      req =>
-        req?.firstName?.toLowerCase().includes(lower) ||
-        req?.lastName?.toLowerCase().includes(lower),
+      req => req?.firstName?.includes(text) || req?.lastName?.includes(text),
     );
 
     setFilteredFriends(friendResults);
@@ -361,8 +356,8 @@ const FriendsScreen = () => {
           ) : (
             <FlatList
               data={filteredFriends.sort((a, b) =>
-                `${a.firstName} ${a.lastName}`.localeCompare(
-                  `${b.firstName} ${b.lastName}`,
+                (a.firstName + ' ' + a.lastName).localeCompare(
+                  b.firstName + ' ' + b.lastName,
                 ),
               )}
               showsVerticalScrollIndicator={false}
@@ -429,8 +424,8 @@ const FriendsScreen = () => {
 
               <FlatList
                 data={usersWithStatus.sort((a, b) =>
-                  `${a.firstName} ${a.lastName}`.localeCompare(
-                    `${b.firstName} ${b.lastName}`,
+                  (a.firstName + ' ' + a.lastName).localeCompare(
+                    b.firstName + ' ' + b.lastName,
                   ),
                 )}
                 showsVerticalScrollIndicator={false}

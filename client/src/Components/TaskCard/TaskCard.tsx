@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useAuth } from '../../context/Auth-context';
+import { useTheme } from '../../context/Theme-context';
 import { getTaskStatusText } from '../../utils/dateFormat';
+import Text from '../Text';
 import cardStyles from './styles';
 import { Task } from './task.interface';
-import Text from '../Text';
-import { useState } from 'react';
-import { useTheme } from '../../context/Theme-context';
-import { useAuth } from '../../context/Auth-context';
 
 const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const { theme } = useTheme();
@@ -27,18 +27,26 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
       onPress={() => setShowDescription(!showDescription)}
     >
       <View style={style.header}>
-        <Pressable onPress={onStatusChange} hitSlop={10}>
+        <Pressable disabled={item?.user} onPress={onStatusChange} hitSlop={10}>
           {item.completed ? (
             <Icon
               name="checkbox-marked-outline"
               size={24}
-              color={theme.colors.primaryIcon}
+              color={
+                item?.user
+                  ? theme.colors.disabledPrimaryIcon
+                  : theme.colors.primaryIcon
+              }
             />
           ) : (
             <Icon
               name="checkbox-blank-outline"
               size={24}
-              color={theme.colors.secondaryIcon}
+              color={
+                item?.user
+                  ? theme.colors.disabledSecondaryIcon
+                  : theme.colors.secondaryIcon
+              }
             />
           )}
         </Pressable>
@@ -73,8 +81,16 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
             : `${item.user?.firstName || ''} ${item.user?.lastName || ''}`}
         </Text>
         <View style={style.date}>
-          <Pressable onPress={onMorePress} hitSlop={10}>
-            <Icon name="dots-horizontal" size={20} color="#9ca3af" />
+          <Pressable onPress={onMorePress} disabled={item?.user} hitSlop={10}>
+            <Icon
+              name="dots-horizontal"
+              size={20}
+              color={
+                item?.user
+                  ? theme.colors.disabledPrimaryIcon
+                  : theme.colors.primaryIcon
+              }
+            />
           </Pressable>
         </View>
       </View>

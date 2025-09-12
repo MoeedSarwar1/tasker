@@ -46,7 +46,10 @@ export const colors = {
   primaryIconDark: '#F7EFE6',
   secondaryIconLight: '#BBAFA3',
   secondaryIconDark: '#BBAFA3',
-
+  primaryIconLightDisabled: 'rgba(89, 63, 43, 0.3)', // 30% opacity
+  primaryIconDarkDisabled: 'rgba(247, 239, 230, 0.3)',
+  secondaryIconLightDisabled: 'rgba(187, 175, 163, 0.3)',
+  secondaryIconDarkDisabled: 'rgba(187, 175, 163, 0.3)',
   // Modals
   successHeaderLight: '#2E7D32', // deep green
   successHeaderDark: '#81C784', // softer green for dark mode
