@@ -155,7 +155,6 @@ const FriendsScreen = () => {
 
       setRequests(prev => prev.filter(r => r._id !== requestId));
       setFilteredRequests(prev => prev.filter(r => r._id !== requestId));
-      notifyFriendsUpdate();
       showModal({
         title: 'All Set',
         description: 'Friend added successfully 🎉',

@@ -27,7 +27,11 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
       onPress={() => setShowDescription(!showDescription)}
     >
       <View style={style.header}>
-        <Pressable disabled={item?.user} onPress={onStatusChange} hitSlop={10}>
+        <Pressable
+          disabled={Boolean(item?.user)}
+          onPress={onStatusChange}
+          hitSlop={10}
+        >
           {item.completed ? (
             <Icon
               name="checkbox-marked-outline"
@@ -81,7 +85,11 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
             : `${item.user?.firstName || ''} ${item.user?.lastName || ''}`}
         </Text>
         <View style={style.date}>
-          <Pressable onPress={onMorePress} disabled={item?.user} hitSlop={10}>
+          <Pressable
+            onPress={onMorePress}
+            disabled={Boolean(item?.user)}
+            hitSlop={10}
+          >
             <Icon
               name="dots-horizontal"
               size={20}
