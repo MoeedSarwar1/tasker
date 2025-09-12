@@ -38,6 +38,6 @@ mongoose
     console.error("MongoDB connection error:", err);
   });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
