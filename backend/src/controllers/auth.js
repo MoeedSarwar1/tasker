@@ -9,7 +9,7 @@ const signup = async (req, res) => {
   try {
     const { firstName, lastName, password, email } = req.body;
 
-    const existingUser = await User.findOne({ $or: [{ email }] });
+    const existingUser = await User.findOne({ email: email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already taken" });
     }
