@@ -1,5 +1,11 @@
 import React from 'react';
-import { Platform, Pressable, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FriendsCard from '../../Components/FriendsCard';
@@ -8,6 +14,7 @@ import { useAuth } from '../../context/Auth-context';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import friendsStyles from './styles';
+import { typography } from '../../theme/typography';
 
 const SettingsScreen = () => {
   const { showModal } = useModal();
@@ -15,8 +22,31 @@ const SettingsScreen = () => {
   const { theme, toggleTheme } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
+  const [loggingOut, setLoggingOut] = React.useState(false);
 
   const styles = friendsStyles(Platform, insets, theme);
+
+  if (loggingOut) {
+    return (
+      <View
+        style={[
+          styles.container,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
+        <ActivityIndicator size="large" color={theme.colors.primaryIcon} />
+        <Text
+          style={{
+            marginTop: 10,
+            color: theme.colors.headerText,
+            ...typography.micro,
+          }}
+        >
+          Logging out...
+        </Text>
+      </View>
+    );
+  }
   return (
     <>
       <Header title="Account Settings" />
@@ -42,7 +72,10 @@ const SettingsScreen = () => {
                 'Logging out will end your current session. You will need to sign in again to access your account. Do you want to continue?',
               iconName: 'exit-run',
               onConfirm: () => {
-                logout();
+                setLoggingOut(true); // show loader
+                setTimeout(() => {
+                  logout(); // perform logout after delay
+                }, 1500); // 1.5 seconds delay
               },
             });
           }}

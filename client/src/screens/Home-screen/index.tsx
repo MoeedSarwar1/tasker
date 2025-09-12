@@ -1,6 +1,7 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Keyboard,
   Pressable,
@@ -26,7 +27,6 @@ import {
   updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
-import { useAuth } from '../../context/Auth-context';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
@@ -45,6 +45,7 @@ const HomeScreen = () => {
   const styles = homeStles(insets, theme);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { showModal } = useModal();
   const openMore = (task: Task) => {
@@ -60,12 +61,18 @@ const HomeScreen = () => {
   // Open BottomSheet
   const handlePresentModal = () => bottomSheetRef.current?.expand();
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
   // Close BottomSheet
   const handleHideModal = () => {
     setEditMode(false);
     bottomSheetRef.current?.close();
   };
-
   // Fetch tasks from backend
   const loadTasks = async () => {
     try {
@@ -292,50 +299,64 @@ const HomeScreen = () => {
       : `${filteredTasks.length} completed tasks`;
   return (
     <>
-      <Header
-        title={getGreeting()}
-        showChips
-        showAdd
-        subtitle={subtitle}
-        onPressAdd={handlePresentModal}
-        onFilterChange={setFilter} // ✅ update filter state when chip is tapped
-      />
+      {loading ? (
+        <View
+          style={[
+            styles.container,
+            { justifyContent: 'center', alignItems: 'center' },
+          ]}
+        >
+          <ActivityIndicator size="large" color={theme.colors.primaryIcon} />
+        </View>
+      ) : (
+        <>
+          <Header
+            title={getGreeting()}
+            showChips
+            showAdd
+            subtitle={subtitle}
+            onPressAdd={handlePresentModal}
+            onFilterChange={setFilter} // ✅ update filter state when chip is tapped
+          />
+          <View style={styles.container}>
+            {filteredTasks.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Icon
+                  name="notebook-edit-outline"
+                  size={64}
+                  color={theme.colors.secondaryIcon}
+                />
 
-      <View style={styles.container}>
-        {filteredTasks.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Icon
-              name="notebook-edit-outline"
-              size={64}
-              color={theme.colors.secondaryIcon}
-            />
-
-            <Text style={styles.emptyTextStyle}>You’re clear for now</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={filteredTasks} // ✅ only filtered tasks shown
-            showsVerticalScrollIndicator={false}
-            style={styles.list}
-            contentContainerStyle={styles.flatlistContainer}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            keyExtractor={(item, index) => item._id || index.toString()}
-            renderItem={({ item }) => (
-              <TaskCard
-                item={item}
-                onChange={() => handleToggleTaskCompletion(item._id)}
-                onMorePress={() => {
-                  setSelectedTask(item); // save which task we want to act on
-                  openMore(item); // open the "More" bottom sheet
-                }}
+                <Text style={styles.emptyTextStyle}>You’re clear for now</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={filteredTasks} // ✅ only filtered tasks shown
+                showsVerticalScrollIndicator={false}
+                style={styles.list}
+                contentContainerStyle={styles.flatlistContainer}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                keyExtractor={(item, index) => item._id || index.toString()}
+                renderItem={({ item }) => (
+                  <TaskCard
+                    item={item}
+                    onChange={() => handleToggleTaskCompletion(item._id)}
+                    onMorePress={() => {
+                      setSelectedTask(item); // save which task we want to act on
+                      openMore(item); // open the "More" bottom sheet
+                    }}
+                  />
+                )}
               />
             )}
-          />
-        )}
-      </View>
-
+          </View>
+        </>
+      )}
       <CustomBottomSheet
         ref={bottomSheetRef}
         onClose={handleHideModal}

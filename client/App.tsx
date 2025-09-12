@@ -10,6 +10,7 @@ import BottomTabs from './src/navigation/BottomTabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ModalProvider } from './src/context/Modal-context';
 import { ThemeProvider, useTheme } from './src/context/Theme-context';
+import { FriendsProvider } from './src/context/Friends-context';
 
 const RootNavigator = () => {
   const { token, loading } = useAuth();
@@ -29,7 +30,13 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer>
-      {token ? <BottomTabs /> : <AuthStack />}
+      {token ? (
+        <FriendsProvider>
+          <BottomTabs />
+        </FriendsProvider>
+      ) : (
+        <AuthStack />
+      )}
     </NavigationContainer>
   );
 };

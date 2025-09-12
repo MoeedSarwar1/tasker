@@ -1,6 +1,12 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, Pressable, RefreshControl, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import CustomBottomSheet from '../../Components/BottomSheet';
@@ -20,6 +26,7 @@ import {
 } from '../../network/Friends';
 import { fetchUsers } from '../../network/User';
 import friendsStyles from './styles';
+import { useFriendsContext } from '../../context/Friends-context';
 
 const FriendsScreen = () => {
   const snapPoints = useMemo(() => ['90%'], []);
@@ -27,6 +34,7 @@ const FriendsScreen = () => {
   const [selectedTab, setSelectedTab] = useState<'friends' | 'requests'>(
     'friends',
   );
+
   const [friends, setFriends] = useState<any[]>([]);
   const [filteredFriends, setFilteredFriends] = useState<any[]>([]);
   const [requests, setRequests] = useState([]);
@@ -34,109 +42,57 @@ const FriendsScreen = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true); // main loader
+  const [searchText, setSearchText] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
   const [searchResetKey, setSearchResetKey] = useState(0);
 
-  const handleHideModal = () => {
-    bottomSheetRef.current?.close();
-    setSearchResetKey(prev => prev + 1); // trigger reset
-  };
-
+  const { notifyFriendsUpdate } = useFriendsContext();
   const { showModal } = useModal();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const styles = friendsStyles(theme, insets);
 
+  const handleHideModal = () => {
+    bottomSheetRef.current?.close();
+    setSearchResetKey(prev => prev + 1);
+  };
   const handlePresentModal = () => bottomSheetRef.current?.expand();
 
   const nothingToShow = (
     hasData: boolean,
     message: string = 'Nothing To Show',
     icon: string,
-  ) => {
-    return (
-      <View style={styles.emptyContainer}>
-        {!hasData && (
-          <>
-            <Material
-              name={icon}
-              size={64}
-              color={theme.colors.secondaryIcon}
-            />
-            <Text style={styles.emptyTextStyle}>{message}</Text>
-          </>
-        )}
-      </View>
-    );
-  };
+  ) => (
+    <View style={styles.emptyContainer}>
+      {!hasData && (
+        <>
+          <Material name={icon} size={64} color={theme.colors.secondaryIcon} />
+          <Text style={styles.emptyTextStyle}>{message}</Text>
+        </>
+      )}
+    </View>
+  );
 
-  const loadRequests = async () => {
+  // ✅ Load all data initially
+  const loadAllData = async () => {
     try {
+      setLoading(true);
       setRefreshing(true);
-      const data = await allRequests(); // returns user objects of friends
-      setRequests(data);
-      setFilteredRequests(data);
-    } catch (error) {
-      showModal({
-        mode: 'error',
-        iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Friends didn’t load. Check your connection and retry.',
-        buttonRow: false,
-        onConfirm: () => onRefresh(),
-      });
-    } finally {
-      setRefreshing(false);
-    }
-  };
-  const handleRejectRequest = async (requestID: string) => {
-    try {
-      setRefreshing(true);
-      const data = await rejectFriendRequest(requestID); // returns user objects of friends
-      setRequests(data);
-      setFilteredRequests(data);
-    } catch (error) {
-      showModal({
-        mode: 'error',
-        iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Friends didn’t load. Check your connection and retry.',
-        buttonRow: false,
-        onConfirm: () => onRefresh(),
-      });
-    } finally {
-      setRefreshing(false);
-    }
-  };
 
-  // ✅ Load current friends
-  const loadFriends = async () => {
-    try {
-      setRefreshing(true);
-      const data = await fetchFriends(); // returns user objects of friends
-      setFriends(data);
-      setFilteredFriends(data);
-    } catch (error) {
-      showModal({
-        mode: 'error',
-        iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Friends didn’t load. Check your connection and retry.',
-        buttonRow: false,
-        onConfirm: () => onRefresh(),
-      });
-    } finally {
-      setRefreshing(false);
-    }
-  };
+      const [friendsData, requestsData, usersData] = await Promise.all([
+        fetchFriends(),
+        allRequests(),
+        fetchUsers(),
+      ]);
 
-  // ✅ Load all users
-  const loadUsers = async () => {
-    try {
-      const data = await fetchUsers();
-      setUsers(data);
+      setFriends(friendsData);
+      setFilteredFriends(friendsData);
+
+      setRequests(requestsData);
+      setFilteredRequests(requestsData);
+
+      setUsers(usersData);
       setFilteredUsers([]); // empty until search
     } catch (error) {
       showModal({
@@ -144,36 +100,62 @@ const FriendsScreen = () => {
         iconName: 'wifi-alert',
         iconColor: '#DC3545',
         title: 'Something Went Wrong,',
-        description: 'Users didn’t load. Check your connection and retry.',
+        description: 'Failed to load data. Check your connection and retry.',
         buttonRow: false,
+        onConfirm: () => loadAllData(),
       });
+    } finally {
+      setRefreshing(false);
+      setTimeout(() => {
+        setLoading(false); // stop search loader
+      }, 500);
     }
   };
 
-  // ✅ Add Friend
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      if (selectedTab === 'friends') {
+        const friendsData = await fetchFriends();
+        setFriends(friendsData);
+        setFilteredFriends(friendsData);
+      } else {
+        const requestsData = await allRequests();
+        setRequests(requestsData);
+        setFilteredRequests(requestsData);
+      }
+    } catch (error) {
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Could not refresh data.',
+        buttonRow: false,
+      });
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  // ✅ Accept friend
   const handleAddFriend = async (requestId: string) => {
     try {
       const addedFriend = await acceptFriendRequest(requestId);
-
-      // ✅ Safely update friends (avoid duplicates)
       setFriends(prev =>
-        prev.some(friend => friend._id === addedFriend._id)
+        prev.some(f => f._id === addedFriend._id)
           ? prev
           : [...prev, addedFriend],
       );
       setFilteredFriends(prev =>
-        prev.some(friend => friend._id === addedFriend._id)
+        prev.some(f => f._id === addedFriend._id)
           ? prev
           : [...prev, addedFriend],
       );
 
-      // ✅ Remove the accepted request
-      setRequests(prev => prev.filter(request => request._id !== requestId));
-      setFilteredRequests(prev =>
-        prev.filter(request => request._id !== requestId),
-      );
-
-      // ✅ Success modal
+      setRequests(prev => prev.filter(r => r._id !== requestId));
+      setFilteredRequests(prev => prev.filter(r => r._id !== requestId));
+      notifyFriendsUpdate();
       showModal({
         title: 'All Set',
         description: 'Friend added successfully 🎉',
@@ -181,15 +163,7 @@ const FriendsScreen = () => {
         iconColor: '#28A745',
         buttonRow: false,
       });
-
-      // Don’t hide modal instantly, let user read it (optional)
-      // If you still want it to auto-close:
-      // setTimeout(() => handleHideModal(), 1500);
     } catch (error: any) {
-      console.error(
-        'Add friend failed:',
-        error?.response?.data || error.message,
-      );
       showModal({
         mode: 'error',
         iconName: 'account-cancel-outline',
@@ -217,12 +191,7 @@ const FriendsScreen = () => {
       });
 
       handleHideModal();
-      loadFriends();
     } catch (error: any) {
-      console.error(
-        'Add friend failed:',
-        error?.response?.data || error.message,
-      );
       showModal({
         mode: 'error',
         iconName: 'account-cancel-outline',
@@ -234,38 +203,27 @@ const FriendsScreen = () => {
     }
   };
 
-  // ✅ Refresh
-  const onRefresh = async () => {
-    await loadFriends();
-  };
-
-  useEffect(() => {
-    loadFriends();
-    loadUsers();
-    loadRequests();
-  }, []);
-
-  // ✅ Search users
-  const handleSearchUsers = (text: string) => {
-    if (!text.trim()) {
-      setFilteredUsers([]);
-      return;
-    }
-
-    const results = users.filter(
-      user =>
-        (user?.firstName?.includes(text) ||
-          user?.lastName?.includes(text) ||
-          user?.email?.includes(text)) ??
-        false,
-    );
-    setFilteredUsers(results);
-  };
-
-  const handleFriendRequestSend = async email => {
+  const handleRejectRequest = async (requestID: string) => {
     try {
-      const data = await sendFriendRequest(email);
+      const data = await rejectFriendRequest(requestID);
+      setRequests(data);
+      setFilteredRequests(data);
+    } catch (error) {
+      showModal({
+        mode: 'error',
+        iconName: 'wifi-alert',
+        iconColor: '#DC3545',
+        title: 'Something Went Wrong,',
+        description: 'Could not reject request.',
+        buttonRow: false,
+      });
+    }
+  };
 
+  const handleFriendRequestSend = async (email: string) => {
+    try {
+      setSearchLoading(true); // start search loader
+      const data = await sendFriendRequest(email);
       showModal({
         title: 'All Set',
         description: `Request Sent successfully 🎉`,
@@ -277,19 +235,47 @@ const FriendsScreen = () => {
         prev.map(u => (u.email === email ? { ...u, status: 'sent' } : u)),
       );
       bottomSheetRef?.current?.close();
-      return setRequests(data);
+      setRequests(data);
     } catch (error) {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
         iconColor: '#DC3545',
         title: 'Something Went Wrong,',
-        description: 'Users didn’t load. Check your connection and retry.',
+        description: 'Could not send request.',
         buttonRow: false,
       });
+    } finally {
+      setTimeout(() => {
+        setSearchLoading(false); // stop search loader
+      }, 300);
     }
   };
-  // ✅ Search friends
+
+  const handleSearchUsers = async (text: string) => {
+    setSearchText(text);
+    if (!text.trim()) {
+      setFilteredUsers([]);
+      return;
+    }
+
+    setSearchLoading(true);
+    try {
+      const results = users.filter(
+        user =>
+          (user?.firstName?.includes(text) ||
+            user?.lastName?.includes(text) ||
+            user?.email?.includes(text)) ??
+          false,
+      );
+      setFilteredUsers(results);
+    } finally {
+      setTimeout(() => {
+        setSearchLoading(false); // stop search loader
+      }, 300);
+    }
+  };
+
   const handleSearch = (text: string) => {
     if (!text.trim()) {
       setFilteredFriends(friends);
@@ -298,23 +284,24 @@ const FriendsScreen = () => {
     }
 
     const friendResults = friends.filter(
-      friend =>
-        friend?.firstName?.includes(text) || friend?.lastName?.includes(text),
+      f => f.firstName.includes(text) || f.lastName.includes(text),
     );
-
     const requestResults = requests.filter(
-      req => req?.firstName?.includes(text) || req?.lastName?.includes(text),
+      r => r.firstName.includes(text) || r.lastName.includes(text),
     );
 
     setFilteredFriends(friendResults);
     setFilteredRequests(requestResults);
   };
 
-  // ✅ Add friend status to search results
   const usersWithStatus = filteredUsers.map(u => ({
     ...u,
     isFriend: friends.some(f => f._id === u._id),
   }));
+
+  useEffect(() => {
+    loadAllData();
+  }, []);
 
   return (
     <>
@@ -353,60 +340,78 @@ const FriendsScreen = () => {
           </Pressable>
         </View>
 
-        {selectedTab === 'friends' ? (
-          filteredFriends.length === 0 ? (
-            nothingToShow(false, 'Connect to Continue', 'person-add-alt')
+        {/* Tab Content */}
+        <View style={{ flex: 1 }}>
+          {loading || refreshing ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ActivityIndicator
+                size="large"
+                color={theme.colors.primaryIcon}
+              />
+            </View>
+          ) : selectedTab === 'friends' ? (
+            filteredFriends.length === 0 ? (
+              nothingToShow(false, 'Connect to Continue', 'person-add-alt')
+            ) : (
+              <FlatList
+                data={filteredFriends.sort((a, b) =>
+                  (a.firstName + ' ' + a.lastName).localeCompare(
+                    b.firstName + ' ' + b.lastName,
+                  ),
+                )}
+                showsVerticalScrollIndicator={false}
+                style={styles.list}
+                contentContainerStyle={styles.flatlistContainer}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                keyExtractor={(item, index) => item._id || index.toString()}
+                renderItem={({ item }) => (
+                  <FriendsCard
+                    item={{ ...item, isFriend: true }}
+                    onPrimaryPress={() =>
+                      handleRemoveFriend(item.firstName, item.lastName)
+                    }
+                  />
+                )}
+              />
+            )
+          ) : filteredRequests.length === 0 ? (
+            nothingToShow(false, 'No Requests Yet', 'person-outline')
           ) : (
             <FlatList
-              data={filteredFriends.sort((a, b) =>
-                (a.firstName + ' ' + a.lastName).localeCompare(
-                  b.firstName + ' ' + b.lastName,
-                ),
-              )}
+              data={requests}
               showsVerticalScrollIndicator={false}
               style={styles.list}
               contentContainerStyle={styles.flatlistContainer}
+              keyExtractor={(item, index) => item._id || index.toString()}
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
-              keyExtractor={(item, index) => item._id || index.toString()}
               renderItem={({ item }) => (
                 <FriendsCard
-                  item={{ ...item, isFriend: true }}
-                  onPrimaryPress={() =>
-                    handleRemoveFriend(item.firstName, item.lastName)
-                  }
+                  title="Accept Request"
+                  buttonRow
+                  item={{ ...item, isFriend: false }}
+                  onPrimaryPress={() => handleAddFriend(item._id)}
+                  onSecondaryPress={() => handleRejectRequest(item._id)}
                 />
               )}
             />
-          )
-        ) : filteredRequests.length === 0 ? (
-          nothingToShow(false, 'No Requests Yet', 'person-outline')
-        ) : (
-          <FlatList
-            data={requests}
-            showsVerticalScrollIndicator={false}
-            style={styles.list}
-            contentContainerStyle={styles.flatlistContainer}
-            keyExtractor={(item, index) => item._id || index.toString()}
-            renderItem={({ item }) => (
-              <FriendsCard
-                title="Accept Request"
-                buttonRow
-                item={{ ...item, isFriend: false }}
-                onPrimaryPress={() => {
-                  // ✅ Accept request here
-                  handleAddFriend(item._id);
-                }}
-                onSecondaryPress={() => {
-                  handleRejectRequest(item._id);
-                }}
-              />
-            )}
-          />
-        )}
+          )}
+        </View>
       </View>
 
+      {/* Bottom Sheet */}
       <CustomBottomSheet
         ref={bottomSheetRef}
         onClose={handleHideModal}
@@ -419,12 +424,23 @@ const FriendsScreen = () => {
             clearTrigger={searchResetKey}
           />
 
-          {usersWithStatus.length > 0 ? (
+          {searchLoading ? (
+            <ActivityIndicator
+              size="large"
+              color={theme.colors.primaryIcon}
+              style={{ marginTop: 20 }}
+            />
+          ) : searchText.trim() === '' ? (
+            // Initial state before searching
+            nothingToShow(false, 'Connect to Continue', 'person-add-alt')
+          ) : filteredUsers.length === 0 ? (
+            // No results found
+            nothingToShow(false, 'No users found', 'no-accounts')
+          ) : (
             <>
               <Text style={styles.subtitle}>
                 Search Results ({usersWithStatus.length})
               </Text>
-
               <FlatList
                 data={usersWithStatus.sort((a, b) =>
                   (a.firstName + ' ' + a.lastName).localeCompare(
@@ -447,8 +463,6 @@ const FriendsScreen = () => {
                 )}
               />
             </>
-          ) : (
-            nothingToShow(false, 'No users found', 'no-accounts')
           )}
         </View>
       </CustomBottomSheet>

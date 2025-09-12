@@ -176,7 +176,7 @@ const RegisterScreen = () => {
               placeholder="Password"
               placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
               value={password}
-              style={{ flex: 1 }}
+              style={{ flex: 1, color: theme.colors.inputTextColor }}
               onChangeText={setPassword}
               secureTextEntry={isHidden}
             />
