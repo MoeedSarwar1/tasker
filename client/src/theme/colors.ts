@@ -1,113 +1,117 @@
 export const colors = {
   // Backgrounds
-  backgroundLight: '#F7EFE6', // soft cream
-  backgroundDark: '#2F2A24', // warm dark brown
-  cardLight: '#DCC4AA', // warmer, richer cream (stands out on soft cream background)
-  cardDark: '#3F3228', // deep chocolate brown (stands out on dark background)
+  backgroundLight: '#FDFDFD', // crystal white
+  backgroundDark: '#050505', // pure obsidian black
+  cardLight: 'rgba(255, 255, 255, 0.85)', // frosted crystal
+  cardDark: 'rgba(15, 15, 15, 0.85)', // frosted onyx
 
   // Header & Bottom Nav
-  headerLight: '#D9CFC4',
-  headerDark: '#3A332C',
-  bottomNavActiveLight: '#A76C49',
-  bottomNavActiveDark: '#A76C49',
-  bottomNavInactiveLight: '#8C7B70',
-  bottomNavInactiveDark: '#8C7B70',
+  headerLight: 'rgba(250, 250, 250, 0.9)', // satin platinum
+  headerDark: 'rgba(10, 10, 10, 0.9)', // stealth matte black
+  bottomNavActiveLight: '#C9A227', // champagne gold
+  bottomNavActiveDark: '#C9A227',
+  bottomNavInactiveLight: '#7D7D85', // gunmetal gray
+  bottomNavInactiveDark: '#7D7D85',
 
   // Buttons
-  primaryButtonLight: '#A76C49',
-  primaryButtonDark: '#A76C49',
-  secondaryButtonLight: '#C9B8A3', // darker than cream for contrast
-  secondaryButtonDark: '#4F453A',
-  primaryButtonTextLight: '#F7EFE6',
-  primaryButtonTextDark: '#F7EFE6',
-  secondaryButtonTextLight: '#593F2B',
-  secondaryButtonTextDark: '#F7EFE6',
+  primaryButtonLight: ['#C9A227', '#F5E6A1'], // champagne gold gradient
+  primaryButtonDark: ['#C9A227', '#7A5C1F'], // deep gold gradient
+  primaryButtonLightSolid: '#C9A227',
+  primaryButtonDarkSolid: '#7A5C1F',
+  secondaryButtonLight: '#D9D9E0', // brushed steel
+  secondaryButtonDark: '#1E1E22', // graphite black
+  primaryButtonTextLight: '#FFFFFF',
+  primaryButtonTextDark: '#050505',
+  secondaryButtonTextLight: '#111111',
+  secondaryButtonTextDark: '#FFFFFF',
 
-  // Default chip background and text
-  defaultChipBackgroundLight: '#D8BFA5', // medium chocolate, stands out on light bg
-  defaultChipTextLight: '#422D1B', // deep cocoa, readable on chip bg
-  defaultChipBackgroundDark: '#5A3F30', // warm chocolate, contrasts dark bg
-  defaultChipTextDark: '#F7EFE6', // soft cream, readable on dark chip bg
+  // Chips (Default)
+  defaultChipBackgroundLight: '#EFEFF4',
+  defaultChipTextLight: '#1C1C1E',
+  defaultChipBackgroundDark: '#2E2E30',
+  defaultChipTextDark: '#FFFFFF',
 
   // Text
-  headerTextLight: '#593F2B',
-  headerTextDark: '#F7EFE6',
-  subtitleTextLight: '#8C7B70',
-  subtitleTextDark: '#BBAFA3',
-  placeholderTextLight: '#BBAFA3',
-  placeholderTextDark: '#8C7B70',
-  inputTextLight: '#4C3B2B',
-  inputTextDark: '#F7EFE6',
-  linkTextLight: '#A76C49',
-  linkTextDark: '#F7EFE6',
+  headerTextLight: '#050505', // obsidian
+  headerTextDark: '#FFFFFF',
+  subtitleTextLight: '#55555C', // smoked platinum
+  subtitleTextDark: '#A0A0A8', // titanium gray
+  placeholderTextLight: '#A8A8AF',
+  placeholderTextDark: '#6E6E73',
+  inputTextLight: '#1C1C1E',
+  inputTextDark: '#FFFFFF',
+  linkTextLight: '#0077FF', // royal deep blue
+  linkTextDark: '#3399FF',
+  descriptionTextLight: '#3A3A3D', // carbon graphite
+  descriptionTextDark: '#BFBFC4',
 
   // Icons
-  primaryIconLight: '#593F2B',
-  primaryIconDark: '#F7EFE6',
-  secondaryIconLight: '#BBAFA3',
-  secondaryIconDark: '#BBAFA3',
-  primaryIconLightDisabled: 'rgba(89, 63, 43, 0.3)', // 30% opacity
-  primaryIconDarkDisabled: 'rgba(247, 239, 230, 0.3)',
-  secondaryIconLightDisabled: 'rgba(187, 175, 163, 0.3)',
-  secondaryIconDarkDisabled: 'rgba(187, 175, 163, 0.3)',
+  primaryIconLight: '#050505',
+  primaryIconDark: '#FFFFFF',
+  secondaryIconLight: '#9C9CA3', // satin steel
+  secondaryIconDark: '#9C9CA3',
+  primaryIconLightDisabled: 'rgba(5,5,5,0.3)',
+  primaryIconDarkDisabled: 'rgba(255,255,255,0.3)',
+  secondaryIconLightDisabled: 'rgba(156,156,163,0.3)',
+  secondaryIconDarkDisabled: 'rgba(156,156,163,0.3)',
+
   // Modals
-  successHeaderLight: '#2E7D32', // deep green
-  successHeaderDark: '#81C784', // softer green for dark mode
-  errorHeaderLight: '#C62828', // strong red
-  errorHeaderDark: '#EF9A9A', // softer red for dark mode
-  confirmationHeaderLight: '#EF6C00', // orange for attention
-  confirmationHeaderDark: '#FFB74D',
-  errorBackgroundLight: '#F9D6C8', // light skin tone, soft and warm
-  errorBackgroundDark: '#8C4B2D', // camel/brownish, stands out on dark background
-  errorTextLight: '#D46A3C',
-  errorTextDark: '#FAD8D0',
-  successBackgroundLight: '#D8E2DC',
-  successBackgroundDark: '#40523B',
-  successTextLight: '#40634E',
-  successTextDark: '#D8E2DC',
-  confirmationBackgroundLight: '#F7EFE6',
-  confirmationBackgroundDark: '#3A332C',
-  confirmationTextLight: '#A76C49',
-  confirmationTextDark: '#A76C49',
+  successHeaderLight: '#00B894', // emerald accent
+  successHeaderDark: '#00E6AA',
+  errorHeaderLight: '#C92A2A', // ruby red
+  errorHeaderDark: '#FF3B3B',
+  confirmationHeaderLight: '#B8860B', // old gold
+  confirmationHeaderDark: '#E6B422',
+  errorBackgroundLight: '#FAEAEA',
+  errorBackgroundDark: '#3A1C1C',
+  errorTextLight: '#9B1C1C',
+  errorTextDark: '#FFB3B3',
+  successBackgroundLight: '#E8FAF0',
+  successBackgroundDark: '#123D2E',
+  successTextLight: '#134B2C',
+  successTextDark: '#C5F4D5',
+  confirmationBackgroundLight: '#FFF8E0',
+  confirmationBackgroundDark: '#3A2A1A',
+  confirmationTextLight: '#C9A227',
+  confirmationTextDark: '#C9A227',
 
-  // Chips (Task Filter)
-  // Chips (Task Filter)
-  allBackgroundLight: '#EEDFCC', // milk chocolate cream
-  allBackgroundDark: '#3B2A23', // bitter dark cocoa
-  allTextLight: '#5C4033', // rich cocoa text
-  allTextDark: '#FAF3E0', // creamy white text
+  // Task Filter Chips
+  allBackgroundLight: '#F1F1F4',
+  allBackgroundDark: '#2C2C2E',
+  allTextLight: '#111111',
+  allTextDark: '#FFFFFF',
 
-  pendingBackgroundLight: '#F1E0D0', // latte beige
-  pendingBackgroundDark: '#4A2E1E', // mocha brown
-  pendingTextLight: '#7B3F00', // burnt caramel
-  pendingTextDark: '#F1E0D0', // latte cream
+  pendingBackgroundLight: '#FFF5E0',
+  pendingBackgroundDark: '#3C2A14',
+  pendingTextLight: '#A6761C', // bronze
+  pendingTextDark: '#FFD27F',
 
-  completedBackgroundLight: '#E6D3C0', // light milk chocolate
-  completedBackgroundDark: '#35261C', // dark bitter chocolate
-  completedTextLight: '#4E3629', // deep cocoa
-  completedTextDark: '#E6D3C0', // creamy beige
+  completedBackgroundLight: '#E6F7EB',
+  completedBackgroundDark: '#1A3B2C',
+  completedTextLight: '#14532D',
+  completedTextDark: '#BFF7DD',
 
-  // Chips (Priority)
-  urgentBackgroundLight: '#8B4513', // classic chocolate brown
-  urgentBackgroundDark: '#3E1F0E', // very dark cocoa
-  urgentTextLight: '#FAF3E0', // creamy white
-  urgentTextDark: '#FAF3E0',
+  // Priority Chips
+  urgentBackgroundLight: '#C92A2A', // ruby red
+  urgentBackgroundDark: '#FF3B3B',
+  urgentTextLight: '#FFFFFF',
+  urgentTextDark: '#FFFFFF',
 
-  normalBackgroundLight: '#C9A57B', // caramel chocolate
-  normalBackgroundDark: '#2F2219', // espresso brown
-  normalTextLight: '#4E3629', // cocoa text
-  normalTextDark: '#EEDFCC', // cream beige
+  normalBackgroundLight: '#0077FF', // royal blue
+  normalBackgroundDark: '#005BBB', // deep blue
+  normalTextLight: '#FFFFFF',
+  normalTextDark: '#FFFFFF',
 
-  lowKeyBackgroundLight: '#FAF3E0', // white chocolate
-  lowKeyBackgroundDark: '#2B2018', // very dark chocolate
-  lowKeyTextLight: '#8B4513', // chocolate brown
-  lowKeyTextDark: '#8B4513',
+  lowKeyBackgroundLight: '#F1F1F4',
+  lowKeyBackgroundDark: '#2C2C2E',
+  lowKeyTextLight: '#6C6C70',
+  lowKeyTextDark: '#A0A0A8',
 
-  // Input backgrounds
-  inputBackgroundLight: '#F3E8DC',
-  inputBackgroundDark: '#3F362C',
+  // Inputs
+  inputBackgroundLight: '#FFFFFF',
+  inputBackgroundDark: '#121214',
 
   // Borders
-  borderLight: '#D7C9B8',
-  borderDark: '#3F3A33',
+  borderLight: '#E1E1E6',
+  borderDark: '#2A2A2E',
 };

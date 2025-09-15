@@ -8,7 +8,7 @@ const homeStles = (insets, theme: Theme) =>
     childrenWrapperStyle: {
       borderRadius: 16,
       padding: 16,
-      backgroundColor: theme.colors.primaryButtonBackground,
+      backgroundColor: theme.colors.primaryButtonSolid,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -35,7 +35,7 @@ const homeStles = (insets, theme: Theme) =>
       ...typography.buttonMedium,
     },
     text: {
-      color: theme.colors.primaryButtonText,
+      color: theme.colors.secondaryButtonText,
       ...typography.buttonMedium,
     },
 

@@ -45,12 +45,7 @@ const loginStyles = (theme: Theme) =>
       alignItems: 'center',
       marginTop: theme.spacing.lg,
     },
-    button: {
-      backgroundColor: theme.colors.primaryButtonBackground,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
-    },
+
     buttonText: {
       color: theme.colors.primaryButtonText,
       ...typography.buttonLarge,

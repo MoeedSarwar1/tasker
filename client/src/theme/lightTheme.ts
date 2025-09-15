@@ -26,6 +26,8 @@ export const lightTheme: Theme = {
     disabledPrimaryIcon: colors.primaryIconLightDisabled,
     disabledSecondaryIcon: colors.secondaryIconLightDisabled,
     linkText: colors.linkTextLight,
+    descriptionText: colors.descriptionTextLight,
+    primaryButtonSolid: colors.primaryButtonLightSolid,
     modals: {
       errorBackground: colors.errorBackgroundLight,
       errorText: colors.errorTextLight,

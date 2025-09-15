@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native';
+import { typography } from '../../theme/typography';
 
 const buttonStyles = () =>
   StyleSheet.create({
     container: {
-      borderRadius: 16,
-      backgroundColor: '#4B4B4B',
-      justifyContent:'center',
+      justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: 24,
       paddingVertical: 16,
     },
+    radius: {
+      borderRadius: 16,
+    },
     buttonText: {
-      fontSize: 18,
-      color: '#FFFFFF',
-      fontFamily: 'Poppins-SemiBold', // <-- change font here
+      ...typography.buttonLarge,
     },
   });
 export default buttonStyles;

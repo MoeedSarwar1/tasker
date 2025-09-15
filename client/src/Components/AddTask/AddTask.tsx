@@ -2,7 +2,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
-import { Platform, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
 import { useTheme } from '../../context/Theme-context';
 import Button from '../Button';
 import Chip from '../Chips';
@@ -110,7 +110,10 @@ const AddTask: React.FC<AddTaskProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       <Text style={styles.label}>Heading</Text>
       <TextInput
         style={styles.input}
@@ -195,13 +198,14 @@ const AddTask: React.FC<AddTaskProps> = ({
         <View style={{ flex: 1 }}>
           <Button
             title={mode === 'edit' ? 'Save Changes' : 'Create Task'}
+            gradientColors={theme.colors.primaryButtonBackground}
             textStyle={styles.addButtonText}
             style={styles.addButton}
             onPress={handleSubmit}
           />
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 export default AddTask;

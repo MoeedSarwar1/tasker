@@ -159,7 +159,6 @@ const LoginScreen = () => {
 
         <Button
           title={loading ? '' : 'Login'}
-          style={styles.button}
           textStyle={styles.buttonText}
           onPress={handleLogin}
         />

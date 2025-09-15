@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
-import { typography } from '../../theme/typography';
-import { shadows } from '../../theme/shadows';
 
 const settingStyles = (Platform, insets, theme: Theme) =>
   StyleSheet.create({
@@ -33,7 +31,8 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       right: 24,
     },
     themeButton: {
-      borderRadius: 16,
+      borderBottomWidth: 1,
+      borderColor: theme.colors.border,
       marginHorizontal: '24',
       padding: 16,
       flexDirection: 'row',

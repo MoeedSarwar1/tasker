@@ -10,7 +10,7 @@ const linkStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     textStyle: {
-      color: '#4B5563',
+      color: theme.colors.descriptionText,
       ...typography.small,
     },
     linkText: {

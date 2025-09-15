@@ -40,8 +40,8 @@ const cardStyles = (theme: Theme) =>
       paddingBottom: 17,
     },
     details: {
-      color: theme.colors.linkText,
-      ...typography.body,
+      color: theme.colors.descriptionText,
+      ...typography.micro,
     },
     user: {
       ...typography.small,

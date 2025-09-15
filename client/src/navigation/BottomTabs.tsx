@@ -30,6 +30,8 @@ const BottomTabs = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: theme.colors.headerBackground,
+                borderTopWidth: 0, // removes the top border
+
           height:
             Platform.OS === 'ios' ? 60 + insets.bottom : 45 + insets.bottom,
           paddingTop: 10,

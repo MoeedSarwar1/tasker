@@ -27,6 +27,8 @@ export const darkTheme: Theme = {
     disabledPrimaryIcon: colors.primaryIconDarkDisabled,
     disabledSecondaryIcon: colors.secondaryIconDarkDisabled,
     linkText: colors.linkTextDark,
+    descriptionText: colors.descriptionTextDark,
+    primaryButtonSolid: colors.primaryButtonDarkSolid,
     modals: {
       errorBackground: colors.errorBackgroundDark,
       errorText: colors.errorTextDark,

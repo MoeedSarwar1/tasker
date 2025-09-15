@@ -186,14 +186,20 @@ const HomeScreen = () => {
   const updateTaskStatus = async (taskId: string, completed: boolean) => {
     try {
       const updatedTask = await updateTaskCompletion(taskId, completed);
+
       showModal({
-        title: 'All Set',
-        description: 'Completed Successfully',
-        iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
+        title: completed ? 'All Set' : 'Task Updated',
+        description: completed
+          ? 'Task marked as completed successfully.'
+          : 'Task marked as incomplete successfully.',
+        iconName: completed
+          ? 'checkbox-marked-circle-outline'
+          : 'checkbox-blank-circle-outline',
+        iconColor: completed ? '#28A745' : '#FFC107', // green for done, yellow for undo
         onConfirm: () => setEditMode(false),
         buttonRow: false,
       });
+
       return updatedTask;
     } catch (error: any) {
       showModal({
@@ -202,7 +208,7 @@ const HomeScreen = () => {
         iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description:
-          'Failed to mark complete. Check your connection and retry.',
+          'Failed to update task status. Check your connection and retry.',
         buttonRow: false,
         onConfirm: () => onRefresh(),
       });
@@ -260,18 +266,20 @@ const HomeScreen = () => {
 
   const handleToggleTaskCompletion = async (taskId: string) => {
     try {
-      // Update UI instantly
+      // Get the task and compute its next status first
+      const task = tasks.find(t => t._id === taskId);
+      if (!task) return;
+
+      const newStatus = !task.completed;
+
+      // Optimistically update UI
       setTasks(prevTasks =>
         prevTasks.map(t =>
-          t._id === taskId ? { ...t, completed: !t.completed } : t,
+          t._id === taskId ? { ...t, completed: newStatus } : t,
         ),
       );
 
-      // Find the new completion status from state
-      const task = tasks.find(t => t._id === taskId);
-      const newStatus = task ? !task.completed : true;
-
-      // Call backend
+      // Call backend with the new status
       await updateTaskStatus(taskId, newStatus);
     } catch (error) {
       showModal({
@@ -279,13 +287,12 @@ const HomeScreen = () => {
         iconName: 'wifi-alert',
         iconColor: '#DC3545',
         title: 'Something Went Wrong,',
-        description:
-          'Failed to mark complete. Check your connection and retry.',
+        description: 'Failed to update task. Check your connection and retry.',
         buttonRow: false,
         onConfirm: () => onRefresh(),
       });
 
-      // Optionally revert UI if API fails
+      // Revert UI if API fails
       setTasks(prevTasks =>
         prevTasks.map(t =>
           t._id === taskId ? { ...t, completed: !t.completed } : t,
@@ -405,7 +412,7 @@ const HomeScreen = () => {
               <Icon
                 name="delete-outline"
                 size={20}
-                color={theme.colors.primaryButtonText}
+                color={theme.colors.secondaryButtonText}
               />
             </Pressable>
 

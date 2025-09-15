@@ -26,7 +26,6 @@ import {
 } from '../../network/Friends';
 import { fetchUsers } from '../../network/User';
 import friendsStyles from './styles';
-import { useFriendsContext } from '../../context/Friends-context';
 
 const FriendsScreen = () => {
   const snapPoints = useMemo(() => ['90%'], []);
@@ -47,7 +46,6 @@ const FriendsScreen = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchResetKey, setSearchResetKey] = useState(0);
 
-  const { notifyFriendsUpdate } = useFriendsContext();
   const { showModal } = useModal();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
@@ -316,7 +314,7 @@ const FriendsScreen = () => {
                 styles.subtitle,
                 selectedTab === 'friends' && {
                   fontWeight: 'bold',
-                  color: theme.colors.primaryTextColor,
+                  color: theme.colors.subtitleTextColor,
                 },
               ]}
             >

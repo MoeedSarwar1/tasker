@@ -205,7 +205,6 @@ const RegisterScreen = () => {
 
         <Button
           title={loading ? '' : 'Register'}
-          style={styles.button}
           textStyle={styles.buttonText}
           onPress={handleRegister}
         />

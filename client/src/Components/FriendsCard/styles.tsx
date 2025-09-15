@@ -6,11 +6,13 @@ import { typography } from '../../theme/typography';
 const cardStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
+      borderWidth: 0.5,
       backgroundColor: theme.colors.cardBackground,
       borderRadius: 16,
       borderColor: theme.colors.border,
       padding: 17,
       marginHorizontal: 24,
+      elevation: 1,
       ...shadows.medium,
     },
     title: {

@@ -23,12 +23,6 @@ export const registerationStyles = (theme: Theme) =>
       padding: theme.spacing.md,
       marginBottom: theme.spacing.md,
     },
-    button: {
-      backgroundColor: theme.colors.primaryButtonBackground,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
-    },
     buttonText: {
       color: theme.colors.primaryButtonText,
       ...typography.buttonLarge,

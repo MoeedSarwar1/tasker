@@ -14,11 +14,10 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const [showDescription, setShowDescription] = useState(false);
   const { user } = useAuth();
 
+  const isMyTask = item?.user?._id === user?._id;
   const onStatusChange = () => {
-    if (!item.completed) {
-      // Only mark as completed if not already completed
-      onChange?.(item._id, true);
-    }
+    const nextValue = !item.completed; // or whatever property you track
+    onChange?.(item._id, nextValue);
   };
 
   return (
@@ -27,17 +26,13 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
       onPress={() => setShowDescription(!showDescription)}
     >
       <View style={style.header}>
-        <Pressable
-          disabled={Boolean(item?.user)}
-          onPress={onStatusChange}
-          hitSlop={10}
-        >
+        <Pressable disabled={!isMyTask} onPress={onStatusChange} hitSlop={10}>
           {item.completed ? (
             <Icon
               name="checkbox-marked-outline"
               size={24}
               color={
-                item?.user
+                !isMyTask
                   ? theme.colors.disabledPrimaryIcon
                   : theme.colors.primaryIcon
               }
@@ -47,7 +42,7 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
               name="checkbox-blank-outline"
               size={24}
               color={
-                item?.user
+                !isMyTask
                   ? theme.colors.disabledSecondaryIcon
                   : theme.colors.secondaryIcon
               }
@@ -87,14 +82,15 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
         <View style={style.date}>
           <Pressable
             onPress={onMorePress}
-            disabled={Boolean(item?.user)}
+            // Disable only if the task userId is not mine
+            disabled={!isMyTask}
             hitSlop={10}
           >
             <Icon
               name="dots-horizontal"
               size={20}
               color={
-                item?.user
+                !isMyTask
                   ? theme.colors.disabledPrimaryIcon
                   : theme.colors.primaryIcon
               }
