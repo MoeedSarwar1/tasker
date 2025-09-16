@@ -22,6 +22,18 @@ const userSchema = new Schema({
   avatar: {
     type: String,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  code: {
+    type: Number,
+  },
+  verificationCodeSentAt: {
+    type: Date,
+    default: null,
+  },
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
