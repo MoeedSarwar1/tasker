@@ -7,10 +7,17 @@ dotenv.config();
 const sendVerificationEmail = async (to, code) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // ✅ correct host
+    port: 587, // ✅ Add this
+    secure: false, // ✅ Add this
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    tls: {
+      rejectUnauthorized: false, // ✅ Helps with Railway's network setup
+    },
+    connectionTimeout: 60000, // 60 seconds
+    greetingTimeout: 30000,
   });
 
   await transporter.sendMail({
