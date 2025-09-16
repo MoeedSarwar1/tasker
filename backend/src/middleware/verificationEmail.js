@@ -6,7 +6,7 @@ dotenv.config();
 
 const sendVerificationEmail = async (to, code) => {
   const transporter = nodemailer.createTransport({
-    host: "gmail", // ✅ correct host
+    host: "smtp.gmail.com", // ✅ correct host
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
