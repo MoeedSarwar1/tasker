@@ -7,8 +7,8 @@ dotenv.config();
 const sendVerificationEmail = async (to, code) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // ✅ correct host
-    port: 587, // ✅ Add this
-    secure: false, // ✅ Add this
+    port: process.env.SMTP_PORT,
+    secure: true,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -20,6 +20,13 @@ const sendVerificationEmail = async (to, code) => {
     greetingTimeout: 30000,
   });
 
+  console.log("Attempting SMTP connection...");
+  try {
+    await transporter.verify();
+    console.log("SMTP works!");
+  } catch (error) {
+    console.log("SMTP blocked:", error.message);
+  }
   await transporter.sendMail({
     from: `"TASUKU" <${process.env.SMTP_USER}>`,
     to,
