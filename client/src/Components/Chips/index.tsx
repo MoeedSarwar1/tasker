@@ -1,21 +1,15 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import Text from '../Text';
+import { Pressable } from 'react-native';
 import { useTheme } from '../../context/Theme-context';
+import Text from '../Text';
 import { chipStyles } from './styles';
-
-export interface ChipProps {
-  label: string;
-  selected?: boolean;
-  onPress?: () => void;
-  color?: string; // background color when selected
-  id?: string;
-}
+import { ChipProps } from './interface';
 
 const Chip: React.FC<ChipProps> = ({
   id,
   label,
   selected = false,
+  textColor,
   onPress,
   color = '#2563EB', // default primary color
 }) => {
@@ -30,7 +24,9 @@ const Chip: React.FC<ChipProps> = ({
         selected && { backgroundColor: color, borderColor: color },
       ]}
     >
-      <Text style={[styles.text, selected && { color: '#fff' }]}>{label}</Text>
+      <Text style={[styles.text, selected && { color: textColor || '#fff' }]}>
+        {label}
+      </Text>
     </Pressable>
   );
 };

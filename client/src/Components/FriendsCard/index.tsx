@@ -61,7 +61,7 @@ const FriendsCard = ({
         <View style={style.footer}>
           <View style={style.buttonRow}>
             {buttonRow && (
-              <View style={{ flex: 1 }}>
+            <View style={style.flex}>
                 <Button
                   title="Reject"
                   style={style.button}
@@ -71,9 +71,8 @@ const FriendsCard = ({
               </View>
             )}
 
-            <View style={{ flex: 1 }}>
+            <View style={style.flex}>
               <Button
-                disabled={user.status === 'sent'}
                 textStyle={style.addButtonText}
                 title={getButtonTitle()}
                 style={[

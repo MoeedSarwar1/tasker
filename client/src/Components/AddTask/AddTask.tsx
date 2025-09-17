@@ -8,24 +8,7 @@ import Button from '../Button';
 import Chip from '../Chips';
 import Text from '../Text';
 import { bottomSheetStyles } from './styles';
-import { colors } from '../../theme/colors';
-
-interface AddTaskProps {
-  initialTask?: {
-    title: string;
-    description: string;
-    dueDate: Date | string;
-    priority: 'Urgent' | 'Medium' | 'Low Key' | null;
-  };
-  mode: 'add' | 'edit';
-  onSubmit: (task: {
-    title: string;
-    description: string;
-    dueDate: Date | string;
-    priority: 'Urgent' | 'Medium' | 'Low Key' | null;
-  }) => void;
-  onCancel: () => void;
-}
+import { AddTaskProps } from './interface';
 
 const AddTask: React.FC<AddTaskProps> = ({
   initialTask,
@@ -42,7 +25,7 @@ const AddTask: React.FC<AddTaskProps> = ({
   );
 
   const [selectedChip, setSelectedChip] = useState(
-    initialTask?.priority || 'Normal',
+    initialTask?.priority || 'Medium',
   );
   const [date, setDate] = useState<Date>(
     initialTask?.dueDate ? new Date(initialTask.dueDate) : new Date(),
@@ -51,16 +34,19 @@ const AddTask: React.FC<AddTaskProps> = ({
 
   const chipData = [
     {
+      id: 'urgent',
       label: 'Urgent',
       color: theme.colors.chips.urgentBackground,
       textColor: theme.colors.chips.urgentText,
     },
     {
-      label: 'Normal',
+      id: 'medium',
+      label: 'Medium',
       color: theme.colors.chips.normalBackground,
       textColor: theme.colors.chips.normalText,
     },
     {
+      id: 'low',
       label: 'Low Key',
       color: theme.colors.chips.lowKeyBackground,
       textColor: theme.colors.chips.lowKeyText,
@@ -93,17 +79,13 @@ const AddTask: React.FC<AddTaskProps> = ({
         title,
         description,
         dueDate: date.toISOString(),
-        priority: selectedChip as
-          | 'Low priority'
-          | 'Medium priority'
-          | 'High priority'
-          | null,
+        priority: selectedChip,
       });
 
       if (!isEditing) {
         setTitle('');
         setDescription('');
-        setSelectedChip(null);
+        setSelectedChip('low');
         setDate(new Date());
       }
     }
@@ -118,7 +100,7 @@ const AddTask: React.FC<AddTaskProps> = ({
       <TextInput
         style={styles.input}
         placeholder="Write a title"
-        placeholderTextColor="#999"
+        placeholderTextColor={theme.colors.placeholderTextColor}
         value={title}
         onChangeText={setTitle}
       />
@@ -128,7 +110,7 @@ const AddTask: React.FC<AddTaskProps> = ({
         <TextInput
           style={{ width: '100%', color: theme.colors.inputTextColor }}
           placeholder="Add some notes"
-          placeholderTextColor="#999"
+          placeholderTextColor={theme.colors.placeholderTextColor}
           value={description}
           onChangeText={setDescription}
           multiline
@@ -136,13 +118,7 @@ const AddTask: React.FC<AddTaskProps> = ({
       </View>
 
       <Text style={styles.label}>Deadline</Text>
-      <View
-        style={{
-          justifyContent: 'center',
-          marginBottom: 12,
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.date}>
         {Platform.OS === 'android' ? (
           <>
             {showDatePicker && (
@@ -157,7 +133,7 @@ const AddTask: React.FC<AddTaskProps> = ({
             <Button
               title={date.toDateString()}
               onPress={() => setShowDatePicker(true)}
-              style={styles.buttonText}
+              textStyle={styles.buttonText}
             />
           </>
         ) : (
@@ -172,14 +148,14 @@ const AddTask: React.FC<AddTaskProps> = ({
       </View>
 
       <Text style={styles.label}>Importance</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      <View style={styles.chipRow}>
         {chipData.map(chip => (
           <Chip
             id={chip.id}
             key={chip.label}
             label={chip.label}
             color={chip.color}
-            textColor={chip.color}
+            textColor={chip.textColor}
             selected={selectedChip === chip.label}
             onPress={() => setSelectedChip(chip.label)}
           />
@@ -187,7 +163,7 @@ const AddTask: React.FC<AddTaskProps> = ({
       </View>
 
       <View style={styles.buttonRow}>
-        <View style={{ flex: 1 }}>
+        <View style={styles.buttonContainer}>
           <Button
             title="Dismiss"
             textStyle={styles.buttonText}
@@ -195,7 +171,7 @@ const AddTask: React.FC<AddTaskProps> = ({
             style={styles.button}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={styles.buttonContainer}>
           <Button
             title={mode === 'edit' ? 'Save Changes' : 'Create Task'}
             gradientColors={theme.colors.primaryButtonBackground}

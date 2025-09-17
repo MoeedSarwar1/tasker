@@ -32,7 +32,7 @@ export const register = async (
   return data;
 };
 
-export const verify = async (email, code) => {
+export const verify = async (email: string, code: string) => {
   try {
     const response = await client.post(API_ENDPOINTS.VERIFY, {
       email: email.toLowerCase().trim(),

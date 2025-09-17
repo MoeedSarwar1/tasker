@@ -62,6 +62,9 @@ const cardStyles = (theme: Theme) =>
       color: theme.colors.primaryButtonText,
       ...typography.buttonMicro,
     },
+    flex:{
+      flex:1
+    },
     buttonText: {
       color: theme.colors.secondaryButtonText,
       ...typography.buttonMicro,

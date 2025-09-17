@@ -4,13 +4,18 @@ import Text from '../Text';
 import { LinkTextProps } from './interface';
 import { useTheme } from '../../context/Theme-context';
 
-const LinkText = ({ text, pressableText, onPress }: LinkTextProps) => {
+const LinkText = ({
+  text,
+  pressableText,
+  onPress,
+  disabled,
+}: LinkTextProps) => {
   const { theme } = useTheme();
   const styles = linkStyles(theme);
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>{text}</Text>
-      <Pressable onPress={onPress}>
+      <Pressable onPress={onPress} disabled={disabled}>
         <Text style={styles.linkText}>{pressableText}</Text>
       </Pressable>
     </View>

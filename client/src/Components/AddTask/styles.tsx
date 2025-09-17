@@ -7,12 +7,19 @@ export const bottomSheetStyles = (theme: Theme) =>
     container: {
       borderRadius: 8,
     },
+    chipRow:{ flexDirection: 'row', flexWrap: 'wrap' },
+    buttonContainer:{ flex: 1 },
     label: {
       marginBottom: 8,
       marginTop: 8,
       color: theme.colors.headerText,
       ...typography.body,
     },
+    date:{
+          justifyContent: 'center',
+          marginBottom: 12,
+          alignItems: 'center',
+        },
     input: {
       gap: theme.spacing.sm,
       backgroundColor: theme.colors.inputBackground,

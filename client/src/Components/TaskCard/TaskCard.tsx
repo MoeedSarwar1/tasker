@@ -14,7 +14,7 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const [showDescription, setShowDescription] = useState(false);
   const { user } = useAuth();
 
-  const isMyTask = item?.user?._id === user?._id;
+  const isMyTask = item?.user?._id === user?.id;
   const onStatusChange = () => {
     const nextValue = !item.completed; // or whatever property you track
     onChange?.(item._id, nextValue);
@@ -81,7 +81,7 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
         </Text>
         <View style={style.date}>
           <Pressable
-            onPress={onMorePress}
+            onPress={() => onMorePress}
             // Disable only if the task userId is not mine
             disabled={!isMyTask}
             hitSlop={10}

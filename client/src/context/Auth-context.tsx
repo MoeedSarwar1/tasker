@@ -9,8 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchMe } from '../network/User';
 
 interface User {
+  id?: string;
   firstName: string;
   email: string;
+  lastName?: string;
 }
 
 interface AuthContextType {

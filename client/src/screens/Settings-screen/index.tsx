@@ -15,11 +15,12 @@ import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import friendsStyles from './styles';
 import { typography } from '../../theme/typography';
+import { ToggleButton } from '../../Components/Toggle';
 
 const SettingsScreen = () => {
   const { showModal } = useModal();
   const { logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const [loggingOut, setLoggingOut] = React.useState(false);
@@ -55,10 +56,26 @@ const SettingsScreen = () => {
         <FriendsCard item={user} buttons={false} />
         <Pressable onPress={toggleTheme} style={styles.themeButton}>
           <Text style={styles.text}>Toggle Theme</Text>
-          <Icon
-            name="theme-light-dark"
-            size={20}
-            color={theme.colors.primaryIcon}
+          <ToggleButton
+            isToggled={isDark}
+            onToggle={toggleTheme}
+            activeIcon="weather-night"
+            inactiveIcon="weather-sunny"
+            activeIconColor="#FFD700" // Gold for moon
+            inactiveIconColor="#FF6B35" // Orange for sun
+            iconSize={26}
+            animated={true}
+            containerStyle={{
+              padding: 0,
+              backgroundColor: 'transparent',
+            }}
+            buttonStyle={{
+              padding: 8,
+              borderRadius: 20,
+              backgroundColor: isDark
+                ? 'rgba(255,255,255,0.1)'
+                : 'rgba(0,0,0,0.05)',
+            }}
           />
         </Pressable>
 

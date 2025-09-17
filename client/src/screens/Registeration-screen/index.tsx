@@ -18,6 +18,7 @@ import { useTheme } from '../../context/Theme-context';
 import { NavigationRoutes } from '../../navigation/enums';
 import { register } from '../../network/Auth';
 import { registerationStyles } from './styles';
+import { ToggleButton } from '../../Components/Toggle';
 
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -182,19 +183,27 @@ const RegisterScreen = () => {
             zIndex: 1,
           }}
         >
-          <Pressable
-            onPress={toggleTheme}
-            hitSlop={20}
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.7 : 1,
-            })}
-          >
-            <Icon
-              name="theme-light-dark"
-              size={26}
-              color={theme.colors.primaryIcon}
-            />
-          </Pressable>
+          <ToggleButton
+            isToggled={isDark}
+            onToggle={toggleTheme}
+            activeIcon="weather-night"
+            inactiveIcon="weather-sunny"
+            activeIconColor="#FFD700" // Gold for moon
+            inactiveIconColor="#FF6B35" // Orange for sun
+            iconSize={26}
+            animated={true}
+            containerStyle={{
+              padding: 0,
+              backgroundColor: 'transparent',
+            }}
+            buttonStyle={{
+              padding: 8,
+              borderRadius: 20,
+              backgroundColor: isDark
+                ? 'rgba(255,255,255,0.1)'
+                : 'rgba(0,0,0,0.05)',
+            }}
+          />
         </View>
 
         {/* Logo */}
@@ -281,7 +290,7 @@ const RegisterScreen = () => {
 
         {/* Register Button */}
         <Button
-          title={loading ? 'Creating Account...' : 'Register'}
+          title={loading ? 'Setting up account...' : 'Create Account'}
           textStyle={styles.buttonText}
           onPress={handleRegister}
           disabled={loading}

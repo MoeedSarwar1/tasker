@@ -12,7 +12,6 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import CustomBottomSheet from '../../Components/BottomSheet';
 import FriendsCard from '../../Components/FriendsCard';
 import Header from '../../Components/Header/Header';
-import Searchbar from '../../Components/SearchBar';
 import Text from '../../Components/Text';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
@@ -26,6 +25,7 @@ import {
 } from '../../network/Friends';
 import { fetchUsers } from '../../network/User';
 import friendsStyles from './styles';
+import Searchbar from '../../Components/SearchBar';
 
 const FriendsScreen = () => {
   const snapPoints = useMemo(() => ['90%'], []);

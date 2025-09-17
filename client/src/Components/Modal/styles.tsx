@@ -91,6 +91,8 @@ export const modalStyles = (theme: Theme) =>
       ...typography.micro,
     },
 
+    childrenContainer:{ marginTop: 8 },
+    buttonContainer:{ flex: 1 },
     // Default / fallback
     modalHeader: {
       color: '#333',

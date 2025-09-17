@@ -5,19 +5,7 @@ import Button from '../Button';
 import Text from '../Text';
 import { useTheme } from '../../context/Theme-context';
 import { modalStyles } from './styles';
-
-interface SimpleModalProps {
-  visible: boolean;
-  onCancle?: () => void;
-  title?: string;
-  iconName?: string;
-  iconColor?: string;
-  children?: React.ReactNode;
-  onConfirm?: () => void;
-  buttonRow?: boolean;
-  description?: string;
-  mode?: 'success' | 'confirmation' | 'error';
-}
+import { SimpleModalProps } from './interface';
 
 const SimpleModal: React.FC<SimpleModalProps> = ({
   visible,
@@ -94,11 +82,11 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
 
           {title && <Text style={titleStyle}>{title}</Text>}
           {description && <Text style={descriptionStyle}>{description}</Text>}
-          <View style={{ marginTop: 8 }}>{children}</View>
+          <View style={styles.childrenContainer}>{children}</View>
 
           <View style={styles.buttonRow}>
             {buttonRow && (
-              <View style={{ flex: 1 }}>
+              <View style={styles.buttonContainer}>
                 <Button
                   title="Cancel"
                   onPress={onCancle}
@@ -107,7 +95,7 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
                 />
               </View>
             )}
-            <View style={{ flex: 1 }}>
+             < View style={styles.buttonContainer}>
               <Button
                 title="Confirm"
                 style={styles.addButton}

@@ -37,7 +37,7 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const moreRef = React.useRef<BottomSheet>(null);
-  const [filter, setFilter] = useState('All'); // all | pending | completed
+  const [filter, setFilter] = useState('all'); // all | pending | completed
   const snapPoints = useMemo(
     () => (isKeyboardVisible ? ['65%'] : ['55%']),
     [isKeyboardVisible],
@@ -301,8 +301,8 @@ const HomeScreen = () => {
     }
   };
   const filteredTasks = tasks.filter(task => {
-    if (filter === 'Pending') return !task.completed;
-    if (filter === 'Completed') return task.completed;
+    if (filter === 'pending') return !task.completed;
+    if (filter === 'completed') return task.completed;
     return true; // for 'All'
   });
 

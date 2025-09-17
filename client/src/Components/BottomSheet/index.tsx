@@ -9,15 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/Theme-context';
 import Text from '../Text';
 import { bottomSheetStyles } from './styles';
-
-interface ReusableBottomSheetProps {
-  children: React.ReactNode;
-  snapPoints?: string[]; // e.g. ['25%', '50%']
-  initialIndex?: number; // default = -1 (closed)
-  onClose?: () => void;
-  title?: string;
-  subtitle?: string;
-}
+import { ReusableBottomSheetProps } from './interface';
 
 const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
   (

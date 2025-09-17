@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
     onPressAdd?.();
   };
 
-  const [selectedChip, setSelectedChip] = useState('All');
+  const [selectedChip, setSelectedChip] = useState('all');
   const chipData = [
     {
       id: 'all',
@@ -61,17 +61,17 @@ const Header: React.FC<HeaderProps> = ({
         )}
       </View>
       {showChips && (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 16 }}>
+        <View style={styles.chipRow}>
           {chipData.map(chip => (
             <Chip
               id={chip.id}
-              key={chip.label}
+              key={chip.id}
               label={chip.label}
               color={chip.color}
-              selected={selectedChip === chip.label}
+              selected={selectedChip === chip.id}
               onPress={() => {
-                setSelectedChip(chip.label);
-                onFilterChange?.(chip.label);
+                setSelectedChip(chip.id);
+                onFilterChange?.(chip.id);
               }}
             />
           ))}
