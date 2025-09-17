@@ -47,6 +47,7 @@ const Searchbar = ({
         style={{ flex: 1, color: theme.colors.inputTextColor }}
         placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
         value={query}
+        autoCorrect={false}
         autoCapitalize="none" // <-- add this
         onChangeText={handleChange}
       />
