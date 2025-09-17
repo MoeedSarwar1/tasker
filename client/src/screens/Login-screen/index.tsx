@@ -39,7 +39,7 @@ const LoginScreen = () => {
     if (!email || !password) {
       showModal({
         mode: 'error',
-        iconName: 'exclamation',
+        iconName: 'alert-circle',
         iconColor: '#DC3545',
         title: 'Validation Error',
         description: 'Please enter email and password',
@@ -61,7 +61,7 @@ const LoginScreen = () => {
       } else {
         showModal({
           mode: 'error',
-          iconName: 'exclamation',
+          iconName: 'alert-circle',
           iconColor: '#DC3545',
           title: 'Login Failed',
           description: 'Please check your credentials and try again',
@@ -69,9 +69,25 @@ const LoginScreen = () => {
         });
       }
     } catch (error: any) {
+      if (error.response?.status === 403) {
+        showModal({
+          mode: 'error',
+          buttonRow: true,
+          iconName: 'alert-circle',
+          iconColor: '#DC3545',
+          title: 'Verification Required',
+          description: 'Please verify your email to move forward',
+          onConfirm: () =>
+            navigation.navigate(NavigationRoutes.VERIFICATION, {
+              email: email,
+            }),
+        });
+
+        return;
+      }
       showModal({
         mode: 'error',
-        iconName: 'exclamation',
+        iconName: 'alert-circle',
         iconColor: '#DC3545',
         title: 'Login Failed',
         description: 'Please check your credentials and try again',

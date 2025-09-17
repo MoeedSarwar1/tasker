@@ -66,7 +66,7 @@ const EmailVerificationScreen = () => {
       showModal({
         mode: 'error',
         buttonRow: false,
-        iconName: 'exclamation',
+        iconName: 'alert-circle',
         title: 'Code Required',
         description: 'Please enter the verification code',
       });
@@ -77,7 +77,7 @@ const EmailVerificationScreen = () => {
       showModal({
         mode: 'error',
         buttonRow: false,
-        iconName: 'exclamation',
+        iconName: 'alert-circle',
         title: 'Invalid Code',
         description: 'Verification code must be 6 digits',
       });
