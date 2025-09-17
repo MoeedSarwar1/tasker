@@ -3,15 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { StatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from 'react-native-splash-screen';
 import { AuthProvider, useAuth } from './src/context/Auth-context';
+import { FriendsProvider } from './src/context/Friends-context';
+import { ModalProvider } from './src/context/Modal-context';
+import SocketManager from './src/context/Socket-context';
+import { ThemeProvider, useTheme } from './src/context/Theme-context';
 import AuthStack from './src/navigation/Auth-stack';
 import BottomTabs from './src/navigation/BottomTabs';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ModalProvider } from './src/context/Modal-context';
-import { ThemeProvider, useTheme } from './src/context/Theme-context';
-import { FriendsProvider } from './src/context/Friends-context';
-import SocketManager from './src/context/Socket-context';
 
 const RootNavigator = () => {
   const { token, loading } = useAuth();
@@ -44,6 +44,10 @@ const RootNavigator = () => {
 };
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <ThemeProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
