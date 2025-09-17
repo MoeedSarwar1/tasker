@@ -20,6 +20,7 @@ const signup = async (req, res) => {
     const svgAvatar = avatar(firstName + email);
     const hash = await bcrypt.hash(password, 10);
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
+    const now = new Date();
 
     // create unverified user
     const newUser = new User({
@@ -30,6 +31,7 @@ const signup = async (req, res) => {
       avatar: svgAvatar,
       code: verificationCode,
       isVerified: false,
+      verificationCodeSentAt: now,
     });
 
     await sendVerificationEmail(email, verificationCode);
@@ -88,27 +90,26 @@ const loginUser = async (req, res) => {
     if (!user.isVerified) {
       const now = new Date();
 
-      // check if a code was sent recently
-      if (
-        user.verificationCodeSentAt &&
-        now - user.verificationCodeSentAt < 60 * 1000
-      ) {
-        return res.status(429).json({
-          message:
-            "Verification code already sent. Please wait 1 minute before requesting again.",
-        });
+      // Ensure both dates are Date objects before comparison
+      if (user.verificationCodeSentAt) {
+        const lastSentAt = new Date(user.verificationCodeSentAt);
+        const timeDiff = now.getTime() - lastSentAt.getTime();
+
+        if (timeDiff < 60 * 1000) {
+          return res.status(429).json({
+            message:
+              "Verification code already sent. Please wait 1 minute before requesting again.",
+          });
+        }
       }
 
-      // generate new code
+      // Generate new code
       const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-
       user.code = newCode;
       user.verificationCodeSentAt = now;
       await user.save();
 
-      // resend email
       await sendVerificationEmail(user.email, newCode);
-
       return res.status(403).json({
         message:
           "Please verify your email first. A new verification code has been sent.",

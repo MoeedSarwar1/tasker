@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-
 import React, { useState } from 'react';
 import {
   Image,
@@ -16,32 +15,62 @@ import LinkText from '../../Components/link-text';
 import Text from '../../Components/Text';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
-import { register } from '../../network/Auth';
+import { register, verify } from '../../network/Auth';
 import { registerationStyles } from './styles';
 
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i; // case-insensitive
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [code, setCode] = useState(''); // ✅ should be string
   const { showModal } = useModal();
   const { theme, toggleTheme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = registerationStyles(theme);
 
   const [isHidden, setIsHidden] = useState(true);
+
+  const handleVerify = async (email: string, code: string) => {
+    try {
+      const data = await verify(email, code);
+
+      showModal({
+        mode: 'success',
+        buttonRow: true,
+        iconName: 'email-check-outline',
+        iconColor: '#28A745',
+        title: 'Email Verified 🎉',
+        description:
+          'Your email has been successfully verified. You can now continue.',
+        onConfirm: () => navigation.goBack(),
+      });
+
+      return data;
+    } catch (error: any) {
+      showModal({
+        mode: 'error',
+        buttonRow: true,
+        iconName: 'close-circle-outline',
+        iconColor: '#DC3545',
+        title: 'Verification Failed',
+        description:
+          error?.response?.data?.message ||
+          'Invalid or expired code. Please try again.',
+      });
+    }
+  };
+
   const handleRegister = async () => {
     const trimmedFirst = firstName.trim();
     const trimmedLast = lastName.trim();
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedPass = password.trim();
 
-    // ✅ Basic validation
     if (!trimmedFirst || !trimmedLast || !trimmedEmail || !trimmedPass) {
       showModal({
         mode: 'error',
@@ -54,7 +83,6 @@ const RegisterScreen = () => {
       return;
     }
 
-    // ✅ Validate email format
     if (!EMAIL_REGEX.test(trimmedEmail)) {
       showModal({
         mode: 'error',
@@ -70,7 +98,6 @@ const RegisterScreen = () => {
     setLoading(true);
 
     try {
-      // ✅ Call register API with trimmed values
       const data = await register(
         trimmedFirst,
         trimmedLast,
@@ -79,15 +106,36 @@ const RegisterScreen = () => {
       );
 
       if (data) {
+        // ✅ Pass ReactNode directly instead of function
         showModal({
-          iconName: 'checkbox-marked-circle-outline',
+          mode: 'confirmation',
+          iconName: 'email-alert-outline',
           iconColor: '#28A745',
-          mode: 'success',
-          buttonRow: false,
-          title: 'All Set',
-          description: 'Account created successfully',
+          title: 'Verification Code Sent',
+          description: `Please enter the verification code sent to ${trimmedEmail}`,
+          children: (
+            <TextInput
+              style={styles.input}
+              placeholder="Verification Code"
+              placeholderTextColor={theme.colors.placeholderTextColor}
+              value={code}
+              onChangeText={setCode}
+              keyboardType="numeric"
+            />
+          ),
+          onConfirm: async () => {
+            if (!code.trim()) {
+              return showModal({
+                mode: 'error',
+                iconName: 'alert-circle',
+                iconColor: '#DC3545',
+                title: 'Code Required',
+                description: 'Please enter the verification code first.',
+              });
+            }
+            await handleVerify(trimmedEmail, code);
+          },
         });
-        navigation.goBack();
       }
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error.message;
@@ -116,9 +164,6 @@ const RegisterScreen = () => {
     }
   };
 
-  const onLinkPress = () => {
-    navigation.goBack();
-  };
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <KeyboardAvoidingView
@@ -126,6 +171,7 @@ const RegisterScreen = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={60}
       >
+        {/* Theme toggle */}
         <View
           style={{
             position: 'absolute',
@@ -142,29 +188,27 @@ const RegisterScreen = () => {
           </Pressable>
         </View>
 
+        {/* Logo */}
         <View style={styles.logoContainer}>
-          {isDark ? (
-            <Image
-              source={require('../../../assets/images/logo.png')}
-              style={styles.imageStyles}
-              resizeMode="contain"
-            />
-          ) : (
-            <Image
-              source={require('../../../assets/images/logoDark.png')}
-              style={styles.imageStyles}
-              resizeMode="contain"
-            />
-          )}
+          <Image
+            source={
+              isDark
+                ? require('../../../assets/images/logo.png')
+                : require('../../../assets/images/logoDark.png')
+            }
+            style={styles.imageStyles}
+            resizeMode="contain"
+          />
           <Text style={styles.textStyles}>Organize your day,</Text>
           <Text style={styles.textStyles}>Effortlessly</Text>
         </View>
 
+        {/* Inputs */}
         <View style={styles.inputContaier}>
           <TextInput
             style={styles.input}
             placeholder="First Name"
-            placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
+            placeholderTextColor={theme.colors.placeholderTextColor}
             value={firstName}
             onChangeText={setFirstName}
           />
@@ -172,13 +216,13 @@ const RegisterScreen = () => {
             style={styles.input}
             placeholder="Last Name"
             value={lastName}
-            placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
+            placeholderTextColor={theme.colors.placeholderTextColor}
             onChangeText={setLastName}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
+            placeholderTextColor={theme.colors.placeholderTextColor}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -187,7 +231,7 @@ const RegisterScreen = () => {
           <View style={styles.input}>
             <TextInput
               placeholder="Password"
-              placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
+              placeholderTextColor={theme.colors.placeholderTextColor}
               value={password}
               style={{ flex: 1, color: theme.colors.inputTextColor }}
               onChangeText={setPassword}
@@ -203,14 +247,17 @@ const RegisterScreen = () => {
           </View>
         </View>
 
+        {/* Register Button */}
         <Button
           title={loading ? '' : 'Register'}
           textStyle={styles.buttonText}
           onPress={handleRegister}
         />
+
+        {/* Link to Login */}
         <View style={{ alignItems: 'center', marginTop: 20 }}>
           <LinkText
-            onPress={onLinkPress}
+            onPress={() => navigation.goBack()}
             text="Welcome Back!"
             pressableText="Login"
           />

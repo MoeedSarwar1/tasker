@@ -44,10 +44,6 @@ const RootNavigator = () => {
 };
 
 const App = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-
   return (
     <ThemeProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>

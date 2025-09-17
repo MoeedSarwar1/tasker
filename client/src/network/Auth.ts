@@ -31,3 +31,10 @@ export const register = async (
 
   return data;
 };
+
+export const verify = async (code: string, email: string) => {
+  const response = await client.post(API_ENDPOINTS.VERIFY, { code, email });
+  const data = response.data;
+
+  return data;
+};

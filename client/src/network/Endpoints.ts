@@ -1,5 +1,6 @@
 export const API_ENDPOINTS = {
   LOGIN: '/users/login',
+  VERIFY: '/users/verify',
   REGISTER: '/users/register',
   GET_USER: '/users',
   GET_USER_BY_ID: (id: string) => `/users/${id}`,
