@@ -3,10 +3,12 @@ import React from 'react';
 import LoginScreen from '../screens/Login-screen';
 import RegisterationScreen from '../screens/Registeration-screen';
 import { NavigationRoutes } from './enums';
+import EmailVerificationScreen from '../screens/Verification-screen';
 
 export type RootStackParamList = {
   [NavigationRoutes.LOGIN]: undefined; // no params for Home
   [NavigationRoutes.REGISTER]: undefined; // no params for Home
+  [NavigationRoutes.VERIFICATION]:undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -20,6 +22,10 @@ const AuthStack: React.FC = () => {
       <Stack.Screen
         name={NavigationRoutes.REGISTER}
         component={RegisterationScreen}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.VERIFICATION}
+        component={EmailVerificationScreen}
       />
     </Stack.Navigator>
   );

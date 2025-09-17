@@ -1,9 +1,10 @@
 export enum NavigationRoutes {
-  HOME = 'Home',
-  LOGIN = 'Login',
-  REGISTER = 'Register',
-  FRIENDS = 'Friends',
-  SETTINGS = 'Settings',
+  HOME = 'Home Screen',
+  LOGIN = 'Login Screen',
+  REGISTER = 'Register Screen',
+  FRIENDS = 'Friends Screen',
+  SETTINGS = 'Settings Screen',
+  VERIFICATION = 'Verification Screen',
 }
 
 export enum tabNames {

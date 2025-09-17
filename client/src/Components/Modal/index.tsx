@@ -94,7 +94,8 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
 
           {title && <Text style={titleStyle}>{title}</Text>}
           {description && <Text style={descriptionStyle}>{description}</Text>}
-          {children}
+          <View style={{ marginTop: 8 }}>{children}</View>
+
           <View style={styles.buttonRow}>
             {buttonRow && (
               <View style={{ flex: 1 }}>

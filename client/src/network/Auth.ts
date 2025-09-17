@@ -32,9 +32,20 @@ export const register = async (
   return data;
 };
 
-export const verify = async (code: string, email: string) => {
-  const response = await client.post(API_ENDPOINTS.VERIFY, { code, email });
-  const data = response.data;
+export const verify = async (email, code) => {
+  try {
+    const response = await client.post(API_ENDPOINTS.VERIFY, {
+      email: email.toLowerCase().trim(),
+      code: code.trim(),
+    });
 
-  return data;
+    return response.data;
+  } catch (error) {
+    console.error('Verification API error:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
+    throw error;
+  }
 };
