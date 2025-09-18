@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useLayoutEffect, useState } from 'react';
 import {
@@ -12,14 +13,19 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../Components/Header/Header';
+import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
+import { deleteMe } from '../../network/User';
 import { privacyStyles } from './styles';
+import { useAuth } from '../../context/Auth-context';
 
 const PrivacySecurityScreen = () => {
   const { theme } = useTheme();
   const styles = privacyStyles(theme);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { showModal } = useModal();
+  const { logout } = useAuth();
 
   // Privacy settings state
   const [settings, setSettings] = useState({
@@ -75,41 +81,81 @@ const PrivacySecurityScreen = () => {
   };
 
   const showDeleteAccountAlert = () => {
-    Alert.alert(
-      'Delete Account',
-      'This action cannot be undone. All your data will be permanently deleted from our servers. Are you sure you want to continue?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            // Handle account deletion
-            Alert.alert(
-              'Account Deleted',
-              'Your account has been successfully deleted.',
-            );
-          },
-        },
-      ],
-    );
+    showModal({
+      mode: 'confirmation',
+      title: 'Delete Account',
+      iconName: 'delete-forever', // material-community icon
+      description:
+        'Are you absolutely sure? This will permanently delete your account and all data stored on our servers. This action cannot be undone.',
+      onConfirm: async () => {
+        try {
+          // Show loading modal first
+          showModal({
+            mode: 'loading',
+            title: 'Deleting Account',
+            iconName: 'progress-clock',
+            description:
+              'We’re securely removing your account data. Please wait...',
+          });
+
+          // Call API to delete account
+          await deleteMe();
+
+          // Clear local storage as well
+          await AsyncStorage.clear();
+
+          // Show success modal
+          showModal({
+            mode: 'success',
+            title: 'Account Deleted',
+            iconName: 'check-circle',
+            description:
+              'Your account and all associated data have been permanently removed. Logging you out...',
+          });
+
+          // Logout after a short delay
+          setTimeout(() => {
+            logout(); // Replace with your actual logout handler
+          }, 1500);
+        } catch (error) {
+          showModal({
+            mode: 'error',
+            title: 'Deletion Failed',
+            iconName: 'alert-circle',
+            description:
+              'Something went wrong while deleting your account. Please try again later.',
+          });
+        }
+      },
+    });
   };
 
   const clearDataAlert = () => {
-    Alert.alert(
-      'Clear All Data',
-      'This will remove all tasks, labels, and settings from this device. This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: () => {
-            Alert.alert('Data Cleared', 'All local data has been removed.');
-          },
-        },
-      ],
-    );
+    showModal({
+      mode: 'confirmation',
+      title: 'Clear All Data',
+      iconName: 'delete-forever', // material-community icon name
+      description:
+        'This will remove all tasks, labels, and settings from this device. This action cannot be undone. Do you want to continue?',
+      onConfirm: async () => {
+        try {
+          await AsyncStorage.clear();
+          showModal({
+            mode: 'success',
+            title: 'Data Cleared',
+            iconName: 'check-circle',
+            description: 'All local data has been removed successfully.',
+          });
+        } catch (error) {
+          showModal({
+            mode: 'error',
+            title: 'Failed to Clear Data',
+            iconName: 'alert-circle',
+            description: 'Something went wrong while clearing local data.',
+          });
+        }
+      },
+    });
   };
 
   const privacySettings = [

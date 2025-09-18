@@ -185,7 +185,6 @@ const SettingsScreen = () => {
             showModal({
               mode: 'error',
               title: 'Leaving So Soon?',
-              iconColor: '#DC3545',
               description:
                 'Logging out will end your current session. You will need to sign in again to access your account. Do you want to continue?',
               iconName: 'exit-run',

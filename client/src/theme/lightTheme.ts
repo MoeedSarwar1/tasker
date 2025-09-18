@@ -41,6 +41,12 @@ export const lightTheme: Theme = {
       errorHeader: colors.errorHeaderLight,
       successHeader: colors.successHeaderLight,
       confirmationHeader: colors.confirmationHeaderLight,
+      defaultBackground: colors.defaultBackgroundLight,
+      defaultHeader: colors.defaultHeaderLight,
+      defaultText: colors.defaultTextLight,
+      errorIcon: colors.errorLight,
+      successIcon: colors.successLight,
+      confirmationIcon: colors.confirmationLight,
     },
     chips: {
       allBackground: colors.allBackgroundLight,

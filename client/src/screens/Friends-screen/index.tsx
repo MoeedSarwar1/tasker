@@ -97,7 +97,6 @@ const FriendsScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description: 'Failed to load data. Check your connection and retry.',
         buttonRow: false,
@@ -105,9 +104,7 @@ const FriendsScreen = () => {
       });
     } finally {
       setRefreshing(false);
-      setTimeout(() => {
-        setLoading(false); // stop search loader
-      }, 500);
+      setLoading(false); // stop search loader
     }
   };
 
@@ -127,7 +124,6 @@ const FriendsScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description: 'Could not refresh data.',
         buttonRow: false,
@@ -140,7 +136,18 @@ const FriendsScreen = () => {
   // ✅ Accept friend
   const handleAddFriend = async (requestId: string) => {
     try {
+      // Show loading modal
+      showModal({
+        mode: 'loading',
+        title: 'Adding Friend...',
+        description: 'Accepting friend request',
+        iconName: 'account-plus-outline',
+        buttonRow: false,
+      });
+
       const addedFriend = await acceptFriendRequest(requestId);
+
+      // Update local state
       setFriends(prev =>
         prev.some(f => f._id === addedFriend._id)
           ? prev
@@ -151,25 +158,38 @@ const FriendsScreen = () => {
           ? prev
           : [...prev, addedFriend],
       );
-
       setRequests(prev => prev.filter(r => r._id !== requestId));
       setFilteredRequests(prev => prev.filter(r => r._id !== requestId));
-      showModal({
-        title: 'All Set',
-        description: 'Friend added successfully 🎉',
-        iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
-        buttonRow: false,
-      });
+
+      // Brief delay to show success state
+      setTimeout(() => {
+        handleHideModal();
+
+        // Show success modal after a short delay
+        setTimeout(() => {
+          showModal({
+            mode: 'success',
+            title: 'Welcome to Your Network! 🤝',
+            description: `${addedFriend.firstName} is now your friend and can share tasks with you`,
+            iconName: 'account-heart-outline',
+            buttonRow: false,
+          });
+        }, 100);
+      }, 600);
     } catch (error: any) {
-      showModal({
-        mode: 'error',
-        iconName: 'account-cancel-outline',
-        iconColor: '#DC3545',
-        title: 'Could not add friend',
-        description: error?.response?.data?.message || 'Something went wrong',
-        buttonRow: false,
-      });
+      handleHideModal();
+
+      setTimeout(() => {
+        showModal({
+          mode: 'error',
+          iconName: 'account-remove-outline',
+          title: 'Unable to Add Friend',
+          description:
+            error?.response?.data?.message ||
+            'Failed to accept friend request. Please check your connection and try again.',
+          buttonRow: false,
+        });
+      }, 100);
     }
   };
 
@@ -181,10 +201,10 @@ const FriendsScreen = () => {
       setFilteredFriends(prev => prev.filter(f => f._id !== removedFriend));
 
       showModal({
+        mode: 'success',
         title: 'All Set',
         description: `${firstName} ${lastName} Removed successfully 🎉`,
         iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
         buttonRow: false,
       });
 
@@ -193,7 +213,6 @@ const FriendsScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'account-cancel-outline',
-        iconColor: '#DC3545',
         title: 'Could not remove friend',
         description: error?.response?.data?.message || 'User not found',
         buttonRow: false,
@@ -203,16 +222,43 @@ const FriendsScreen = () => {
 
   const handleRejectRequest = async (requestID: string) => {
     try {
+      // Show loading modal
+      showModal({
+        mode: 'loading',
+        title: 'Processing Request',
+        description: 'Please wait while we decline the friend request...',
+        iconName: 'account-clock-outline',
+      });
+
       const data = await rejectFriendRequest(requestID);
+
+      // Hide loading modal first
+      handleHideModal();
+
+      // Update local state
       setRequests(data);
       setFilteredRequests(data);
-    } catch (error) {
+
+      // Show success modal
+      showModal({
+        title: 'Request Declined',
+        mode: 'success',
+        description: 'The friend request has been declined',
+        iconName: 'account-minus-outline',
+        buttonRow: false,
+      });
+    } catch (error: any) {
+      // Hide loading modal first
+      handleHideModal();
+
+      // Show error modal
       showModal({
         mode: 'error',
-        iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Could not reject request.',
+        iconName: 'account-cancel-outline',
+        title: 'Could Not Decline Request',
+        description:
+          error?.response?.data?.message ||
+          'Failed to decline friend request. Please try again.',
         buttonRow: false,
       });
     }
@@ -220,32 +266,55 @@ const FriendsScreen = () => {
 
   const handleFriendRequestSend = async (email: string) => {
     try {
-      setSearchLoading(true); // start search loader
-      const data = await sendFriendRequest(email);
+      // Show loading modal
       showModal({
-        title: 'All Set',
-        description: `Request Sent successfully 🎉`,
-        iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
+        mode: 'loading',
+        title: 'Sending Request',
+        description: 'Please wait while we send your friend request...',
+        iconName: 'account-arrow-right-outline',
         buttonRow: false,
       });
+
+      const data = await sendFriendRequest(email);
+
+      // Hide loading modal first
+      handleHideModal();
+
+      // Update local state
       setUsers(prev =>
         prev.map(u => (u.email === email ? { ...u, status: 'sent' } : u)),
       );
-      bottomSheetRef?.current?.close();
       setRequests(data);
-    } catch (error) {
+
+      // Close bottom sheet
+      bottomSheetRef?.current?.close();
+
+      // Show success modal
+      showModal({
+        title: 'Request Sent! 📤',
+        description: 'Your friend request has been sent successfully',
+        iconName: 'account-check-outline',
+        buttonRow: false,
+        mode: 'success',
+      });
+    } catch (error: any) {
+      // Hide loading modal first
+      handleHideModal();
+
+      // Show error modal
       showModal({
         mode: 'error',
-        iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
-        description: 'Could not send request.',
+        iconName: 'account-alert-outline',
+        title: 'Could Not Send Request',
+        description:
+          error?.response?.data?.message ||
+          'Failed to send friend request. Please try again.',
         buttonRow: false,
       });
     } finally {
+      // Clean up any loading states
       setTimeout(() => {
-        setSearchLoading(false); // stop search loader
+        setSearchLoading(false);
       }, 300);
     }
   };

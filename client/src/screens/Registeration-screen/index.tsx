@@ -83,7 +83,6 @@ const RegisterScreen = () => {
       mode: 'error',
       buttonRow: true,
       iconName,
-      iconColor: '#DC3545',
       title,
       description,
     });
@@ -94,7 +93,6 @@ const RegisterScreen = () => {
     showModal({
       mode: 'confirmation',
       iconName: 'email-alert-outline',
-      iconColor: '#28A745',
       title: 'Verification Code Sent',
       buttonRow: false,
       description: `Please enter the 6-digit verification code sent to ${email}`,

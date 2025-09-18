@@ -41,7 +41,6 @@ const LoginScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'alert-circle',
-        iconColor: '#DC3545',
         title: 'Validation Error',
         description: 'Please enter email and password',
         buttonRow: false,
@@ -63,7 +62,6 @@ const LoginScreen = () => {
         showModal({
           mode: 'error',
           iconName: 'alert-circle',
-          iconColor: '#DC3545',
           title: 'Login Failed',
           description: 'Please check your credentials and try again',
           buttonRow: false,
@@ -75,7 +73,6 @@ const LoginScreen = () => {
           mode: 'error',
           buttonRow: true,
           iconName: 'alert-circle',
-          iconColor: '#DC3545',
           title: 'Verification Required',
           description: 'Please verify your email to move forward',
           onConfirm: () =>
@@ -89,7 +86,6 @@ const LoginScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'alert-circle',
-        iconColor: '#DC3545',
         title: 'Login Failed',
         description: 'Please check your credentials and try again',
         buttonRow: false,
@@ -168,12 +164,15 @@ const LoginScreen = () => {
             onChangeText={text => setEmail(text.toLowerCase())} // ✅ force lowercase
             keyboardType="email-address"
             autoCapitalize="none"
+            autoCorrect={false}
           />
           <View style={styles.input}>
             <TextInput
               placeholder="Password"
               placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
               value={password}
+              autoCapitalize="none"
+              autoCorrect={false}
               style={{ flex: 1, color: theme.colors.inputTextColor }}
               onChangeText={setPassword}
               secureTextEntry={isHidden}

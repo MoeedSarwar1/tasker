@@ -15,5 +15,6 @@ export const API_ENDPOINTS = {
   REMOVE_FRIEND: '/friends/remove',
   GET_FRIENDS: '/friends/',
   GET_ME: '/users/me',
+  DELETE_ME: '/users/me',
   GET_FRIEND_TASK: (id: string) => `friends/${id}/tasks`,
 };

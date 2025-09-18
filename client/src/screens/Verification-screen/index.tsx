@@ -17,6 +17,7 @@ import { verificationScreenStyles } from './styles';
 import { verify } from '../../network/Auth';
 import { NavigationRoutes } from '../../navigation/enums';
 import { useModal } from '../../context/Modal-context';
+import LinkText from '../../Components/link-text';
 
 const EmailVerificationScreen = () => {
   const route = useRoute();
@@ -38,7 +39,6 @@ const EmailVerificationScreen = () => {
         mode: 'error',
         buttonRow: true,
         iconName: 'alert-circle',
-        iconColor: '#DC3545',
         title: 'Missing Email',
         description: 'Email address is missing. Please go back and try again.',
         onConfirm: () => navigation.goBack(),
@@ -53,7 +53,6 @@ const EmailVerificationScreen = () => {
         mode: 'error',
         buttonRow: true,
         iconName: 'alert-circle',
-        iconColor: '#DC3545',
         title: 'Missing Email',
         description: 'Email address is missing. Please go back and try again.',
         onConfirm: () => navigation.goBack(),
@@ -96,7 +95,6 @@ const EmailVerificationScreen = () => {
         mode: 'success',
         buttonRow: true,
         iconName: 'email-check-outline',
-        iconColor: '#28A745',
         title: 'Email Verified 🎉',
         description:
           'Your email has been successfully verified. You can now continue.',
@@ -142,7 +140,6 @@ const EmailVerificationScreen = () => {
         mode: 'error',
         buttonRow: true,
         iconName: 'close-circle-outline',
-        iconColor: '#DC3545',
         title: errorTitle,
         description: errorMessage,
         onConfirm: () => {
@@ -293,18 +290,12 @@ const EmailVerificationScreen = () => {
         />
 
         {/* Resend Code button */}
-        <View style={{ alignItems: 'center', marginTop: 20 }}>
-          <Pressable
+        <View style={styles.linkText}>
+          <LinkText
             onPress={handleResendCode}
-            disabled={loading}
-            style={({ pressed }) => ({
-              opacity: pressed || loading ? 0.6 : 1,
-            })}
-          >
-            <Text style={[styles.linkText, { color: theme.colors.primary }]}>
-              Didn't receive the code? Resend
-            </Text>
-          </Pressable>
+            text="Didn't Recieve the Code?"
+            pressableText="Resend"
+          />
         </View>
       </KeyboardAvoidingView>
     </View>

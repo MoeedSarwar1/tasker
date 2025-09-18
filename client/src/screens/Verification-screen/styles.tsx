@@ -1,7 +1,6 @@
-import { Theme } from '../../theme/theme.interface';
 import { StyleSheet } from 'react-native';
+import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
-import headerStyles from '../../Components/Header/styles';
 
 export const verificationScreenStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -28,6 +27,11 @@ export const verificationScreenStyles = (theme: Theme) =>
       color: theme.colors.primaryButtonText,
       ...typography.buttonLarge,
     },
+    linkText: {
+      alignItems: 'center',
+      marginTop: theme.spacing.lg,
+    },
+
     logoContainer: {
       justifyContent: 'center',
       alignItems: 'center',

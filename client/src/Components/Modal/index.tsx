@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Modal, View } from 'react-native';
+import { ActivityIndicator, Modal, View } from 'react-native';
 import Button from '../Button';
 import Text from '../Text';
 import { useTheme } from '../../context/Theme-context';
@@ -17,7 +17,7 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
   iconName,
   iconColor,
   children,
-  mode = 'success',
+  mode = 'success ',
 }) => {
   const { theme } = useTheme();
   const styles = modalStyles(theme);
@@ -30,28 +30,28 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
           container: styles.successModalContainer,
           title: styles.successModalHeader,
           description: styles.successModalText,
-          defaultIconColor: theme.colors.modals.successText,
+          defaultIconColor: theme.colors.modals.successIcon,
         };
       case 'confirmation':
         return {
           container: styles.confirmModalContainer,
           title: styles.confirmModalHeader,
           description: styles.confirmModalText,
-          defaultIconColor: theme.colors.modals.confirmationText,
+          defaultIconColor: theme.colors.modals.confirmationIcon,
         };
       case 'error':
         return {
           container: styles.errorModalContainer,
           title: styles.errorModalHeader,
           description: styles.errorModalText,
-          defaultIconColor: theme.colors.modals.errorText,
+          defaultIconColor: theme.colors.modals.errorIcon,
         };
       default:
         return {
           container: styles.modalContainer,
           title: styles.modalHeader,
           description: styles.modalText,
-          defaultIconColor: '#333',
+          defaultIconColor: theme.colors.primaryIcon,
         };
     }
   };
@@ -84,26 +84,28 @@ const SimpleModal: React.FC<SimpleModalProps> = ({
           {description && <Text style={descriptionStyle}>{description}</Text>}
           <View style={styles.childrenContainer}>{children}</View>
 
-          <View style={styles.buttonRow}>
-            {buttonRow && (
+          {mode !== 'loading' && (
+            <View style={styles.buttonRow}>
+              {buttonRow && (
+                <View style={styles.buttonContainer}>
+                  <Button
+                    title="Cancel"
+                    onPress={onCancle}
+                    textStyle={styles.buttonText}
+                    style={styles.button}
+                  />
+                </View>
+              )}
               <View style={styles.buttonContainer}>
                 <Button
-                  title="Cancel"
-                  onPress={onCancle}
-                  textStyle={styles.buttonText}
-                  style={styles.button}
+                  title="Confirm"
+                  style={styles.addButton}
+                  textStyle={styles.addButtonText}
+                  onPress={onConfirm}
                 />
               </View>
-            )}
-             < View style={styles.buttonContainer}>
-              <Button
-                title="Confirm"
-                style={styles.addButton}
-                textStyle={styles.addButtonText}
-                onPress={onConfirm}
-              />
             </View>
-          </View>
+          )}
         </View>
       </View>
     </Modal>

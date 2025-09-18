@@ -100,7 +100,6 @@ const HomeScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description: 'Tasks didn’t load. Check your connection and retry.',
         buttonRow: false,
@@ -132,25 +131,40 @@ const HomeScreen = () => {
     dueDate: Date | string;
   }) => {
     try {
+      // Show loading modal
+      showModal({
+        mode: 'loading',
+        iconName: 'clock-outline',
+        title: 'Adding Task',
+        description: 'Please wait while we save your task...',
+      });
+
       const newTask = await postTask(task);
+
+      // Hide loading modal first
+      handleHideModal();
 
       // Update local tasks
       setTasks(prevTasks => [newTask, ...prevTasks]);
+
+      // Show success modal
       showModal({
-        title: 'All Set',
-        description: 'Added Successfully',
+        title: 'All Set!',
+        description: 'Task added successfully',
         iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
+        mode: 'success',
         onConfirm: () => setEditMode(false),
         buttonRow: false,
       });
-      handleHideModal();
     } catch (error: any) {
+      // Hide loading modal first
+      handleHideModal();
+
+      // Show error modal
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
-        title: 'Something Went Wrong,',
+        title: 'Something Went Wrong',
         description: 'Failed to add task. Check your connection and retry.',
         buttonRow: false,
         onConfirm: () => onRefresh(),
@@ -165,8 +179,8 @@ const HomeScreen = () => {
         title: 'All Set',
         description: 'Removed Successfully',
         iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
         buttonRow: false,
+        mode: 'success',
       });
       await loadTasks();
       return deletedTask;
@@ -174,7 +188,6 @@ const HomeScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description: 'Failed to delete task. Check your connection and retry.',
         buttonRow: false,
@@ -205,7 +218,6 @@ const HomeScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description:
           'Failed to update task status. Check your connection and retry.',
@@ -227,7 +239,7 @@ const HomeScreen = () => {
         title: 'All Set',
         description: 'Update Saved',
         iconName: 'checkbox-marked-circle-outline',
-        iconColor: '#28A745',
+        mode: 'success',
         onConfirm: () => setEditMode(false),
         buttonRow: false,
       });
@@ -236,7 +248,6 @@ const HomeScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description: 'Failed to update task. Check your connection and retry.',
         buttonRow: false,
@@ -285,7 +296,6 @@ const HomeScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        iconColor: '#DC3545',
         title: 'Something Went Wrong,',
         description: 'Failed to update task. Check your connection and retry.',
         buttonRow: false,

@@ -80,6 +80,20 @@ export const colors = {
   confirmationBackgroundDark: '#3A2A1A',
   confirmationTextLight: '#C9A227',
   confirmationTextDark: '#C9A227',
+  defaultHeaderLight: '#3A7BD5', // cool sapphire blue
+  defaultHeaderDark: '#1E3C72', // deep midnight blue
+  defaultBackgroundLight: '#F5F7FA', // frosted silver
+  defaultBackgroundDark: '#1A1D24', // graphite frost
+  defaultTextLight: '#1C1C1E', // obsidian
+  defaultTextDark: '#EAEAEA',
+  errorLight: '#C92A2A', // ruby red (light mode)
+  errorDark: '#FF3B3B', // bright red (dark mode)
+
+  successLight: '#00B894', // emerald accent
+  successDark: '#00E6AA', // neon emerald
+
+  confirmationLight: '#B8860B', // old gold
+  confirmationDark: '#E6B422', // bright golden yellow
 
   // Task Filter Chips
   allBackgroundLight: '#F1F1F4',

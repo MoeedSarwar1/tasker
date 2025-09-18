@@ -10,7 +10,7 @@ interface ModalOptions {
   onConfirm?: () => void;
   onCancel?: () => void;
   children?: ReactNode;
-  mode?: 'success' | 'confirmation' | 'error';
+  mode?: 'success' | 'confirmation' | 'error' |'loading';
 }
 
 interface ModalContextType {

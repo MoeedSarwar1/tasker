@@ -1,4 +1,3 @@
-
 export interface SimpleModalProps {
   visible: boolean;
   onCancle?: () => void;
@@ -9,5 +8,5 @@ export interface SimpleModalProps {
   onConfirm?: () => void;
   buttonRow?: boolean;
   description?: string;
-  mode?: 'success' | 'confirmation' | 'error';
+  mode?: 'success' | 'confirmation' | 'error' | 'loading';
 }

@@ -20,3 +20,12 @@ export const fetchMe = async () => {
     return [];
   }
 };
+export const deleteMe = async () => {
+  try {
+    const response = await client.delete(API_ENDPOINTS.DELETE_ME);
+    return response.data; // should be an array of users
+  } catch (error: any) {
+    console.error('Fetch Users Error:', error);
+    return [];
+  }
+};

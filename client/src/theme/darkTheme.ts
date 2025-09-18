@@ -42,6 +42,12 @@ export const darkTheme: Theme = {
       successHeader: colors.successHeaderDark,
       confirmationHeader: colors.confirmationHeaderDark,
       confirmationText: colors.confirmationTextDark,
+      defaultBackground: colors.defaultBackgroundDark,
+      defaultHeader: colors.defaultHeaderDark,
+      defaultText: colors.defaultTextDark,
+      errorIcon: colors.errorDark,
+      confirmationIcon: colors.confirmationDark,
+      successIcon: colors.successLight,
     },
     chips: {
       allBackground: colors.allBackgroundDark,

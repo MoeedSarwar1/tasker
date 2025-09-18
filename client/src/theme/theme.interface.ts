@@ -2,14 +2,21 @@ export interface ModalsColors {
   errorBackground: string;
   errorText: string;
   errorHeader: string;
+  errorIcon: string;
 
   successBackground: string;
   successText: string;
   successHeader: string;
+  successIcon: string;
 
   confirmationBackground: string;
   confirmationText: string;
   confirmationHeader: string;
+  confirmationIcon: string;
+
+  defaultBackground: string;
+  defaultText: string;
+  defaultHeader: string;
 }
 
 export interface ChipsColors {

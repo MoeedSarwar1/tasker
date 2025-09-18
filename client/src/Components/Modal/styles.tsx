@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { shadows } from '../../theme/shadows';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
-import { shadows } from '../../theme/shadows';
 
 export const modalStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -12,7 +12,7 @@ export const modalStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     modalContainer: {
-      backgroundColor: theme.colors.modals.confirmationBackground, // default
+      backgroundColor: theme.colors.modals.defaultBackground, // default
       borderRadius: 16,
       alignItems: 'center',
       gap: 8,
@@ -95,10 +95,10 @@ export const modalStyles = (theme: Theme) =>
     buttonContainer: { flex: 1 },
     // Default / fallback
     modalHeader: {
-      color: '#333',
+      color: theme.colors.modals.defaultHeader,
       ...typography.title,
     },
-    modalText: { ...typography.micro, color: '#666' },
+    modalText: { ...typography.micro, color: theme.colors.modals.defaultText },
 
     buttonRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
 
