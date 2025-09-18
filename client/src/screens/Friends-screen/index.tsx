@@ -26,6 +26,7 @@ import {
 import { fetchUsers } from '../../network/User';
 import friendsStyles from './styles';
 import Searchbar from '../../Components/SearchBar';
+import LinearGradient from 'react-native-linear-gradient';
 
 const FriendsScreen = () => {
   const snapPoints = useMemo(() => ['90%'], []);
@@ -65,7 +66,7 @@ const FriendsScreen = () => {
     <View style={styles.emptyContainer}>
       {!hasData && (
         <>
-          <Material name={icon} size={64} color={theme.colors.secondaryIcon} />
+          <Material name={icon} size={52} color={theme.colors.secondaryIcon} />
           <Text style={styles.emptyTextStyle}>{message}</Text>
         </>
       )}
@@ -302,7 +303,7 @@ const FriendsScreen = () => {
 
   return (
     <>
-      <Header title="Co-workers" showAdd onPressAdd={handlePresentModal} />
+      <Header title="Co-workers" />
 
       <View style={styles.container}>
         <Searchbar onSearch={handleSearch} />
@@ -406,6 +407,20 @@ const FriendsScreen = () => {
             />
           )}
         </View>
+        <LinearGradient
+          colors={theme.colors.floatingButton}
+          start={{ x: 0, y: 1 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.logoutContainer}
+        >
+          <Pressable
+            onPress={() => {
+              handlePresentModal();
+            }}
+          >
+            <Material name="add" size={28} color="white" />
+          </Pressable>
+        </LinearGradient>
       </View>
 
       {/* Bottom Sheet */}

@@ -1,15 +1,13 @@
 import { Insets, StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
-import { shadows } from '../../theme/shadows';
 
-const headerStyles = (insets:Insets, theme: Theme) =>
+const headerStyles = (insets: Insets, theme: Theme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.md ,
+      padding: theme.spacing.md,
       paddingTop: insets.top,
       backgroundColor: theme.colors.headerBackground,
-      ...shadows.heavy,
     },
     headerRow: {
       flexDirection: 'row',
@@ -24,7 +22,16 @@ const headerStyles = (insets:Insets, theme: Theme) =>
       color: theme.colors.subtitleTextColor,
       ...typography.small,
     },
-    chipRow:{ flexDirection: 'row', flexWrap: 'wrap', marginTop: theme.spacing.md }
+    chipRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: theme.spacing.md,
+    },
+    backRow: {
+      flexDirection: 'row',
+      gap: 8,
+      alignItems:'center'
+    },
   });
 
 export default headerStyles;

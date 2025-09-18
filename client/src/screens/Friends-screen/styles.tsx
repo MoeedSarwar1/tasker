@@ -33,6 +33,13 @@ const friendsStyles = (theme: Theme, insets) =>
       color: theme.colors.subtitleTextColor,
       ...typography.title,
     },
+    logoutContainer: {
+      position: 'absolute',
+      bottom: 40,
+      right: 30,
+      padding: 8,
+      borderRadius: 100,
+    },
   });
 
 export default friendsStyles;

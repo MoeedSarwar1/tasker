@@ -133,7 +133,8 @@ const AddTask: React.FC<AddTaskProps> = ({
             <Button
               title={date.toDateString()}
               onPress={() => setShowDatePicker(true)}
-              textStyle={styles.buttonText}
+              textStyle={styles.addButtonText}
+              style={styles.addButton}
             />
           </>
         ) : (

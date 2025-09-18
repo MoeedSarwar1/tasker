@@ -2,11 +2,11 @@ export const colors = {
   // Backgrounds
   backgroundLight: '#FDFDFD', // crystal white
   backgroundDark: '#050505', // pure obsidian black
-  cardLight: 'rgba(255, 255, 255, 0.85)', // frosted crystal
-  cardDark: 'rgba(15, 15, 15, 0.85)', // frosted onyx
+  cardLight: 'rgba(255, 255, 255, 0.95)', // frosted crystal
+  cardDark: 'rgba(15, 15, 15, 0.95)', // frosted onyx
 
   // Header & Bottom Nav
-  headerLight: 'rgba(250, 250, 250, 0.9)', // satin platinum
+  headerLight: 'rgba(250, 250, 250, 0.1)', // satin platinum
   headerDark: 'rgba(10, 10, 10, 0.9)', // stealth matte black
   bottomNavActiveLight: '#C9A227', // champagne gold
   bottomNavActiveDark: '#C9A227',
@@ -16,9 +16,12 @@ export const colors = {
   friendsCardDark: ['rgba(20, 20, 25, 0.7)', 'rgba(40, 50, 60, 0.55)'],
   taskCardLight: ['rgba(255, 255, 255, 0.7)', 'rgba(240, 248, 255, 0.6)'], // icy white → soft frost blue
   taskCardDark: ['rgba(25, 25, 28, 0.7)', 'rgba(45, 50, 55, 0.6)'],
+  // Floating Button Gradient
+  floatingButtonLight: ['#A1C4FD', '#C2E9FB'], // sky blue → ice crystal
+  floatingButtonDark: ['#3A6073', '#16222A'],
   // Buttons
-  primaryButtonLight: ['#C9A227', '#F5E6A1'], // champagne gold gradient
-  primaryButtonDark: ['#C9A227', '#7A5C1F'], // deep gold gradient
+  primaryButtonLight: ['#6FA8DC', '#89CFF0'], // champagne gold gradient
+  primaryButtonDark: ['#274046', '#0F2027'], // deep gold gradient
   primaryButtonLightSolid: '#C9A227',
   primaryButtonDarkSolid: '#7A5C1F',
   secondaryButtonLight: '#D9D9E0', // brushed steel

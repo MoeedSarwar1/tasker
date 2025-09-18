@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Chip from '../Chips';
 import { useState } from 'react';
 import { useTheme } from '../../context/Theme-context';
+import { useNavigation } from '@react-navigation/native';
 
 const Header: React.FC<HeaderProps> = ({
   title,
@@ -16,6 +17,7 @@ const Header: React.FC<HeaderProps> = ({
   iconName = 'add',
   onFilterChange,
   showChips,
+  showBack = false,
   showAdd,
 }) => {
   const insets = useSafeAreaInsets();
@@ -26,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const [selectedChip, setSelectedChip] = useState('all');
+  const navigation = useNavigation();
   const chipData = [
     {
       id: 'all',
@@ -50,10 +53,23 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <View>
-          <Text style={styles.title}>{title}</Text>
-          {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+        <View style={styles.backRow}>
+          {showBack && (
+            <Pressable onPress={()=>navigation.goBack()} hitSlop={10}>
+              <Icon
+                name={iconName}
+                size={24}
+                color={theme.colors.primaryIcon}
+              />
+            </Pressable>
+          )}
+
+          <View>
+            <Text style={styles.title}>{title}</Text>
+            {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+          </View>
         </View>
+
         {showAdd && (
           <Pressable onPress={handleAdd} hitSlop={10}>
             <Icon name={iconName} size={24} color={theme.colors.primaryIcon} />

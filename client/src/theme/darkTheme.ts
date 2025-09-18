@@ -31,6 +31,7 @@ export const darkTheme: Theme = {
     primaryButtonSolid: colors.primaryButtonDarkSolid,
     friendsCard: colors.friendsCardDark,
     taskCard: colors.taskCardDark,
+    floatingButton: colors.floatingButtonDark,
     modals: {
       errorBackground: colors.errorBackgroundDark,
       errorText: colors.errorTextDark,

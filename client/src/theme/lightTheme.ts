@@ -30,6 +30,7 @@ export const lightTheme: Theme = {
     primaryButtonSolid: colors.primaryButtonLightSolid,
     friendsCard: colors.friendsCardLight,
     taskCard: colors.taskCardLight,
+    floatingButton: colors.floatingButtonLight,
     modals: {
       errorBackground: colors.errorBackgroundLight,
       errorText: colors.errorTextLight,

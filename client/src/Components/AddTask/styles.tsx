@@ -7,19 +7,19 @@ export const bottomSheetStyles = (theme: Theme) =>
     container: {
       borderRadius: 8,
     },
-    chipRow:{ flexDirection: 'row', flexWrap: 'wrap' },
-    buttonContainer:{ flex: 1 },
+    chipRow: { flexDirection: 'row', flexWrap: 'wrap' },
+    buttonContainer: { flex: 1 },
     label: {
       marginBottom: 8,
       marginTop: 8,
       color: theme.colors.headerText,
       ...typography.body,
     },
-    date:{
-          justifyContent: 'center',
-          marginBottom: 12,
-          alignItems: 'center',
-        },
+    date: {
+      justifyContent: 'center',
+      marginBottom: 12,
+      alignItems: 'center',
+    },
     input: {
       gap: theme.spacing.sm,
       backgroundColor: theme.colors.inputBackground,
@@ -46,22 +46,20 @@ export const bottomSheetStyles = (theme: Theme) =>
       marginTop: 24,
     },
     button: {
-      paddingHorizontal: 8,
       borderRadius: 16,
-      paddingVertical: 12,
+      paddingVertical: 8,
       backgroundColor: theme.colors.secondaryButtonBackground,
     },
     addButton: {
-      paddingHorizontal: 8,
-      paddingVertical: 12,
+      paddingVertical: 8,
       backgroundColor: theme.colors.primaryButtonBackground,
     },
     addButtonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonLarge,
+      ...typography.buttonMedium,
     },
     buttonText: {
       color: theme.colors.secondaryButtonText,
-      ...typography.buttonLarge,
+      ...typography.buttonMedium,
     },
   });

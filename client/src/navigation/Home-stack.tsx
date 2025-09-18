@@ -4,11 +4,15 @@ import HomeScreen from '../screens/Home-screen';
 import { NavigationRoutes } from './enums';
 import FriendsScreen from '../screens/Friends-screen';
 import SettingsScreen from '../screens/Settings-screen';
+import AboutScreen from '../screens/About-screen';
+import PrivacySecurityScreen from '../screens/Privacy-screen';
 
 export type RootStackParamList = {
   [NavigationRoutes.HOME]: undefined; // no params for Home
   [NavigationRoutes.FRIENDS]: undefined; // no params for Home
   [NavigationRoutes.SETTINGS]: undefined; // no params for Home
+  [NavigationRoutes.ABOUT]: undefined; // no params for Home
+  [NavigationRoutes.PRIVACY]: undefined; // no params for Home
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -34,6 +38,11 @@ const SettingsStack: React.FC = () => {
       <Stack.Screen
         name={NavigationRoutes.SETTINGS}
         component={SettingsScreen}
+      />
+      <Stack.Screen name={NavigationRoutes.ABOUT} component={AboutScreen} />
+      <Stack.Screen
+        name={NavigationRoutes.PRIVACY}
+        component={PrivacySecurityScreen}
       />
     </Stack.Navigator>
   );

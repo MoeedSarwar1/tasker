@@ -6,10 +6,11 @@ const settingStyles = (Platform, insets, theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
     },
     scrollView: {
       flex: 1,
+      backgroundColor: theme.colors.background,
+      paddingTop: 24,
     },
     scrollContent: {
       paddingBottom: 100, // Space for fixed logout button

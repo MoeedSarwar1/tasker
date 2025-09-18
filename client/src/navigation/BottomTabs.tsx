@@ -36,7 +36,7 @@ const BottomTabs = () => {
             paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           },
           Platform.OS === 'android' && {
-            height: 70,
+            height: 75,
             elevation: 0, // Remove Android elevation shadow
             shadowOpacity: 0, // Remove iOS shadow
           },

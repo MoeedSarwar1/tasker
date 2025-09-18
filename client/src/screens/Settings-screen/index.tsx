@@ -16,6 +16,8 @@ import { useAuth } from '../../context/Auth-context';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import settingStyles from './styles';
+import { NavigationRoutes } from '../../navigation/enums';
+import { useNavigation } from '@react-navigation/native';
 
 const SettingsScreen = () => {
   const { showModal } = useModal();
@@ -25,6 +27,7 @@ const SettingsScreen = () => {
   const { user } = useAuth();
   const [loggingOut, setLoggingOut] = React.useState(false);
   const styles = settingStyles(Platform, insets, theme);
+  const navigation = useNavigation();
 
   const settingsOptions = [
     {
@@ -45,7 +48,7 @@ const SettingsScreen = () => {
       hasArrow: true,
       onPress: () => {
         // Navigate to privacy settings
-        console.log('Navigate to privacy');
+        navigation.navigate(NavigationRoutes.PRIVACY);
       },
     },
     {
@@ -64,8 +67,7 @@ const SettingsScreen = () => {
       icon: 'information-outline',
       hasArrow: true,
       onPress: () => {
-        // Navigate to about
-        console.log('Navigate to about');
+        navigation.navigate(NavigationRoutes.ABOUT);
       },
     },
   ];

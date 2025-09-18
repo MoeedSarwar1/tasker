@@ -31,6 +31,9 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
           onClose={onClose}
           backgroundStyle={{ backgroundColor: theme.colors.cardBackground }}
           keyboardBehavior="interactive"
+          handleStyle={{
+            color: theme.colors.primaryIcon,
+          }}
           style={styles.bottomshhetContainer}
           keyboardBlurBehavior="restore"
           backdropComponent={backdropProps => (
