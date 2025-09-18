@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
+import { scale, verticalScale } from 'react-native-size-matters';
+import { borderRadius } from '../../theme/borderRadius';
 
 const settingStyles = (Platform, insets, theme: Theme) =>
   StyleSheet.create({
@@ -10,7 +12,7 @@ const settingStyles = (Platform, insets, theme: Theme) =>
     scrollView: {
       flex: 1,
       backgroundColor: theme.colors.background,
-      paddingTop: 24,
+      paddingTop: verticalScale(theme.spacing.lg),
     },
     scrollContent: {
       paddingBottom: 100, // Space for fixed logout button
@@ -22,34 +24,34 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       alignItems: 'center',
     },
     loadingText: {
-      marginTop: 12,
+      marginTop: verticalScale(theme.spacing.md),
       color: theme.colors.headerText,
-      ...typography.body,
+      ...typography.titleMD,
     },
 
     // Section Styles
     section: {
-      marginTop: 24,
-      marginHorizontal: 16,
+      marginTop: verticalScale(theme.spacing.lg),
+      marginHorizontal: scale(theme.spacing.md),
     },
     headerTitle: {
       color: theme.colors.headerText,
-      marginLeft: 16,
-      ...typography.title,
-      marginBottom: 12,
+      marginLeft: scale(theme.spacing.md),
+      ...typography.titleMD,
+      marginBottom: verticalScale(theme.spacing.sm),
     },
 
     sectionTitle: {
       color: theme.colors.headerText,
-      ...typography.title,
-      marginBottom: 12,
-      marginLeft: 8,
+      ...typography.titleMD,
+      marginBottom: verticalScale(theme.spacing.sm),
+      marginHorizontal: scale(theme.spacing.sm),
     },
 
     // Settings Card Styles
     settingsCard: {
       backgroundColor: theme.colors.cardBackground,
-      borderRadius: 16,
+      borderRadius: theme.borderRadius.xl,
       borderWidth: 0.5,
       borderColor: theme.colors.border,
       overflow: 'hidden',
@@ -61,7 +63,7 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: 16,
+      padding: scale(theme.spacing.md),
       minHeight: 56,
     },
     settingItemBorder: {
@@ -80,15 +82,15 @@ const settingStyles = (Platform, insets, theme: Theme) =>
     iconContainer: {
       width: 32,
       height: 32,
-      borderRadius: 8,
+      borderRadius: theme.borderRadius.md,
       backgroundColor: theme.colors.primaryButtonBackground + '15', // 15% opacity
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: 12,
+      marginRight: scale(theme.spacing.sm),
     },
     settingText: {
       color: theme.colors.headerText,
-      ...typography.body,
+      ...typography.captionXS,
       fontWeight: '500',
     },
 
@@ -98,13 +100,13 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       backgroundColor: 'transparent',
     },
     toggleButton: {
-      padding: 6,
-      borderRadius: 16,
+      padding: scale(theme.spacing.sm),
+      borderRadius: theme.borderRadius.xl,
       backgroundColor: theme.colors.secondaryButtonBackground,
     },
     smallToggleButton: {
-      padding: 4,
-      borderRadius: 12,
+      padding: scale(theme.spacing.xs),
+      borderRadius: theme.borderRadius.lg,
       backgroundColor: theme.colors.secondaryButtonBackground,
     },
 
@@ -115,9 +117,9 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       left: 0,
       right: 0,
       backgroundColor: theme.colors.background,
-      paddingHorizontal: 16,
-      paddingTop: 12,
-      paddingBottom: Platform.OS === 'ios' ? insets.bottom + 12 : 16,
+      paddingHorizontal: scale(theme.spacing.md),
+      paddingTop: verticalScale(theme.spacing.sm),
+      paddingBottom: insets.bottom,
       borderTopWidth: 0.5,
       borderTopColor: theme.colors.border,
     },
@@ -126,21 +128,21 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#DC354515', // Red with 15% opacity
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 24,
+      borderRadius: theme.borderRadius.lg,
+      paddingVertical: verticalScale(theme.spacing.sm),
+      paddingHorizontal: scale(theme.spacing.md),
       borderWidth: 1,
       borderColor: '#DC354530', // Red with 30% opacity
     },
     logoutText: {
       color: '#DC3545',
-      ...typography.buttonLarge,
-      marginLeft: 8,
+      ...typography.buttonLG,
+      marginLeft: scale(theme.spacing.sm),
     },
 
     // Spacer
     spacer: {
-      height: 20,
+      height: verticalScale(theme.spacing.lg),
     },
 
     // Legacy styles for backward compatibility (remove if not needed)
@@ -174,7 +176,7 @@ const settingStyles = (Platform, insets, theme: Theme) =>
       justifyContent: 'space-between',
       elevation: 2,
       position: 'absolute',
-      bottom: 12,
+      bottom: 0,
       left: 24,
       right: 24,
     },

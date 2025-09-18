@@ -1,60 +1,57 @@
 import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from 'react-native-size-matters';
 import { Theme } from '../../theme/theme.interface';
-import { shadows } from '../../theme/shadows';
 import { typography } from '../../theme/typography';
 
 const homeStles = (insets, theme: Theme) =>
   StyleSheet.create({
     childrenWrapperStyle: {
-      borderRadius: 16,
-      padding: 16,
+      borderRadius: theme.borderRadius.xl,
+      padding: scale(theme.spacing.md),
       backgroundColor: theme.colors.primaryButtonSolid,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      ...shadows.medium,
     },
 
     parentView: {
       paddingBottom: insets.bottom,
-      marginTop: 8,
-      gap: 16,
+      marginTop: verticalScale(theme.spacing.sm),
+      gap: scale(theme.spacing.md),
     },
     editColor: {
       backgroundColor: theme.colors.secondaryButtonBackground,
-      borderRadius: 16,
-      padding: 16,
+      borderRadius: theme.borderRadius.xl,
+      padding: scale(theme.spacing.md),
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      ...shadows.medium,
     },
 
     modalText: {
       color: theme.colors.secondaryButtonText,
-      ...typography.buttonMedium,
+      ...typography.titleXL,
     },
     text: {
-      color: theme.colors.secondaryButtonText,
-      ...typography.buttonMedium,
+      color: theme.colors.primaryButtonText,
+      ...typography.titleXL,
     },
 
     flatlistContainer: {
-      gap: 16,
       paddingBottom: insets.bottom + 80,
     },
     list: {
-      paddingTop: 24,
+      paddingTop: verticalScale(theme.spacing.lg),
     },
     emptyTextStyle: {
       color: theme.colors.subtitleTextColor,
-      ...typography.title,
+      ...typography.bodyMD,
     },
     emptyContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 16,
+      gap: scale(theme.spacing.sm),
     },
     container: { flex: 1, backgroundColor: theme.colors.background },
   });

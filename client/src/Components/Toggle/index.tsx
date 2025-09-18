@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, View, Text, Animated } from 'react-native';
+import { scale } from 'react-native-size-matters';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from '../../context/Theme-context';
 
 export const ToggleButton = ({
   isToggled = false,
@@ -49,6 +51,7 @@ export const ToggleButton = ({
     }
   };
 
+  const { theme } = useTheme();
   const currentIcon = isToggled ? activeIcon : inactiveIcon;
   const currentIconColor = isToggled ? activeIconColor : inactiveIconColor;
   const currentText = isToggled ? activeText : inactiveText;
@@ -61,7 +64,13 @@ export const ToggleButton = ({
       return renderInactiveIcon();
     }
 
-    return <Icon name={currentIcon} size={iconSize} color={currentIconColor} />;
+    return (
+      <Icon
+        name={currentIcon}
+        size={scale(iconSize)}
+        color={currentIconColor}
+      />
+    );
   };
 
   const iconComponent = (
@@ -112,7 +121,7 @@ export const ToggleButton = ({
             flexDirection: getFlexDirection(),
             alignItems: 'center',
             justifyContent: 'center',
-            padding: 8,
+            padding: scale(theme.spacing.sm),
             borderRadius: 8,
             opacity: pressed && !disabled ? 0.7 : 1,
           },

@@ -317,9 +317,9 @@ const HomeScreen = () => {
   });
 
   const subtitle =
-    filter === 'All'
+    filter === 'all'
       ? `${tasks.length} tasks in total`
-      : filter === 'Pending'
+      : filter === 'pending'
       ? `${filteredTasks.length} pending tasks`
       : `${filteredTasks.length} completed tasks`;
   return (

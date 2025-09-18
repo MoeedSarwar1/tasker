@@ -42,7 +42,6 @@ const PrivacySecurityScreen = () => {
       tabBarStyle: { display: 'none' },
     });
 
-    // Restore tab bar when leaving the screen
     return () => {
       navigation.getParent()?.setOptions({
         tabBarStyle: [
@@ -54,8 +53,8 @@ const PrivacySecurityScreen = () => {
           },
           Platform.OS === 'android' && {
             height: 75,
-            elevation: 0, // Remove Android elevation shadow
-            shadowOpacity: 0, // Remove iOS shadow
+            elevation: 0,
+            shadowOpacity: 0,
           },
         ].filter(Boolean),
         tabBarItemStyle: Platform.select({
@@ -84,27 +83,22 @@ const PrivacySecurityScreen = () => {
     showModal({
       mode: 'confirmation',
       title: 'Delete Account',
-      iconName: 'delete-forever', // material-community icon
+      iconName: 'delete-forever',
       description:
         'Are you absolutely sure? This will permanently delete your account and all data stored on our servers. This action cannot be undone.',
       onConfirm: async () => {
         try {
-          // Show loading modal first
           showModal({
             mode: 'loading',
             title: 'Deleting Account',
             iconName: 'progress-clock',
             description:
-              'We’re securely removing your account data. Please wait...',
+              "We're securely removing your account data. Please wait...",
           });
 
-          // Call API to delete account
           await deleteMe();
-
-          // Clear local storage as well
           await AsyncStorage.clear();
 
-          // Show success modal
           showModal({
             mode: 'success',
             title: 'Account Deleted',
@@ -113,9 +107,8 @@ const PrivacySecurityScreen = () => {
               'Your account and all associated data have been permanently removed. Logging you out...',
           });
 
-          // Logout after a short delay
           setTimeout(() => {
-            logout(); // Replace with your actual logout handler
+            logout();
           }, 1500);
         } catch (error) {
           showModal({
@@ -134,7 +127,7 @@ const PrivacySecurityScreen = () => {
     showModal({
       mode: 'confirmation',
       title: 'Clear All Data',
-      iconName: 'delete-forever', // material-community icon name
+      iconName: 'delete-forever',
       description:
         'This will remove all tasks, labels, and settings from this device. This action cannot be undone. Do you want to continue?',
       onConfirm: async () => {
@@ -164,7 +157,6 @@ const PrivacySecurityScreen = () => {
       title: 'Biometric Authentication',
       description: 'Use Face ID or fingerprint to secure your tasks',
       icon: 'fingerprint',
-      type: 'toggle',
       value: settings.biometricAuth,
       onToggle: () => toggleSetting('biometricAuth'),
     },
@@ -173,7 +165,6 @@ const PrivacySecurityScreen = () => {
       title: 'Analytics & Usage Data',
       description: 'Help improve Tasuku by sharing anonymous usage data',
       icon: 'chart-line',
-      type: 'toggle',
       value: settings.analytics,
       onToggle: () => toggleSetting('analytics'),
     },
@@ -182,7 +173,6 @@ const PrivacySecurityScreen = () => {
       title: 'Crash Reports',
       description: 'Automatically send crash reports to help fix bugs',
       icon: 'bug',
-      type: 'toggle',
       value: settings.crashReports,
       onToggle: () => toggleSetting('crashReports'),
     },
@@ -191,7 +181,6 @@ const PrivacySecurityScreen = () => {
       title: 'Data Sharing',
       description: 'Share data with third-party services for enhanced features',
       icon: 'share-variant',
-      type: 'toggle',
       value: settings.dataSharing,
       onToggle: () => toggleSetting('dataSharing'),
     },
@@ -203,7 +192,6 @@ const PrivacySecurityScreen = () => {
       title: 'Export My Data',
       description: 'Download all your tasks and settings',
       icon: 'download',
-      type: 'action',
       onPress: () =>
         Alert.alert('Export Data', 'Your data export will be ready shortly.'),
     },
@@ -225,9 +213,11 @@ const PrivacySecurityScreen = () => {
     },
   ];
 
-  const dataInfo = [
+  const dataCategories = [
     {
       title: 'What we collect',
+      icon: 'database',
+      color: theme.colors.primaryIcon,
       items: [
         'Tasks and labels you create',
         'App usage patterns (anonymous)',
@@ -237,6 +227,8 @@ const PrivacySecurityScreen = () => {
     },
     {
       title: "What we don't collect",
+      icon: 'shield-check',
+      color: '#10B981',
       items: [
         'Personal identification information',
         'Location data (unless enabled)',
@@ -244,6 +236,13 @@ const PrivacySecurityScreen = () => {
         'Sensitive personal content',
       ],
     },
+  ];
+
+  const securityTips = [
+    'Enable biometric authentication for an extra layer of security',
+    'Regularly review and update your privacy settings',
+    'Export your data regularly to keep local backups',
+    'Keep your app updated to get the latest security improvements',
   ];
 
   return (
@@ -254,7 +253,7 @@ const PrivacySecurityScreen = () => {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Privacy Overview */}
+        {/* Hero Section */}
         <View style={styles.heroCard}>
           <View style={styles.heroIconContainer}>
             <Icon
@@ -266,173 +265,168 @@ const PrivacySecurityScreen = () => {
           <Text style={styles.heroTitle}>Your Privacy Matters</Text>
           <Text style={styles.heroDescription}>
             We're committed to protecting your data and giving you control over
-            your privacy. Your tasks stay private and secure.
+            your privacy. Your tasks stay private and secure with
+            industry-standard encryption.
           </Text>
         </View>
 
-        {/* Privacy Settings */}
+        {/* Privacy Controls */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>🔐 Privacy Settings</Text>
-          <View style={styles.settingsCard}>
-            {privacySettings.map((setting, index) => (
-              <View
-                key={setting.id}
-                style={[
-                  styles.settingItem,
-                  index !== privacySettings.length - 1 &&
-                    styles.settingItemBorder,
-                ]}
-              >
-                <View style={styles.settingLeft}>
+          <Text style={styles.sectionTitle}>Privacy Controls</Text>
+          <View style={styles.settingsGrid}>
+            {privacySettings.map(setting => (
+              <View key={setting.id} style={styles.settingCard}>
+                <View style={styles.settingHeader}>
                   <View style={styles.settingIconContainer}>
                     <Icon
                       name={setting.icon}
-                      size={20}
+                      size={24}
                       color={theme.colors.primaryIcon}
                     />
                   </View>
-                  <View style={styles.settingContent}>
-                    <Text style={styles.settingTitle}>{setting.title}</Text>
-                    <Text style={styles.settingDescription}>
-                      {setting.description}
-                    </Text>
-                  </View>
+                  <Switch
+                    value={setting.value}
+                    onValueChange={setting.onToggle}
+                    trackColor={{
+                      false: theme.colors.secondaryButtonBackground,
+                      true: theme.colors.primaryButtonBackground,
+                    }}
+                    thumbColor={
+                      setting.value ? '#fff' : theme.colors.secondaryIcon
+                    }
+                  />
                 </View>
-                <Switch
-                  value={setting.value}
-                  onValueChange={setting.onToggle}
-                  trackColor={{
-                    false: theme.colors.secondaryButtonBackground,
-                    true: theme.colors.primaryButtonBackground,
-                  }}
-                  thumbColor={
-                    setting.value ? '#fff' : theme.colors.secondaryIcon
-                  }
-                />
+                <Text style={styles.settingTitle}>{setting.title}</Text>
+                <Text style={styles.settingDescription}>
+                  {setting.description}
+                </Text>
               </View>
             ))}
           </View>
         </View>
 
-        {/* Data Information */}
+        {/* Data Transparency */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>📊 Data Transparency</Text>
-          {dataInfo.map((info, index) => (
-            <View key={index} style={styles.infoCard}>
-              <Text style={styles.infoTitle}>{info.title}</Text>
-              {info.items.map((item, itemIndex) => (
-                <View key={itemIndex} style={styles.infoItem}>
-                  <Icon
-                    name="circle-small"
-                    size={16}
-                    color={theme.colors.primaryIcon}
-                  />
-                  <Text style={styles.infoText}>{item}</Text>
+          <Text style={styles.sectionTitle}>Data Transparency</Text>
+          <View style={styles.transparencyGrid}>
+            {dataCategories.map((category, index) => (
+              <View key={index} style={styles.transparencyCard}>
+                <View style={styles.transparencyHeader}>
+                  <Icon name={category.icon} size={24} color={category.color} />
+                  <Text style={styles.transparencyTitle}>{category.title}</Text>
                 </View>
-              ))}
-            </View>
-          ))}
-        </View>
-
-        {/* Security Actions */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>⚙️ Data Management</Text>
-          <View style={styles.actionsCard}>
-            {securityActions.map((action, index) => (
-              <Pressable
-                key={action.id}
-                style={[
-                  styles.actionItem,
-                  action.type === 'destructive' && styles.destructiveAction,
-                  index !== securityActions.length - 1 &&
-                    styles.actionItemBorder,
-                ]}
-                onPress={action.onPress}
-              >
-                <View style={styles.actionLeft}>
-                  <View
-                    style={[
-                      styles.actionIconContainer,
-                      action.type === 'destructive' &&
-                        styles.destructiveIconContainer,
-                    ]}
-                  >
+                {category.items.map((item, itemIndex) => (
+                  <View key={itemIndex} style={styles.transparencyItem}>
                     <Icon
-                      name={action.icon}
-                      size={20}
-                      color={
-                        action.type === 'destructive'
-                          ? '#DC3545'
-                          : theme.colors.primaryIcon
-                      }
+                      name="circle"
+                      size={6}
+                      color={theme.colors.primaryIcon}
                     />
+                    <Text style={styles.transparencyText}>{item}</Text>
                   </View>
-                  <View style={styles.actionContent}>
-                    <Text
-                      style={[
-                        styles.actionTitle,
-                        action.type === 'destructive' && styles.destructiveText,
-                      ]}
-                    >
-                      {action.title}
-                    </Text>
-                    <Text style={styles.actionDescription}>
-                      {action.description}
-                    </Text>
-                  </View>
-                </View>
-                <Icon
-                  name="chevron-right"
-                  size={20}
-                  color={theme.colors.secondaryIcon}
-                />
-              </Pressable>
+                ))}
+              </View>
             ))}
           </View>
         </View>
 
+        {/* Data Management */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Data Management</Text>
+          {securityActions.map(action => (
+            <Pressable
+              key={action.id}
+              style={[
+                styles.actionCard,
+                action.type === 'destructive' && styles.destructiveCard,
+              ]}
+              onPress={action.onPress}
+            >
+              <View
+                style={[
+                  styles.actionIconContainer,
+                  action.type === 'destructive' &&
+                    styles.destructiveIconContainer,
+                ]}
+              >
+                <Icon
+                  name={action.icon}
+                  size={24}
+                  color={
+                    action.type === 'destructive'
+                      ? '#DC3545'
+                      : theme.colors.primaryIcon
+                  }
+                />
+              </View>
+              <View style={styles.actionContent}>
+                <Text
+                  style={[
+                    styles.actionTitle,
+                    action.type === 'destructive' && styles.destructiveText,
+                  ]}
+                >
+                  {action.title}
+                </Text>
+                <Text style={styles.actionDescription}>
+                  {action.description}
+                </Text>
+              </View>
+              <Icon
+                name="chevron-right"
+                size={20}
+                color={theme.colors.secondaryIcon}
+              />
+            </Pressable>
+          ))}
+        </View>
+
         {/* Security Tips */}
         <View style={styles.tipsCard}>
-          <Text style={styles.sectionTitle}>💡 Security Tips</Text>
-          <View style={styles.tipItem}>
-            <Icon name="lightbulb" size={16} color={theme.colors.primaryIcon} />
-            <Text style={styles.tipText}>
-              Enable biometric authentication for an extra layer of security
-            </Text>
+          <View style={styles.tipsHeader}>
+            <Icon
+              name="lightbulb-on"
+              size={24}
+              color={theme.colors.primaryIcon}
+            />
+            <Text style={styles.tipsTitle}>Security Best Practices</Text>
           </View>
-          <View style={styles.tipItem}>
-            <Icon name="lightbulb" size={16} color={theme.colors.primaryIcon} />
-            <Text style={styles.tipText}>
-              Regularly review and update your privacy settings
-            </Text>
-          </View>
-          <View style={styles.tipItem}>
-            <Icon name="lightbulb" size={16} color={theme.colors.primaryIcon} />
-            <Text style={styles.tipText}>
-              Export your data regularly to keep local backups
-            </Text>
-          </View>
+          {securityTips.map((tip, index) => (
+            <View key={index} style={styles.tipItem}>
+              <Icon
+                name="check-circle"
+                size={16}
+                color={theme.colors.primaryIcon}
+              />
+              <Text style={styles.tipText}>{tip}</Text>
+            </View>
+          ))}
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Pressable style={styles.footerLink}>
-            <Text style={styles.footerLinkText}>Privacy Policy</Text>
-            <Icon
-              name="external-link"
-              size={16}
-              color={theme.colors.primaryIcon}
-            />
-          </Pressable>
-          <Pressable style={styles.footerLink}>
-            <Text style={styles.footerLinkText}>Terms of Service</Text>
-            <Icon
-              name="external-link"
-              size={16}
-              color={theme.colors.primaryIcon}
-            />
-          </Pressable>
-          <Text style={styles.footerText}>Last updated: March 2024</Text>
+          <View style={styles.footerLinks}>
+            <Pressable style={styles.footerLink}>
+              <Text style={styles.footerLinkText}>Privacy Policy</Text>
+              <Icon
+                name="arrow-top-right-thin"
+                size={16}
+                color={theme.colors.primaryIcon}
+              />
+            </Pressable>
+            <View style={styles.footerDivider} />
+            <Pressable style={styles.footerLink}>
+              <Text style={styles.footerLinkText}>Terms of Service</Text>
+              <Icon
+                name="arrow-top-right-thin"
+                size={16}
+                color={theme.colors.primaryIcon}
+              />
+            </Pressable>
+          </View>
+          <Text style={styles.footerText}>
+            Last updated: March 2025 • Made with security in mind
+          </Text>
         </View>
       </ScrollView>
     </>

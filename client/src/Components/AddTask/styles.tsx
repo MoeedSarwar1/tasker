@@ -1,34 +1,33 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 export const bottomSheetStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      borderRadius: 8,
+      borderRadius: scale(theme.borderRadius.xl),
     },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap' },
     buttonContainer: { flex: 1 },
     label: {
-      marginBottom: 8,
-      marginTop: 8,
+      marginVertical: verticalScale(theme.spacing.sm),
       color: theme.colors.headerText,
       ...typography.titleMD,
     },
     date: {
       justifyContent: 'center',
-      marginBottom: 12,
+      marginBottom: verticalScale(theme.spacing.md),
       alignItems: 'center',
     },
     input: {
-      gap: theme.spacing.sm,
       backgroundColor: theme.colors.inputBackground,
       borderColor: theme.colors.border,
       borderWidth: 1,
-      borderRadius: theme.borderRadius.xl,
+      borderRadius: scale(theme.borderRadius.xl),
       color: theme.colors.inputTextColor,
-      padding: theme.spacing.md,
-      marginBottom: theme.spacing.md,
+      padding: moderateScale(theme.spacing.md),
+      marginBottom: verticalScale(theme.spacing.md),
     },
     descriptionInput: {
       backgroundColor: theme.colors.inputBackground,
@@ -38,20 +37,20 @@ export const bottomSheetStyles = (theme: Theme) =>
       color: theme.colors.inputTextColor,
       padding: theme.spacing.md,
       marginBottom: theme.spacing.md,
-      height: 100,
+      height: verticalScale(100),
     },
     buttonRow: {
       flexDirection: 'row',
-      gap: 8,
-      marginTop: 24,
+      gap: scale(theme.spacing.sm),
+      marginTop: verticalScale(theme.spacing.sm),
     },
     button: {
-      borderRadius: 16,
-      paddingVertical: 8,
+      borderRadius: scale(theme.borderRadius.xl),
+      paddingVertical: verticalScale(theme.spacing.sm),
       backgroundColor: theme.colors.secondaryButtonBackground,
     },
     addButton: {
-      paddingVertical: 8,
+      paddingVertical: verticalScale(theme.spacing.sm),
       backgroundColor: theme.colors.primaryButtonBackground,
     },
     addButtonText: {

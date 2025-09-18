@@ -1,13 +1,13 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useLayoutEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useLayoutEffect } from 'react';
 import {
-  Image,
-  Linking,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
+    Image,
+    Linking,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -26,7 +26,6 @@ const AboutScreen = () => {
       tabBarStyle: { display: 'none' },
     });
 
-    // Restore tab bar when leaving the screen
     return () => {
       navigation.getParent()?.setOptions({
         tabBarStyle: [
@@ -38,8 +37,8 @@ const AboutScreen = () => {
           },
           Platform.OS === 'android' && {
             height: 75,
-            elevation: 0, // Remove Android elevation shadow
-            shadowOpacity: 0, // Remove iOS shadow
+            elevation: 0,
+            shadowOpacity: 0,
           },
         ].filter(Boolean),
         tabBarItemStyle: Platform.select({
@@ -61,22 +60,28 @@ const AboutScreen = () => {
     {
       icon: 'lightning-bolt',
       title: 'Fast Task Creation',
-      description: 'Quick capture with intuitive gestures',
+      description: 'Quick capture with intuitive gestures and smart shortcuts',
+      color: '#F59E0B',
     },
     {
       icon: 'tag-multiple',
       title: 'Smart Organization',
-      description: 'Labels, priorities, and custom categories',
+      description:
+        'Labels, priorities, and custom categories for perfect organization',
+      color: '#8B5CF6',
     },
     {
       icon: 'palette',
       title: 'Beautiful Themes',
-      description: 'Light & dark modes with frosted glass effects',
+      description:
+        'Light & dark modes with frosted glass effects and animations',
+      color: '#EC4899',
     },
     {
       icon: 'gesture-swipe',
       title: 'Smooth Experience',
-      description: 'Native performance with delightful animations',
+      description: 'Native performance with delightful micro-interactions',
+      color: '#10B981',
     },
   ];
 
@@ -85,32 +90,78 @@ const AboutScreen = () => {
       icon: 'email',
       title: 'Contact Support',
       subtitle: 'Get help when you need it',
+      color: '#3B82F6',
       action: () => Linking.openURL('mailto:support@tasuku.app'),
     },
     {
       icon: 'github',
       title: 'GitHub',
       subtitle: 'View source code & contribute',
+      color: '#6B7280',
       action: () => Linking.openURL('https://github.com/your-repo'),
     },
     {
       icon: 'web',
       title: 'Official Website',
       subtitle: 'Learn more about Tasuku',
+      color: '#059669',
       action: () => Linking.openURL('https://tasuku.app'),
     },
     {
       icon: 'star',
       title: 'Rate Us',
       subtitle: 'Leave a review on the App Store',
+      color: '#F59E0B',
       action: () => Linking.openURL('https://apps.apple.com'),
     },
   ];
 
   const teamMembers = [
-    { name: 'Alex Chen', role: 'Lead Developer', avatar: '👨‍💻' },
-    { name: 'Sarah Kim', role: 'UI/UX Designer', avatar: '👩‍🎨' },
-    { name: 'Mike Johnson', role: 'Product Manager', avatar: '👨‍💼' },
+    {
+      name: 'Alex Chen',
+      role: 'Lead Developer',
+      avatar: '👨‍💻',
+      description: 'Full-stack developer with 8+ years experience',
+    },
+    {
+      name: 'Sarah Kim',
+      role: 'UI/UX Designer',
+      avatar: '👩‍🎨',
+      description: 'Design systems expert and user experience advocate',
+    },
+    {
+      name: 'Mike Johnson',
+      role: 'Product Manager',
+      avatar: '👨‍💼',
+      description: 'Product strategy and user research specialist',
+    },
+  ];
+
+  const achievements = [
+    {
+      icon: 'account-group',
+      number: '10K+',
+      label: 'Active Users',
+      description: 'Growing community',
+    },
+    {
+      icon: 'check-circle',
+      number: '50K+',
+      label: 'Tasks Completed',
+      description: 'Productivity achieved',
+    },
+    {
+      icon: 'star',
+      number: '4.8',
+      label: 'App Store Rating',
+      description: 'User satisfaction',
+    },
+    {
+      icon: 'download',
+      number: '25K+',
+      label: 'Downloads',
+      description: 'Trusted worldwide',
+    },
   ];
 
   return (
@@ -150,53 +201,79 @@ const AboutScreen = () => {
 
         {/* Features Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>✨ What makes us special</Text>
-          {features.map((feature, index) => (
-            <View key={index} style={styles.featureItem}>
-              <View style={styles.featureIconContainer}>
-                <Icon
-                  name={feature.icon}
-                  size={24}
-                  color={theme.colors.primaryIcon}
-                />
-              </View>
-              <View style={styles.featureContent}>
+          <Text style={styles.sectionTitle}>What Makes Us Special</Text>
+          <View style={styles.featuresGrid}>
+            {features.map((feature, index) => (
+              <View key={index} style={styles.featureCard}>
+                <View
+                  style={[
+                    styles.featureIconContainer,
+                    { backgroundColor: feature.color + '15' },
+                  ]}
+                >
+                  <Icon name={feature.icon} size={28} color={feature.color} />
+                </View>
                 <Text style={styles.featureTitle}>{feature.title}</Text>
                 <Text style={styles.featureDescription}>
                   {feature.description}
                 </Text>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
 
         {/* Mission Section */}
-        <View style={styles.card}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>🎯 Our Mission</Text>
+        <View style={styles.missionCard}>
+          <View style={styles.missionHeader}>
+            <Icon name="target" size={32} color={theme.colors.primaryIcon} />
+            <Text style={styles.missionTitle}>Our Mission</Text>
           </View>
-          <Text style={styles.paragraph}>
+          <Text style={styles.missionText}>
             We believe productivity apps should be both powerful and delightful.
             Tasuku is crafted by developers who understand the importance of
             staying organized without sacrificing user experience.
           </Text>
-          <Text style={styles.paragraph}>
+          <Text style={styles.missionText}>
             Every animation, every transition, every interaction is thoughtfully
             designed to help you stay motivated and accomplish your goals.
           </Text>
         </View>
 
         {/* Team Section */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>👥 Meet the Team</Text>
-          <View style={styles.teamContainer}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Meet the Team</Text>
+          <View style={styles.teamGrid}>
             {teamMembers.map((member, index) => (
-              <View key={index} style={styles.teamMember}>
+              <View key={index} style={styles.teamCard}>
                 <Text style={styles.teamAvatar}>{member.avatar}</Text>
-                <View style={styles.teamInfo}>
-                  <Text style={styles.teamName}>{member.name}</Text>
-                  <Text style={styles.teamRole}>{member.role}</Text>
+                <Text style={styles.teamName}>{member.name}</Text>
+                <Text style={styles.teamRole}>{member.role}</Text>
+                <Text style={styles.teamDescription}>{member.description}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Achievements Grid */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>By the Numbers</Text>
+          <View style={styles.achievementsGrid}>
+            {achievements.map((achievement, index) => (
+              <View key={index} style={styles.achievementCard}>
+                <View style={styles.achievementIconContainer}>
+                  <Icon
+                    name={achievement.icon}
+                    size={24}
+                    color={theme.colors.primaryIcon}
+                  />
                 </View>
+                <Text style={styles.achievementNumber}>
+                  {achievement.number}
+                </Text>
+                <Text style={styles.achievementLabel}>{achievement.label}</Text>
+                <Text style={styles.achievementDescription}>
+                  {achievement.description}
+                </Text>
               </View>
             ))}
           </View>
@@ -204,19 +281,20 @@ const AboutScreen = () => {
 
         {/* Social Links Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>🌐 Connect with us</Text>
+          <Text style={styles.sectionTitle}>Connect with Us</Text>
           {socialLinks.map((link, index) => (
             <Pressable
               key={index}
-              style={styles.socialLink}
+              style={styles.socialCard}
               onPress={link.action}
             >
-              <View style={styles.socialIconContainer}>
-                <Icon
-                  name={link.icon}
-                  size={20}
-                  color={theme.colors.primaryIcon}
-                />
+              <View
+                style={[
+                  styles.socialIconContainer,
+                  { backgroundColor: link.color + '15' },
+                ]}
+              >
+                <Icon name={link.icon} size={24} color={link.color} />
               </View>
               <View style={styles.socialContent}>
                 <Text style={styles.socialTitle}>{link.title}</Text>
@@ -231,34 +309,16 @@ const AboutScreen = () => {
           ))}
         </View>
 
-        {/* Stats Section */}
-        <View style={styles.statsCard}>
-          <Text style={styles.sectionTitle}>📊 By the numbers</Text>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>10K+</Text>
-              <Text style={styles.statLabel}>Active Users</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>50K+</Text>
-              <Text style={styles.statLabel}>Tasks Completed</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>4.8</Text>
-              <Text style={styles.statLabel}>App Store Rating</Text>
-            </View>
-          </View>
-        </View>
-
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Made with ❤️ for productivity enthusiasts
-          </Text>
+          <View style={styles.footerContent}>
+            <Icon name="heart" size={20} color="#EF4444" />
+            <Text style={styles.footerText}>
+              Made with love for productivity enthusiasts
+            </Text>
+          </View>
           <Text style={styles.copyright}>
-            © 2024 Tasuku. All rights reserved.
+            © 2025 Tasuku. All rights reserved.
           </Text>
         </View>
       </ScrollView>

@@ -1,19 +1,21 @@
 import { StyleSheet } from 'react-native';
 import { typography } from '../../theme/typography';
+import { scale, verticalScale } from 'react-native-size-matters';
+import { Theme } from '../../theme/theme.interface';
 
-const buttonStyles = () =>
+const buttonStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 24,
-      paddingVertical: 16,
+      paddingHorizontal: scale(theme.spacing.lg),
+      paddingVertical: verticalScale(theme.spacing.md),
     },
     radius: {
-      borderRadius: 16,
+      borderRadius: scale(theme.borderRadius.xl),
     },
     buttonText: {
-      ...typography.buttonLarge,
+      ...typography.buttonLG,
     },
   });
 export default buttonStyles;

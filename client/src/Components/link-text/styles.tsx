@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
+import { scale } from 'react-native-size-matters';
 
 const linkStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      gap: theme.spacing.xs,
+      gap: scale(theme.spacing.xs),
       alignItems: 'center',
     },
     textStyle: {

@@ -1,21 +1,23 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
+import { scale, verticalScale } from 'react-native-size-matters';
+import { typography } from '../../theme/typography';
 
 export const chipStyles = (theme: Theme) =>
   StyleSheet.create({
     chip: {
-      paddingVertical: 6,
+      paddingVertical: verticalScale(theme.spacing.xs),
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 12,
-      borderRadius: 16,
+      paddingHorizontal: scale(theme.spacing.sm),
+      borderRadius: scale(theme.borderRadius.xl),
       borderColor: theme.colors.border,
       backgroundColor: theme.colors.chips.defaultChipBakground,
-      marginRight: 8,
-      marginBottom: 8,
+      marginRight: scale(theme.spacing.xs),
+      marginBottom: verticalScale(theme.spacing.sm),
     },
     text: {
-      fontSize: 14,
       color: theme.colors.chips.defaultChipText,
+      ...typography.captionXS,
     },
   });

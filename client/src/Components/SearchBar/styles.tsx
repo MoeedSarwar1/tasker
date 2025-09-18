@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
+import { scale, verticalScale } from 'react-native-size-matters';
 
 const searchBarStyles = (theme: Theme) =>
   StyleSheet.create({
     input: {
       flexDirection: 'row-reverse',
-      marginHorizontal: 24,
+      marginHorizontal: scale(theme.spacing.lg),
       gap: theme.spacing.sm,
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -14,8 +15,8 @@ const searchBarStyles = (theme: Theme) =>
       borderWidth: 1,
       borderRadius: theme.borderRadius.xl,
       color: theme.colors.inputTextColor,
-      padding: theme.spacing.md,
-      marginBottom: theme.spacing.md,
+      padding:scale( theme.spacing.md),
+      marginBottom: verticalScale( theme.spacing.md),
     },
   });
 export default searchBarStyles;

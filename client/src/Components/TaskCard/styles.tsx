@@ -1,43 +1,42 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
+import { scale, verticalScale } from 'react-native-size-matters';
 
 const cardStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      borderWidth: 0.5,
-      borderRadius: 16,
-      borderColor: theme.colors.border,
-      marginHorizontal: 24,
+      borderRadius: scale(theme.borderRadius.md),
+      marginHorizontal: scale(theme.spacing.lg),
       overflow: 'hidden', // Important for gradient to respect border radius
     },
     gradientContainer: {
       flex: 1,
     },
     content: {
-      padding: 16,
+      padding: scale(theme.spacing.md),
     },
 
     title: {
       color: theme.colors.headerText,
-      marginBottom: theme.spacing.xs,
+      marginBottom: verticalScale(theme.spacing.xs),
       ...typography.titleXL,
     },
     description: {
       color: theme.colors.subtitleTextColor,
-      marginBottom: 4,
-      ...typography.bodySM,
+      marginBottom: verticalScale(theme.spacing.xs),
+      ...typography.bodyXS,
     },
     date: {
       alignItems: 'flex-end',
     },
     header: {
-      gap: 8,
+      gap: scale(theme.spacing.md),
       flexDirection: 'row-reverse',
       justifyContent: 'space-between',
     },
     footer: {
-      paddingTop: 12,
+      paddingTop: verticalScale(theme.spacing.md),
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',

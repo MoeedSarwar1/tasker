@@ -16,7 +16,7 @@ const Button = ({
   gradientColors,
 }: ButtonProps & { gradientColors?: string[] }) => {
   const { theme } = useTheme();
-  const styles = buttonStyles();
+  const styles = buttonStyles(theme);
 
   const handlePress = () => {
     if (!disabled && onPress) {

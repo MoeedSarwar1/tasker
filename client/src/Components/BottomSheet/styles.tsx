@@ -16,7 +16,7 @@ export const bottomSheetStyles = (theme: Theme) =>
     },
     title: {
       color: theme.colors.headerText,
-      ...typography.header,
+      ...typography.headingXL,
     },
     separator: {
       height: 1,

@@ -1,11 +1,12 @@
 import { Insets, StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
+import { scale, verticalScale } from 'react-native-size-matters';
 
 const headerStyles = (insets: Insets, theme: Theme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.md,
+      padding: scale(theme.spacing.md),
       paddingTop: insets.top,
       backgroundColor: theme.colors.headerBackground,
     },
@@ -25,12 +26,10 @@ const headerStyles = (insets: Insets, theme: Theme) =>
     chipRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      marginTop: theme.spacing.md,
+      marginTop: verticalScale(theme.spacing.md),
     },
     backRow: {
-      flexDirection: 'row',
-      gap: 8,
-      alignItems: 'center',
+      gap: scale(theme.spacing.sm),
     },
   });
 

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { shadows } from '../../theme/shadows';
+import { scale, verticalScale } from 'react-native-size-matters';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
 
@@ -13,82 +13,71 @@ export const modalStyles = (theme: Theme) =>
     },
     modalContainer: {
       backgroundColor: theme.colors.modals.defaultBackground, // default
-      borderRadius: 16,
+      borderRadius: theme.borderRadius.xl,
       alignItems: 'center',
-      gap: 8,
-      padding: 20,
-      marginHorizontal: 24,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
+      gap: verticalScale(theme.spacing.sm),
+      padding: scale(theme.spacing.lg),
+      marginHorizontal: scale(theme.spacing.lg),
     },
 
     // ✅ Success
     successModalContainer: {
       backgroundColor: theme.colors.modals.successBackground,
-      borderRadius: 16,
+      borderRadius: theme.borderRadius.xl,
       alignItems: 'center',
-      gap: 8,
-      padding: 20,
-      marginHorizontal: 24,
-      elevation: 2,
-      ...shadows.heavy,
+      gap: verticalScale(theme.spacing.sm),
+      marginHorizontal: scale(theme.spacing.lg),
+      padding: scale(theme.spacing.lg),
     },
     successModalHeader: {
       textAlign: 'center',
-      ...typography.title,
+      ...typography.titleLG,
       color: theme.colors.modals.successHeader,
     },
     successModalText: {
       textAlign: 'center',
       color: theme.colors.modals.successText,
-      ...typography.micro,
+      ...typography.captionXS,
     },
 
     // ⚠️ Confirmation
     confirmModalContainer: {
+      marginHorizontal: scale(theme.spacing.lg),
       backgroundColor: theme.colors.modals.confirmationBackground,
-      borderRadius: 16,
+      borderRadius: theme.borderRadius.xl,
       alignItems: 'center',
-      gap: 8,
-      padding: 20,
-      marginHorizontal: 24,
-      elevation: 2,
-      ...shadows.heavy,
+      gap: verticalScale(theme.spacing.sm),
+      padding: scale(theme.spacing.lg),
     },
     confirmModalHeader: {
       textAlign: 'center',
-      ...typography.title,
+      ...typography.titleLG,
       color: theme.colors.modals.confirmationHeader,
     },
     confirmModalText: {
       textAlign: 'center',
       color: theme.colors.modals.confirmationText,
-      ...typography.micro,
+      ...typography.captionXS,
     },
 
     // ❌ Error
     errorModalContainer: {
       backgroundColor: theme.colors.modals.errorBackground,
-      borderRadius: 16,
+      borderRadius: theme.borderRadius.xl,
       alignItems: 'center',
-      gap: 8,
-      padding: 20,
-      marginHorizontal: 24,
-      ...shadows.heavy,
+      gap: verticalScale(theme.spacing.sm),
+      padding: scale(theme.spacing.lg),
+      marginHorizontal: scale(theme.spacing.lg),
     },
     errorModalHeader: {
       textAlign: 'center',
-      elevation: 2,
       color: theme.colors.modals.errorHeader,
-      ...typography.title,
+      ...typography.titleLG,
     },
     errorModalText: {
       textAlign: 'center',
       color: theme.colors.modals.errorText,
-      ...typography.micro,
+      ...typography.captionXS,
     },
 
     childrenContainer: { marginTop: 8 },
@@ -96,28 +85,30 @@ export const modalStyles = (theme: Theme) =>
     // Default / fallback
     modalHeader: {
       color: theme.colors.modals.defaultHeader,
-      ...typography.title,
+      ...typography.titleLG,
     },
-    modalText: { ...typography.micro, color: theme.colors.modals.defaultText },
+    modalText: {
+      ...typography.captionXS,
+      color: theme.colors.modals.defaultText,
+    },
 
     buttonRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
 
     button: {
-      borderRadius: 16,
-      paddingHorizontal: 8,
-      paddingVertical: 10,
+      borderRadius: scale(theme.borderRadius.xl),
+      paddingVertical: verticalScale(theme.spacing.sm),
       backgroundColor: theme.colors.secondaryButtonBackground,
     },
     addButton: {
-      paddingVertical: 10,
+      paddingVertical: verticalScale(theme.spacing.sm),
       backgroundColor: theme.colors.primaryButtonBackground,
     },
     addButtonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonSmall,
+      ...typography.buttonSM,
     },
     buttonText: {
       color: theme.colors.secondaryButtonText,
-      ...typography.buttonSmall,
+      ...typography.buttonSM,
     },
   });

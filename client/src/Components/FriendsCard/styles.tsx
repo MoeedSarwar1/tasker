@@ -24,12 +24,12 @@ const cardStyles = (theme: Theme) =>
     title: {
       color: theme.colors.headerText,
       marginBottom: 1,
-      ...typography.titleMD,
+      ...typography.titleSM,
     },
     description: {
       color: theme.colors.subtitleTextColor,
       marginBottom: 1,
-      ...typography.captionSM,
+      ...typography.captionXS,
     },
     footer: {
       paddingTop: 12,
