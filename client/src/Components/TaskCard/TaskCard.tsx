@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Pressable, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAuth } from '../../context/Auth-context';
 import { useTheme } from '../../context/Theme-context';
+import { NavigationRoutes } from '../../navigation/enums';
 import { getTaskStatusText } from '../../utils/dateFormat';
 import Text from '../Text';
 import cardStyles from './styles';
 import { Task } from './task.interface';
-import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationRoutes } from '../../navigation/enums';
 
 const TaskCard = ({ item, onChange, onMorePress }: Task) => {
   const { theme } = useTheme();
@@ -30,6 +29,10 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
         navigation.navigate(NavigationRoutes.TASKS, {
           title: item.title,
           description: item.description,
+          completed: item.completed,
+          createdBy: item.user?.firstName + ' ' + item.user?.lastName,
+          dueDate: item.dueDate,
+          priority: item.priority,
         })
       }
     >
