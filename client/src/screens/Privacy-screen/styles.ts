@@ -38,14 +38,13 @@ export const privacyStyles = (theme: Theme) =>
       marginBottom: 16,
     },
     heroTitle: {
-      ...typography.h2,
+      ...typography.headingLG,
       color: theme.colors.headerText,
-      fontWeight: '700',
       marginBottom: 8,
       textAlign: 'center',
     },
     heroDescription: {
-      ...typography.body,
+      ...typography.bodySM,
       color: theme.colors.descriptionText,
       textAlign: 'center',
       lineHeight: 22,
@@ -57,7 +56,7 @@ export const privacyStyles = (theme: Theme) =>
       marginTop: 28,
     },
     sectionTitle: {
-      ...typography.h3,
+      ...typography.bodyLG,
       color: theme.colors.headerText,
       fontWeight: '600',
       marginBottom: 16,
@@ -108,13 +107,13 @@ export const privacyStyles = (theme: Theme) =>
       flex: 1,
     },
     settingTitle: {
-      ...typography.body,
+      ...typography.bodyLG,
       color: theme.colors.headerText,
       fontWeight: '600',
       marginBottom: 2,
     },
     settingDescription: {
-      ...typography.small,
+      ...typography.captionSM,
       color: theme.colors.descriptionText,
       lineHeight: 18,
     },
@@ -129,7 +128,7 @@ export const privacyStyles = (theme: Theme) =>
       borderColor: theme.colors.border,
     },
     infoTitle: {
-      ...typography.body,
+      ...typography.titleLG,
       color: theme.colors.headerText,
       fontWeight: '600',
       marginBottom: 12,
@@ -140,7 +139,7 @@ export const privacyStyles = (theme: Theme) =>
       marginBottom: 6,
     },
     infoText: {
-      ...typography.small,
+      ...typography.captionSM,
       color: theme.colors.descriptionText,
       marginLeft: 4,
       lineHeight: 20,
@@ -193,7 +192,7 @@ export const privacyStyles = (theme: Theme) =>
       flex: 1,
     },
     actionTitle: {
-      ...typography.body,
+      ...typography.bodyLG,
       color: theme.colors.headerText,
       fontWeight: '600',
       marginBottom: 2,
@@ -202,7 +201,7 @@ export const privacyStyles = (theme: Theme) =>
       color: '#DC3545',
     },
     actionDescription: {
-      ...typography.small,
+      ...typography.captionSM,
       color: theme.colors.descriptionText,
       lineHeight: 18,
     },
@@ -226,7 +225,7 @@ export const privacyStyles = (theme: Theme) =>
       marginBottom: 12,
     },
     tipText: {
-      ...typography.small,
+      ...typography.captionSM,
       color: theme.colors.descriptionText,
       marginLeft: 8,
       lineHeight: 20,

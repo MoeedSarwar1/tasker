@@ -12,19 +12,21 @@ const cardStyles = (theme: Theme) =>
       overflow: 'hidden', // Important for gradient to respect border radius
     },
     gradientContainer: {
-      padding: 17,
       flex: 1,
+    },
+    content: {
+      padding: 16,
     },
 
     title: {
       color: theme.colors.headerText,
       marginBottom: theme.spacing.xs,
-      ...typography.title,
+      ...typography.titleXL,
     },
     description: {
       color: theme.colors.subtitleTextColor,
       marginBottom: 4,
-      ...typography.small,
+      ...typography.bodySM,
     },
     date: {
       alignItems: 'flex-end',
@@ -39,14 +41,9 @@ const cardStyles = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingBottom: 17,
-    },
-    details: {
-      color: theme.colors.descriptionText,
-      ...typography.micro,
     },
     user: {
-      ...typography.small,
+      ...typography.captionXS,
       color: theme.colors.subtitleTextColor,
     },
   });

@@ -296,7 +296,7 @@ const RegisterScreen = () => {
         />
 
         {/* Link to Login */}
-        <View style={{ alignItems: 'center', marginTop: 20 }}>
+        <View style={styles.linkText}>
           <LinkText
             onPress={() => !loading && navigation.goBack()}
             text="Welcome Back!"

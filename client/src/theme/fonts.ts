@@ -1,3 +1,5 @@
+import { scale } from 'react-native-size-matters';
+
 export const fonts = {
   families: {
     primary: 'Poppins-Regular',
@@ -5,11 +7,11 @@ export const fonts = {
     bold: 'Poppins-Bold',
   },
   sizes: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-    heading: 32,
+    xs: scale(12),
+    sm: scale(14),
+    md: scale(16),
+    lg: scale(18),
+    xl: scale(20),
+    heading: scale(32),
   },
 };

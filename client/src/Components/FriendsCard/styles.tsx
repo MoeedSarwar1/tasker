@@ -9,22 +9,27 @@ const cardStyles = (theme: Theme) =>
       borderRadius: 16,
       borderColor: theme.colors.border,
       marginHorizontal: 24,
-      overflow: 'hidden', // Important for gradient to respect border radius
+      overflow: 'hidden', // only here
     },
+
     gradientContainer: {
-      padding: 17,
       flex: 1,
+    },
+
+    content: {
+      flex: 1,
+      padding: 16, // keep padding inside
     },
 
     title: {
       color: theme.colors.headerText,
       marginBottom: 1,
-      ...typography.body,
+      ...typography.titleMD,
     },
     description: {
       color: theme.colors.subtitleTextColor,
       marginBottom: 1,
-      ...typography.micro,
+      ...typography.captionSM,
     },
     footer: {
       paddingTop: 12,
@@ -61,14 +66,14 @@ const cardStyles = (theme: Theme) =>
     },
     addButtonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonMicro,
+      ...typography.buttonSM,
     },
     flex: {
       flex: 1,
     },
     buttonText: {
       color: theme.colors.secondaryButtonText,
-      ...typography.buttonMicro,
+      ...typography.buttonSM,
     },
   });
 export default cardStyles;

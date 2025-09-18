@@ -16,11 +16,11 @@ const headerStyles = (insets: Insets, theme: Theme) =>
     },
     title: {
       color: theme.colors.headerText,
-      ...typography.header,
+      ...typography.headingXL,
     },
     subtitle: {
       color: theme.colors.subtitleTextColor,
-      ...typography.small,
+      ...typography.bodySM,
     },
     chipRow: {
       flexDirection: 'row',
@@ -30,7 +30,7 @@ const headerStyles = (insets: Insets, theme: Theme) =>
     backRow: {
       flexDirection: 'row',
       gap: 8,
-      alignItems:'center'
+      alignItems: 'center',
     },
   });
 

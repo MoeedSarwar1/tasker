@@ -2,42 +2,123 @@ import { StyleSheet } from 'react-native';
 import { fonts } from './fonts';
 
 export const typography = StyleSheet.create({
-  header: {
+  // 📌 Headings
+  headingXL: {
     fontFamily: fonts.families.bold,
     fontSize: fonts.sizes.heading,
   },
-  title: {
-    fontFamily: fonts.families.medium,
+  headingLG: {
+    fontFamily: fonts.families.bold,
     fontSize: fonts.sizes.xl,
   },
-  body: {
-    fontFamily: fonts.families.primary,
-    fontSize: fonts.sizes.md,
-  },
-  small: {
-    fontFamily: fonts.families.primary,
-    fontSize: fonts.sizes.sm,
-  },
-  micro: {
-    fontFamily: fonts.families.primary,
-    fontSize: fonts.sizes.xs, // extra small
-  },
-
-  // 🔘 Button Text Variants
-  buttonLarge: {
+  headingMD: {
     fontFamily: fonts.families.bold,
     fontSize: fonts.sizes.lg,
   },
-  buttonMedium: {
+  headingSM: {
+    fontFamily: fonts.families.bold,
+    fontSize: fonts.sizes.md,
+  },
+  headingXS: {
+    fontFamily: fonts.families.bold,
+    fontSize: fonts.sizes.sm,
+  },
+
+  // 📌 Titles
+  titleXL: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.xl,
+  },
+  titleLG: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.lg,
+  },
+  titleMD: {
     fontFamily: fonts.families.medium,
     fontSize: fonts.sizes.md,
   },
-  buttonSmall: {
+  titleSM: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.sm,
+  },
+  titleXS: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.xs,
+  },
+
+  // 📌 Body text
+  bodyXL: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.xl,
+  },
+  bodyLG: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.lg,
+  },
+  bodyMD: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.md,
+  },
+  bodySM: {
     fontFamily: fonts.families.primary,
     fontSize: fonts.sizes.sm,
   },
-  buttonMicro: {
+  bodyXS: {
     fontFamily: fonts.families.primary,
-    fontSize: fonts.sizes.xs, // extra small
+    fontSize: fonts.sizes.xs,
+  },
+
+  // 📌 Captions / Small text
+  captionMD: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.md,
+  },
+  captionSM: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.sm,
+  },
+  captionXS: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.xs,
+  },
+
+  // 📌 Buttons
+  buttonXL: {
+    fontFamily: fonts.families.bold,
+    fontSize: fonts.sizes.xl,
+  },
+  buttonLG: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.lg,
+  },
+  buttonMD: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.md,
+  },
+  buttonSM: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.sm,
+  },
+  buttonXS: {
+    fontFamily: fonts.families.primary,
+    fontSize: fonts.sizes.xs,
+  },
+
+  // 📌 Labels (optional, for chips, tags, etc.)
+  labelLG: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.lg,
+  },
+  labelMD: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.md,
+  },
+  labelSM: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.sm,
+  },
+  labelXS: {
+    fontFamily: fonts.families.medium,
+    fontSize: fonts.sizes.xs,
   },
 });

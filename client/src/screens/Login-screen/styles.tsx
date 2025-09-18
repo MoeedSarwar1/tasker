@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 const loginStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -8,7 +9,7 @@ const loginStyles = (theme: Theme) =>
       flex: 1,
       justifyContent: 'center',
       backgroundColor: theme.colors.background,
-      paddingHorizontal: theme.spacing.lg,
+      paddingHorizontal: scale(theme.spacing.lg),
     },
     logoContainer: {
       justifyContent: 'center',
@@ -22,33 +23,33 @@ const loginStyles = (theme: Theme) =>
     },
     textStyles: {
       color: theme.colors.headerText,
-      ...typography.buttonMedium,
+      ...typography.titleLG,
     },
     input: {
       flexDirection: 'row',
-      gap: theme.spacing.sm,
+      gap: scale(theme.spacing.sm),
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: theme.colors.inputBackground,
       borderColor: theme.colors.border,
       borderWidth: 1,
-      borderRadius: theme.borderRadius.xl,
+      borderRadius: scale(theme.borderRadius.xl),
       color: theme.colors.inputTextColor,
-      padding: theme.spacing.md,
-      marginBottom: theme.spacing.md,
+      padding: moderateScale(theme.spacing.md),
+      marginBottom: verticalScale(theme.spacing.md),
     },
     inputContaier: {
-      marginTop: theme.spacing.lg,
-      marginBottom: theme.spacing.md,
+      marginTop: verticalScale(theme.spacing.lg),
+      marginBottom: verticalScale(theme.spacing.md),
     },
     linkText: {
       alignItems: 'center',
-      marginTop: theme.spacing.lg,
+      marginTop: verticalScale(theme.spacing.lg),
     },
 
     buttonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonLarge,
+      ...typography.buttonLG,
     },
   });
 

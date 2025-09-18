@@ -486,6 +486,7 @@ const FriendsScreen = () => {
             onPress={() => {
               handlePresentModal();
             }}
+            style={styles.content}
           >
             <Material name="add" size={28} color="white" />
           </Pressable>

@@ -1,39 +1,40 @@
 import { Theme } from '../../theme/theme.interface';
 import { StyleSheet } from 'react-native';
 import { typography } from '../../theme/typography';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 export const registerationStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: 24,
+      paddingHorizontal: scale(theme.spacing.lg),
       justifyContent: 'center',
       flex: 1,
       backgroundColor: theme.colors.background,
     },
     input: {
       flexDirection: 'row',
-      gap: theme.spacing.sm,
+      gap: scale(theme.spacing.sm),
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: theme.colors.inputBackground,
       borderColor: theme.colors.border,
       borderWidth: 1,
-      borderRadius: theme.borderRadius.xl,
+      borderRadius: scale(theme.borderRadius.xl),
       color: theme.colors.inputTextColor,
-      padding: theme.spacing.md,
-      marginBottom: theme.spacing.md,
+      padding: moderateScale(theme.spacing.md),
+      marginBottom: verticalScale(theme.spacing.md),
     },
     buttonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonLarge,
+      ...typography.buttonLG,
     },
     logoContainer: {
       justifyContent: 'center',
       alignItems: 'center',
     },
     inputContaier: {
-      marginTop: 24,
-      marginBottom: 32,
+      marginTop: verticalScale(theme.spacing.lg),
+      marginBottom: verticalScale(theme.spacing.md),
     },
     imageStyles: {
       width: '80%', // take 80% of parent width
@@ -44,6 +45,10 @@ export const registerationStyles = (theme: Theme) =>
 
     textStyles: {
       color: theme.colors.headerText,
-      ...typography.buttonMedium,
+      ...typography.titleLG,
+    },
+    linkText: {
+      alignItems: 'center',
+      marginTop: verticalScale(theme.spacing.lg),
     },
   });

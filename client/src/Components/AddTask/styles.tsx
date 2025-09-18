@@ -13,7 +13,7 @@ export const bottomSheetStyles = (theme: Theme) =>
       marginBottom: 8,
       marginTop: 8,
       color: theme.colors.headerText,
-      ...typography.body,
+      ...typography.titleMD,
     },
     date: {
       justifyContent: 'center',
@@ -56,10 +56,10 @@ export const bottomSheetStyles = (theme: Theme) =>
     },
     addButtonText: {
       color: theme.colors.primaryButtonText,
-      ...typography.buttonMedium,
+      ...typography.buttonSM,
     },
     buttonText: {
       color: theme.colors.secondaryButtonText,
-      ...typography.buttonMedium,
+      ...typography.buttonSM,
     },
   });

@@ -11,12 +11,12 @@ const linkStyles = (theme: Theme) =>
     },
     textStyle: {
       color: theme.colors.descriptionText,
-      ...typography.small,
+      ...typography.captionSM,
     },
     linkText: {
       fontWeight: 'semibold',
       color: theme.colors.linkText,
-      ...typography.small,
+      ...typography.captionSM,
     },
   });
 

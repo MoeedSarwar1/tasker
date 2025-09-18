@@ -51,6 +51,7 @@ const FriendsCard = ({
         end={{ x: 1, y: 0 }}
         style={style.gradientContainer}
       >
+        <View style={style.content}>
         <View style={style.header}>
           <View style={style.avatar}>
             <SvgXml xml={user.avatar} width={35} height={35} />
@@ -93,6 +94,7 @@ const FriendsCard = ({
             </View>
           </View>
         )}
+        </View>
       </LinearGradient>
     </Pressable>
   );

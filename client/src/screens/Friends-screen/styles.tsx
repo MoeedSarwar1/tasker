@@ -37,9 +37,13 @@ const friendsStyles = (theme: Theme, insets) =>
       position: 'absolute',
       bottom: 40,
       right: 30,
-      padding: 8,
-      borderRadius: 100,
+      borderRadius: 200,
+
     },
+    content:{
+            padding: 8,
+
+    }
   });
 
 export default friendsStyles;
