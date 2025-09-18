@@ -33,6 +33,8 @@ export interface ChipsColors {
 }
 
 export interface ThemeColors {
+  friendsCard: string;
+  taskCard: string;
   primaryButtonSolid: string;
   descriptionText: string;
   background: string;

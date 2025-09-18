@@ -12,7 +12,10 @@ export const colors = {
   bottomNavActiveDark: '#C9A227',
   bottomNavInactiveLight: '#7D7D85', // gunmetal gray
   bottomNavInactiveDark: '#7D7D85',
-
+  friendsCardLight: ['rgba(255, 255, 255, 0.65)', 'rgba(220, 235, 245, 0.5)'], // crystal → pale ice blue
+  friendsCardDark: ['rgba(20, 20, 25, 0.7)', 'rgba(40, 50, 60, 0.55)'],
+  taskCardLight: ['rgba(255, 255, 255, 0.7)', 'rgba(240, 248, 255, 0.6)'], // icy white → soft frost blue
+  taskCardDark: ['rgba(25, 25, 28, 0.7)', 'rgba(45, 50, 55, 0.6)'],
   // Buttons
   primaryButtonLight: ['#C9A227', '#F5E6A1'], // champagne gold gradient
   primaryButtonDark: ['#C9A227', '#7A5C1F'], // deep gold gradient

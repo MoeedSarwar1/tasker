@@ -28,15 +28,30 @@ const BottomTabs = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: theme.colors.headerBackground,
-                borderTopWidth: 0, // removes the top border
-
-          height:
-            Platform.OS === 'ios' ? 60 + insets.bottom : 45 + insets.bottom,
-          paddingTop: 10,
-          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-        },
+        tabBarStyle: [
+          {
+            backgroundColor: theme.colors.headerBackground,
+            borderTopWidth: 0,
+            paddingTop: 0,
+            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+          },
+          Platform.OS === 'android' && {
+            height: 70,
+            elevation: 0, // Remove Android elevation shadow
+            shadowOpacity: 0, // Remove iOS shadow
+          },
+        ].filter(Boolean),
+        tabBarItemStyle: Platform.select({
+          android: {
+            height: 47,
+            paddingVertical: 0,
+            marginVertical: 4,
+          },
+          ios: {
+            height: 50,
+            paddingTop: 5,
+          },
+        }),
       }}
     >
       <Tabs.Screen

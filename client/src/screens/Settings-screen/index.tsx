@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Platform,
   Pressable,
+  ScrollView,
   Text,
   View,
 } from 'react-native';
@@ -10,12 +11,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FriendsCard from '../../Components/FriendsCard';
 import Header from '../../Components/Header/Header';
+import { ToggleButton } from '../../Components/Toggle';
 import { useAuth } from '../../context/Auth-context';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
-import friendsStyles from './styles';
-import { typography } from '../../theme/typography';
-import { ToggleButton } from '../../Components/Toggle';
+import settingStyles from './styles';
 
 const SettingsScreen = () => {
   const { showModal } = useModal();
@@ -24,61 +24,160 @@ const SettingsScreen = () => {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const [loggingOut, setLoggingOut] = React.useState(false);
+  const styles = settingStyles(Platform, insets, theme);
 
-  const styles = friendsStyles(Platform, insets, theme);
+  const settingsOptions = [
+    {
+      id: 'notifications',
+      title: 'Notifications',
+      icon: 'bell-outline',
+      hasToggle: true,
+      isToggled: true, // You can connect this to state
+      onPress: () => {
+        // Handle notifications toggle
+        console.log('Toggle notifications');
+      },
+    },
+    {
+      id: 'privacy',
+      title: 'Privacy & Security',
+      icon: 'shield-outline',
+      hasArrow: true,
+      onPress: () => {
+        // Navigate to privacy settings
+        console.log('Navigate to privacy');
+      },
+    },
+    {
+      id: 'help',
+      title: 'Help & Support',
+      icon: 'help-circle-outline',
+      hasArrow: true,
+      onPress: () => {
+        // Navigate to help
+        console.log('Navigate to help');
+      },
+    },
+    {
+      id: 'about',
+      title: 'About',
+      icon: 'information-outline',
+      hasArrow: true,
+      onPress: () => {
+        // Navigate to about
+        console.log('Navigate to about');
+      },
+    },
+  ];
 
   if (loggingOut) {
     return (
-      <View
-        style={[
-          styles.container,
-          { justifyContent: 'center', alignItems: 'center' },
-        ]}
-      >
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={theme.colors.primaryIcon} />
-        <Text
-          style={{
-            marginTop: 10,
-            color: theme.colors.headerText,
-            ...typography.micro,
-          }}
-        >
-          Logging out...
-        </Text>
+        <Text style={styles.loadingText}>Logging out...</Text>
       </View>
     );
   }
+
   return (
-    <>
-      <Header title="Account Settings" />
+    <View style={styles.container}>
+      <Header title="Settings" />
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* User Profile Section */}
+        <View>
+          <Text style={styles.headerTitle}>Profile</Text>
+          <FriendsCard item={user} buttons={false} />
+        </View>
 
-      <View style={styles.container}>
-        <FriendsCard item={user} buttons={false} />
-        <Pressable onPress={toggleTheme} style={styles.themeButton}>
-          <Text style={styles.text}>Toggle Theme</Text>
-          <ToggleButton
-            isToggled={isDark}
-            onToggle={toggleTheme}
-            activeIcon="weather-night"
-            inactiveIcon="weather-sunny"
-            activeIconColor="#FFD700" // Gold for moon
-            inactiveIconColor="#FF6B35" // Orange for sun
-            iconSize={26}
-            animated={true}
-            containerStyle={{
-              padding: 0,
-              backgroundColor: 'transparent',
-            }}
-            buttonStyle={{
-              padding: 8,
-              borderRadius: 20,
-              backgroundColor: isDark
-                ? 'rgba(255,255,255,0.1)'
-                : 'rgba(0,0,0,0.05)',
-            }}
-          />
-        </Pressable>
+        {/* Appearance Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Appearance</Text>
+          <View style={styles.settingsCard}>
+            <Pressable onPress={toggleTheme} style={styles.settingItem}>
+              <View style={styles.settingLeft}>
+                <View style={styles.iconContainer}>
+                  <Icon
+                    name={isDark ? 'weather-night' : 'weather-sunny'}
+                    size={20}
+                    color={theme.colors.primaryIcon}
+                  />
+                </View>
+                <Text style={styles.settingText}>Dark Mode</Text>
+              </View>
+              <ToggleButton
+                isToggled={isDark}
+                onToggle={toggleTheme}
+                activeIcon="weather-night"
+                inactiveIcon="weather-sunny"
+                activeIconColor="#FFD700"
+                inactiveIconColor="#FF6B35"
+                iconSize={20}
+                animated={true}
+                containerStyle={styles.toggleContainer}
+                buttonStyle={styles.toggleButton}
+              />
+            </Pressable>
+          </View>
+        </View>
 
+        {/* General Settings Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>General</Text>
+          <View style={styles.settingsCard}>
+            {settingsOptions.map((option, index) => (
+              <Pressable
+                key={option.id}
+                onPress={option.onPress}
+                style={[
+                  styles.settingItem,
+                  index !== settingsOptions.length - 1 &&
+                    styles.settingItemBorder,
+                ]}
+              >
+                <View style={styles.settingLeft}>
+                  <View style={styles.iconContainer}>
+                    <Icon
+                      name={option.icon}
+                      size={20}
+                      color={theme.colors.primaryIcon}
+                    />
+                  </View>
+                  <Text style={styles.settingText}>{option.title}</Text>
+                </View>
+                <View style={styles.settingRight}>
+                  {option.hasToggle && (
+                    <ToggleButton
+                      isToggled={option.isToggled}
+                      onToggle={option.onPress}
+                      iconSize={16}
+                      animated={true}
+                      containerStyle={styles.toggleContainer}
+                      buttonStyle={styles.smallToggleButton}
+                    />
+                  )}
+                  {option.hasArrow && (
+                    <Icon
+                      name="chevron-right"
+                      size={20}
+                      color={theme.colors.secondaryIcon}
+                    />
+                  )}
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        {/* Spacer for logout button */}
+        <View style={styles.spacer} />
+      </ScrollView>
+
+      {/* Logout Button - Fixed at bottom */}
+      <View style={styles.logoutContainer}>
         <Pressable
           onPress={() => {
             showModal({
@@ -89,20 +188,20 @@ const SettingsScreen = () => {
                 'Logging out will end your current session. You will need to sign in again to access your account. Do you want to continue?',
               iconName: 'exit-run',
               onConfirm: () => {
-                setLoggingOut(true); // show loader
+                setLoggingOut(true);
                 setTimeout(() => {
-                  logout(); // perform logout after delay
-                }, 1500); // 1.5 seconds delay
+                  logout();
+                }, 1500);
               },
             });
           }}
-          style={styles.childrenWrapperStyle}
+          style={styles.logoutButton}
         >
-          <Text style={styles.text}>Log out</Text>
-          <Icon name="exit-to-app" size={20} color={theme.colors.primaryIcon} />
+          <Icon name="logout" size={20} color="#DC3545" />
+          <Text style={styles.logoutText}>Log out</Text>
         </Pressable>
       </View>
-    </>
+    </View>
   );
 };
 

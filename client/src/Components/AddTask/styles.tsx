@@ -47,6 +47,7 @@ export const bottomSheetStyles = (theme: Theme) =>
     },
     button: {
       paddingHorizontal: 8,
+      borderRadius: 16,
       paddingVertical: 12,
       backgroundColor: theme.colors.secondaryButtonBackground,
     },

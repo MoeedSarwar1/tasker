@@ -28,6 +28,8 @@ export const lightTheme: Theme = {
     linkText: colors.linkTextLight,
     descriptionText: colors.descriptionTextLight,
     primaryButtonSolid: colors.primaryButtonLightSolid,
+    friendsCard: colors.friendsCardLight,
+    taskCard: colors.taskCardLight,
     modals: {
       errorBackground: colors.errorBackgroundLight,
       errorText: colors.errorTextLight,

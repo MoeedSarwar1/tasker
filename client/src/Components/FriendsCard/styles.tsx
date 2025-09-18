@@ -1,20 +1,21 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
-import { shadows } from '../../theme/shadows';
 import { typography } from '../../theme/typography';
 
 const cardStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       borderWidth: 0.5,
-      backgroundColor: theme.colors.cardBackground,
       borderRadius: 16,
       borderColor: theme.colors.border,
-      padding: 17,
       marginHorizontal: 24,
-      elevation: 1,
-      ...shadows.medium,
+      overflow: 'hidden', // Important for gradient to respect border radius
     },
+    gradientContainer: {
+      padding: 17,
+      flex: 1,
+    },
+
     title: {
       color: theme.colors.headerText,
       marginBottom: 1,
@@ -43,7 +44,6 @@ const cardStyles = (theme: Theme) =>
       overflow: 'hidden',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#f0f0f0', // optional fallback bg
     },
     buttonRow: {
       flexDirection: 'row',
@@ -51,6 +51,7 @@ const cardStyles = (theme: Theme) =>
       marginTop: 8,
     },
     button: {
+      borderRadius: 16,
       paddingVertical: 8,
       backgroundColor: theme.colors.secondaryButtonBackground,
     },
@@ -62,8 +63,8 @@ const cardStyles = (theme: Theme) =>
       color: theme.colors.primaryButtonText,
       ...typography.buttonMicro,
     },
-    flex:{
-      flex:1
+    flex: {
+      flex: 1,
     },
     buttonText: {
       color: theme.colors.secondaryButtonText,

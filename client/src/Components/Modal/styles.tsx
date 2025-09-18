@@ -91,8 +91,8 @@ export const modalStyles = (theme: Theme) =>
       ...typography.micro,
     },
 
-    childrenContainer:{ marginTop: 8 },
-    buttonContainer:{ flex: 1 },
+    childrenContainer: { marginTop: 8 },
+    buttonContainer: { flex: 1 },
     // Default / fallback
     modalHeader: {
       color: '#333',
@@ -103,6 +103,7 @@ export const modalStyles = (theme: Theme) =>
     buttonRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
 
     button: {
+      borderRadius: 16,
       paddingHorizontal: 8,
       paddingVertical: 10,
       backgroundColor: theme.colors.secondaryButtonBackground,

@@ -29,6 +29,8 @@ export const darkTheme: Theme = {
     linkText: colors.linkTextDark,
     descriptionText: colors.descriptionTextDark,
     primaryButtonSolid: colors.primaryButtonDarkSolid,
+    friendsCard: colors.friendsCardDark,
+    taskCard: colors.taskCardDark,
     modals: {
       errorBackground: colors.errorBackgroundDark,
       errorText: colors.errorTextDark,

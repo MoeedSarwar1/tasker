@@ -6,6 +6,7 @@ import { Friends } from './friends.interface';
 import cardStyles from './styles';
 import Button from '../Button';
 import { useTheme } from '../../context/Theme-context';
+import LinearGradient from 'react-native-linear-gradient';
 
 const FriendsCard = ({
   item,
@@ -44,48 +45,55 @@ const FriendsCard = ({
       style={style.container}
       onPress={() => setShowButtons(!showButtons)}
     >
-      <View style={style.header}>
-        <View style={style.avatar}>
-          <SvgXml xml={user.avatar} width={35} height={35} />
-        </View>
+      <LinearGradient
+        colors={theme.colors.friendsCard}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 0 }}
+        style={style.gradientContainer}
+      >
+        <View style={style.header}>
+          <View style={style.avatar}>
+            <SvgXml xml={user.avatar} width={35} height={35} />
+          </View>
 
-        <View>
-          <Text style={[style.title]}>
-            {user.firstName} {user.lastName}
-          </Text>
-          <Text style={style.description}>{user.email}</Text>
-        </View>
-      </View>
-
-      {buttons && showButtons && (
-        <View style={style.footer}>
-          <View style={style.buttonRow}>
-            {buttonRow && (
-            <View style={style.flex}>
-                <Button
-                  title="Reject"
-                  style={style.button}
-                  textStyle={style.buttonText}
-                  onPress={onSecondaryPress}
-                />
-              </View>
-            )}
-
-            <View style={style.flex}>
-              <Button
-                textStyle={style.addButtonText}
-                title={getButtonTitle()}
-                style={[
-                  style.addButton,
-                  isButtonDisabled() && { opacity: 0.6 }, // dim the button if disabled
-                ]}
-                disabled={isButtonDisabled()}
-                onPress={onPrimaryPress}
-              />
-            </View>
+          <View>
+            <Text style={[style.title]}>
+              {user.firstName} {user.lastName}
+            </Text>
+            <Text style={style.description}>{user.email}</Text>
           </View>
         </View>
-      )}
+
+        {buttons && showButtons && (
+          <View style={style.footer}>
+            <View style={style.buttonRow}>
+              {buttonRow && (
+                <View style={style.flex}>
+                  <Button
+                    title="Reject"
+                    style={style.button}
+                    textStyle={style.buttonText}
+                    onPress={onSecondaryPress}
+                  />
+                </View>
+              )}
+
+              <View style={style.flex}>
+                <Button
+                  textStyle={style.addButtonText}
+                  title={getButtonTitle()}
+                  style={[
+                    style.addButton,
+                    isButtonDisabled() && { opacity: 0.6 }, // dim the button if disabled
+                  ]}
+                  disabled={isButtonDisabled()}
+                  onPress={onPrimaryPress}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+      </LinearGradient>
     </Pressable>
   );
 };

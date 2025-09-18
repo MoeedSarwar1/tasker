@@ -1,19 +1,21 @@
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
-import { shadows } from '../../theme/shadows';
 
 const cardStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: theme.colors.cardBackground,
+      borderWidth: 0.5,
       borderRadius: 16,
       borderColor: theme.colors.border,
-      padding: 17,
       marginHorizontal: 24,
-      ...shadows.medium,
+      overflow: 'hidden', // Important for gradient to respect border radius
     },
+    gradientContainer: {
+      padding: 17,
+      flex: 1,
+    },
+
     title: {
       color: theme.colors.headerText,
       marginBottom: theme.spacing.xs,
