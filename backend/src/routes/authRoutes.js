@@ -8,6 +8,7 @@ const {
   fetchAllUsers,
   fetchMe,
   verifyEmail,
+  deleteMe,
 } = require("../controllers/auth.js");
 
 const Router = express.Router();
@@ -17,6 +18,7 @@ Router.post("/login", loginUser);
 Router.post("/verify", verifyEmail);
 Router.get("/", fetchAllUsers); // list all users
 Router.get("/me", auth, fetchMe); // list all users
+Router.delete("/me", auth, deleteMe); // list all users
 Router.get("/:userID", getSingleUser);
 
 module.exports = Router;

@@ -179,6 +179,14 @@ const fetchMe = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const deleteMe = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.user.id);
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete account" });
+  }
+};
 
 module.exports = {
   signup,
@@ -187,4 +195,5 @@ module.exports = {
   fetchAllUsers,
   getSingleUser,
   fetchMe,
+  deleteMe,
 };
