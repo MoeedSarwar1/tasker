@@ -162,9 +162,15 @@ exports.acceptFriendRequest = async (req, res) => {
         });
     }
 
-    res
-      .status(200)
-      .json({ message: "Friend request accepted", friend: newFriend });
+    res.status(200).json({
+      message: "Friend request accepted",
+      friend: {
+        _id: friend._id,
+        firstName: friend.firstName,
+        lastName: friend.lastName,
+        email: friend.email,
+      },
+    });
   } catch (err) {
     console.error("❌ Error accepting friend request:", err);
     res.status(500).json({ message: "Server error" });
