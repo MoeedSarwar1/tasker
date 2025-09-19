@@ -49,7 +49,7 @@ To get the application up and running on your local machine, follow these steps.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/tasker.git
+    git clone https://github.com/MoeedSarwar1/tasker.git
     cd tasker
     ```
 
