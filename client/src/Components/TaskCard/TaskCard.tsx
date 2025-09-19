@@ -30,7 +30,9 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
           title: item.title,
           description: item.description,
           completed: item.completed,
-          createdBy: item.user?.firstName + ' ' + item.user?.lastName,
+          createdBy: `${item.user?.firstName ?? user?.firstName ?? ''} ${
+            item.user?.lastName ?? user?.lastName ?? ''
+          }`,
           dueDate: item.dueDate,
           priority: item.priority,
         })

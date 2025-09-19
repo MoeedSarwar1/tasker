@@ -31,6 +31,7 @@ export const lightTheme: Theme = {
     friendsCard: colors.friendsCardLight,
     taskCard: colors.taskCardLight,
     floatingButton: colors.floatingButtonLight,
+    bottomNavBackground: colors.navBarLight,
     modals: {
       errorBackground: colors.errorBackgroundLight,
       errorText: colors.errorTextLight,

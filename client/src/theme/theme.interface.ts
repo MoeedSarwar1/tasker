@@ -63,6 +63,7 @@ export interface ThemeColors {
   primaryIcon: string;
   border: string; // ✅ added border option
   secondaryIcon: string;
+  bottomNavBackground: string;
   disabledPrimaryIcon: string;
   disabledSecondaryIcon: string;
   modals: ModalsColors;

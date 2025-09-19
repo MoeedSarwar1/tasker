@@ -147,6 +147,8 @@ const FriendsScreen = () => {
 
       const addedFriend = await acceptFriendRequest(requestId);
 
+      const userName =
+        addedFriend.friend.firstName + ' ' + addedFriend.friend.lastName;
       // Update local state
       setFriends(prev =>
         prev.some(f => f._id === addedFriend._id)
@@ -170,7 +172,7 @@ const FriendsScreen = () => {
           showModal({
             mode: 'success',
             title: 'Welcome to Your Network! 🤝',
-            description: `${addedFriend.firstName} is now your friend and can share tasks with you`,
+            description: `${userName} is now your friend and can share tasks with you`,
             iconName: 'account-heart-outline',
             buttonRow: false,
           });

@@ -22,7 +22,7 @@ const RootNavigator = () => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <StatusBar
           barStyle={isDark ? 'light-content' : 'dark-content'}
-          backgroundColor={theme.colors.background}
+          backgroundColor={theme.colors.headerBackground}
           translucent={false}
         />
       </View>
@@ -73,7 +73,7 @@ const ThemedApp = () => {
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={isDark ? '#000' : '#fff'}
+        backgroundColor={theme.colors.headerBackground}
       />
       <RootNavigator />
     </View>

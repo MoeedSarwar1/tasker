@@ -28,7 +28,7 @@ export const TaskDetails = () => {
       navigation.getParent()?.setOptions({
         tabBarStyle: [
           {
-            backgroundColor: theme.colors.headerBackground,
+            backgroundColor: theme.colors.bottomNavBackground,
             borderTopWidth: 0,
             paddingTop: 0,
             paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
@@ -54,7 +54,7 @@ export const TaskDetails = () => {
     };
   }, [navigation]);
 
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = priority => {
     switch (priority?.toLowerCase()) {
       case 'high':
         return '#EF4444';
@@ -67,7 +67,7 @@ export const TaskDetails = () => {
     }
   };
 
-  const getPriorityIcon = (priority) => {
+  const getPriorityIcon = priority => {
     switch (priority?.toLowerCase()) {
       case 'high':
         return 'flag';
@@ -90,22 +90,38 @@ export const TaskDetails = () => {
       >
         {/* Task Status Icon */}
         <View style={styles.statusContainer}>
-          <View style={[
-            styles.statusIconContainer,
-            { backgroundColor: completed ? theme.colors.primaryButtonBackground + '15' : theme.colors.secondaryIcon + '15' }
-          ]}>
+          <View
+            style={[
+              styles.statusIconContainer,
+              {
+                backgroundColor: completed
+                  ? theme.colors.primaryButtonBackground + '15'
+                  : theme.colors.secondaryIcon + '15',
+              },
+            ]}
+          >
             <Icon
-              name={completed ? "check-circle" : "clock-outline"}
+              name={completed ? 'check-circle' : 'clock-outline'}
               size={scale(32)}
-              color={completed ? theme.colors.primaryIcon : theme.colors.secondaryIcon}
+              color={
+                completed
+                  ? theme.colors.primaryIcon
+                  : theme.colors.secondaryIcon
+              }
             />
           </View>
           <View style={styles.statusTextContainer}>
             <Text style={styles.statusLabel}>Status</Text>
-            <Text style={[
-              styles.statusText,
-              { color: completed ? theme.colors.primaryIcon : theme.colors.secondaryIcon }
-            ]}>
+            <Text
+              style={[
+                styles.statusText,
+                {
+                  color: completed
+                    ? theme.colors.primaryIcon
+                    : theme.colors.secondaryIcon,
+                },
+              ]}
+            >
               {completed ? 'Completed' : 'Pending'}
             </Text>
           </View>
@@ -137,10 +153,12 @@ export const TaskDetails = () => {
             </View>
 
             <View style={styles.metaItem}>
-              <View style={[
-                styles.metaIconContainer,
-                { backgroundColor: getPriorityColor(priority) + '15' }
-              ]}>
+              <View
+                style={[
+                  styles.metaIconContainer,
+                  { backgroundColor: getPriorityColor(priority) + '15' },
+                ]}
+              >
                 <Icon
                   name={getPriorityIcon(priority)}
                   size={scale(18)}
@@ -149,10 +167,12 @@ export const TaskDetails = () => {
               </View>
               <View>
                 <Text style={styles.metaLabel}>Priority</Text>
-                <Text style={[
-                  styles.metaValue,
-                  { color: getPriorityColor(priority) }
-                ]}>
+                <Text
+                  style={[
+                    styles.metaValue,
+                    { color: getPriorityColor(priority) },
+                  ]}
+                >
                   {priority || 'Not set'}
                 </Text>
               </View>
@@ -170,9 +190,7 @@ export const TaskDetails = () => {
               </View>
               <View>
                 <Text style={styles.metaLabel}>Created by</Text>
-                <Text style={styles.metaValue}>
-                  {createdBy || 'Unknown'}
-                </Text>
+                <Text style={styles.metaValue}>{createdBy || 'Unknown'}</Text>
               </View>
             </View>
           </View>

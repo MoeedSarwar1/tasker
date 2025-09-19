@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Platform, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,58 +14,74 @@ const BottomTabs = () => {
   const { theme } = useTheme();
   const [requests, setRequests] = useState([]);
 
-  const loadRequests = async () => {
-    const data = await allRequests(); // returns user objects of friends
-    setRequests(data);
-  };
+  const loadRequests = useCallback(async () => {
+    try {
+      const data = await allRequests();
+      setRequests(data || []);
+    } catch (error) {
+      console.error('Failed to load friend requests:', error);
+      setRequests([]);
+    }
+  }, []);
 
   useEffect(() => {
     loadRequests();
-  }, [loadRequests()]);
+  }, [loadRequests]);
 
   return (
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: [
-          {
-            backgroundColor: theme.colors.headerBackground,
-            borderTopWidth: 0,
-            paddingTop: 0,
-            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-          },
-          Platform.OS === 'android' && {
-            height: 75,
-            elevation: 0, // Remove Android elevation shadow
-            shadowOpacity: 0, // Remove iOS shadow
-          },
-        ].filter(Boolean),
-        tabBarItemStyle: Platform.select({
-          android: {
-            height: 47,
-            paddingVertical: 0,
-            marginVertical: 4,
-          },
-          ios: {
-            height: 50,
-            paddingTop: 5,
-          },
-        }),
+        tabBarStyle: {
+          backgroundColor: theme.colors.bottomNavBackground,
+          borderTopWidth: 0,
+          paddingTop: 12,
+          paddingBottom: insets.bottom > 0 ? insets.bottom + 12 : 20,
+          paddingHorizontal: 16,
+          height: Platform.select({
+            android: 75 + (insets.bottom > 0 ? insets.bottom : 0),
+            ios: 85 + insets.bottom,
+          }),
+          // Remove shadows/elevation
+          ...Platform.select({
+            android: {
+              elevation: 0,
+            },
+            ios: {
+              shadowOpacity: 0,
+            },
+          }),
+          // Modern border radius
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 8,
+          marginHorizontal: 6,
+          borderRadius: 16,
+          minHeight: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        },
+        tabBarActiveTintColor: theme.colors.primaryIcon,
+        tabBarInactiveTintColor: theme.colors.secondaryIcon,
+        tabBarHideOnKeyboard: Platform.OS === 'android',
       }}
     >
       <Tabs.Screen
         name={tabNames.HOME}
         component={HomeStack}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name="home"
-              size={26}
-              color={
-                focused ? theme.colors.primaryIcon : theme.colors.secondaryIcon
-              }
-            />
+          tabBarIcon: ({ focused, color }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Icon
+                name={focused ? 'home' : 'home-outline'}
+                size={28}
+                color={color}
+              />
+            </View>
           ),
         }}
       />
@@ -73,36 +89,45 @@ const BottomTabs = () => {
         name={tabNames.FRIENDS}
         component={FriendsStack}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ position: 'relative' }}>
+          tabBarIcon: ({ focused, color }) => (
+            <View
+              style={{
+                position: 'relative',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Icon
-                name="account-group"
-                size={26}
-                color={
-                  focused
-                    ? theme.colors.primaryIcon
-                    : theme.colors.secondaryIcon
-                }
+                name={focused ? 'account-group' : 'account-group-outline'}
+                size={28}
+                color={color}
               />
               {requests.length > 0 && (
                 <View
                   style={{
                     position: 'absolute',
-                    right: -6,
-                    top: -3,
-                    backgroundColor: 'red',
-                    borderRadius: 8,
-                    minWidth: 16,
-                    height: 16,
+                    right: -8,
+                    top: -6,
+                    backgroundColor: '#FF3B30',
+                    borderRadius: 12,
+                    minWidth: 20,
+                    height: 20,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    paddingHorizontal: 2,
+                    paddingHorizontal: 6,
+                    borderWidth: 2,
+                    borderColor: theme.colors.bottomNavBackground,
                   }}
                 >
                   <Text
-                    style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}
+                    style={{
+                      color: 'white',
+                      fontSize: 12,
+                      fontWeight: '700',
+                      lineHeight: 14,
+                    }}
                   >
-                    {requests.length}
+                    {requests.length > 99 ? '99+' : requests.length}
                   </Text>
                 </View>
               )}
@@ -114,14 +139,14 @@ const BottomTabs = () => {
         name={tabNames.SETTINGS}
         component={SettingsStack}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name="account-settings"
-              size={26}
-              color={
-                focused ? theme.colors.primaryIcon : theme.colors.secondaryIcon
-              }
-            />
+          tabBarIcon: ({ focused, color }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Icon
+                name={focused ? 'cog' : 'cog-outline'}
+                size={28}
+                color={color}
+              />
+            </View>
           ),
         }}
       />

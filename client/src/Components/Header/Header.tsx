@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({
       <View style={styles.headerRow}>
         <View style={styles.backRow}>
           {showBack && (
-            <Pressable onPress={()=>navigation.goBack()} hitSlop={10}>
+            <Pressable onPress={() => navigation.goBack()} hitSlop={10}>
               <Icon
                 name={iconName}
                 size={24}
@@ -84,6 +84,7 @@ const Header: React.FC<HeaderProps> = ({
               key={chip.id}
               label={chip.label}
               color={chip.color}
+              textColor={chip.textColor}
               selected={selectedChip === chip.id}
               onPress={() => {
                 setSelectedChip(chip.id);

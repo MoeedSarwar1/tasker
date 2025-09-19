@@ -38,6 +38,7 @@ const homeStles = (insets, theme: Theme) =>
     },
 
     flatlistContainer: {
+      gap: verticalScale(theme.spacing.md),
       paddingBottom: insets.bottom + 80,
     },
     list: {

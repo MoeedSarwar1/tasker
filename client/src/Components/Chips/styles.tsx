@@ -1,3 +1,4 @@
+// Chip Styles
 import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { scale, verticalScale } from 'react-native-size-matters';
@@ -7,17 +8,22 @@ export const chipStyles = (theme: Theme) =>
   StyleSheet.create({
     chip: {
       paddingVertical: verticalScale(theme.spacing.xs),
+      paddingHorizontal: scale(16),
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: scale(theme.spacing.sm),
-      borderRadius: scale(theme.borderRadius.xl),
+      borderRadius: scale(20),
+      borderWidth: 1,
       borderColor: theme.colors.border,
-      backgroundColor: theme.colors.chips.defaultChipBakground,
-      marginRight: scale(theme.spacing.xs),
-      marginBottom: verticalScale(theme.spacing.sm),
+      backgroundColor: theme.colors.chips?.defaultChipBakground,
+      marginRight: scale(8),
+      marginBottom: verticalScale(8),
     },
     text: {
-      color: theme.colors.chips.defaultChipText,
+      color: theme.colors.chips?.defaultChipText,
+      fontWeight: '500',
+      lineHeight: scale(18),
+      letterSpacing: 0.25,
+      textAlign: 'center',
       ...typography.captionXS,
     },
   });

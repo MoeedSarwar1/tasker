@@ -1,4 +1,6 @@
 export const colors = {
+  navBarLight: 'rgba(230, 230, 230, 0.95)',
+  navBarDark: 'rgba(15, 15, 15, 0.95)',
   // Backgrounds
   backgroundLight: '#FDFDFD', // crystal white
   backgroundDark: '#050505', // pure obsidian black
@@ -12,10 +14,24 @@ export const colors = {
   bottomNavActiveDark: '#C9A227',
   bottomNavInactiveLight: '#7D7D85', // gunmetal gray
   bottomNavInactiveDark: '#7D7D85',
-  friendsCardLight: ['rgba(255, 255, 255, 0.65)', 'rgba(220, 235, 245, 0.5)'], // crystal → pale ice blue
-  friendsCardDark: ['rgba(20, 20, 25, 0.7)', 'rgba(40, 50, 60, 0.55)'],
-  taskCardLight: ['rgba(255, 255, 255, 0.7)', 'rgba(240, 248, 255, 0.6)'], // icy white → soft frost blue
-  taskCardDark: ['rgba(25, 25, 28, 0.7)', 'rgba(45, 50, 55, 0.6)'],
+  friendsCardLight: [
+    'rgba(248, 250, 252, 0.85)', // Soft light gray-blue (darker)
+    'rgba(203, 213, 225, 0.75)', // Muted slate blue (more opacity)
+  ],
+  friendsCardDark: [
+    'rgba(15, 23, 42, 0.8)', // Rich dark slate
+    'rgba(30, 41, 59, 0.7)', // Deeper blue-gray
+  ],
+
+  // Task Card Gradients - Clean neutral theme
+  taskCardLight: [
+    'rgba(241, 245, 249, 0.9)', // Soft neutral gray (darker)
+    'rgba(226, 232, 240, 0.8)', // Light slate gray (more opacity)
+  ],
+  taskCardDark: [
+    'rgba(15, 23, 42, 0.85)', // Deep slate blue
+    'rgba(30, 58, 138, 0.7)', // Rich dark blue accent
+  ],
   // Floating Button Gradient
   floatingButtonLight: ['#A1C4FD', '#C2E9FB'], // sky blue → ice crystal
   floatingButtonDark: ['#3A6073', '#16222A'],
@@ -32,10 +48,12 @@ export const colors = {
   secondaryButtonTextDark: '#FFFFFF',
 
   // Chips (Default)
-  defaultChipBackgroundLight: '#EFEFF4',
-  defaultChipTextLight: '#1C1C1E',
-  defaultChipBackgroundDark: '#2E2E30',
-  defaultChipTextDark: '#FFFFFF',
+  // Chips (Default)
+  defaultChipBackgroundLight: 'rgba(240, 240, 245, 0.9)', // softer frosted silver with translucency
+  defaultChipTextLight: '#111111', // richer obsidian for better readability
+
+  defaultChipBackgroundDark: 'rgba(45, 45, 50, 0.85)', // frosted graphite, slightly lifted from bg
+  defaultChipTextDark: '#EAEAEA', // soft pearl white instead of harsh pure white
 
   // Text
   headerTextLight: '#050505', // obsidian
@@ -96,20 +114,22 @@ export const colors = {
   confirmationDark: '#E6B422', // bright golden yellow
 
   // Task Filter Chips
-  allBackgroundLight: '#F1F1F4',
-  allBackgroundDark: '#2C2C2E',
-  allTextLight: '#111111',
-  allTextDark: '#FFFFFF',
+  allBackgroundLight: '#F8FAFC', // Light background
+  allBackgroundDark: '#1E293B', // Dark background
+  allTextLight: '#1F2937', // Very dark gray - high contrast
+  allTextDark: '#FFFFFF', // Pure white - maximum contrast
 
-  pendingBackgroundLight: '#FFF5E0',
-  pendingBackgroundDark: '#3C2A14',
-  pendingTextLight: '#A6761C', // bronze
-  pendingTextDark: '#FFD27F',
+  // Pending states - High contrast amber
+  pendingBackgroundLight: '#FEF3C7', // Light amber background
+  pendingBackgroundDark: '#451A03', // Dark amber background
+  pendingTextLight: '#78350F', // Much darker amber - readable
+  pendingTextDark: '#FFFFFF', // Pure white for maximum contrast
 
-  completedBackgroundLight: '#E6F7EB',
-  completedBackgroundDark: '#1A3B2C',
-  completedTextLight: '#14532D',
-  completedTextDark: '#BFF7DD',
+  // Completed states - High contrast green
+  completedBackgroundLight: '#ECFDF5', // Light green background
+  completedBackgroundDark: '#064E3B', // Dark green background
+  completedTextLight: '#14532D', // Much darker green - readable
+  completedTextDark: '#FFFFFF',
 
   // Priority Chips
   urgentBackgroundLight: '#C92A2A', // ruby red

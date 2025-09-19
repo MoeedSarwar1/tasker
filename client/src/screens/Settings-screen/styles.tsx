@@ -102,12 +102,16 @@ const settingStyles = (Platform, insets, theme: Theme) =>
     toggleButton: {
       padding: scale(theme.spacing.sm),
       borderRadius: theme.borderRadius.xl,
-      backgroundColor: theme.colors.secondaryButtonBackground,
+      backgroundColor: theme.colors.cardBackground,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
     },
     smallToggleButton: {
       padding: scale(theme.spacing.xs),
       borderRadius: theme.borderRadius.lg,
-      backgroundColor: theme.colors.secondaryButtonBackground,
+      backgroundColor: theme.colors.cardBackground,
+      borderWidth: 0.5,
+      borderColor: theme.colors.border,
     },
 
     // Logout Styles

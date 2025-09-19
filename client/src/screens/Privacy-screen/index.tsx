@@ -46,7 +46,7 @@ const PrivacySecurityScreen = () => {
       navigation.getParent()?.setOptions({
         tabBarStyle: [
           {
-            backgroundColor: theme.colors.headerBackground,
+            backgroundColor: theme.colors.bottomNavBackground,
             borderTopWidth: 0,
             paddingTop: 0,
             paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
