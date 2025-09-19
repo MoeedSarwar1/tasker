@@ -111,29 +111,31 @@ exports.acceptFriendRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
     const request = await FriendRequest.findById(requestId);
-
     if (!request) return res.status(404).json({ message: "Request not found" });
     if (request.receiver.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized" });
     }
-
     // Update request status
     request.status = "accepted";
     await request.save();
-
     // Add each other as friends
     const sender = await User.findById(request.sender);
     const receiver = await User.findById(request.receiver);
-
     sender.friends.push(receiver.id);
     receiver.friends.push(sender.id);
-
     await sender.save();
     await receiver.save();
 
+    // Create friend object for response (sender is the new friend from receiver's perspective)
+    const newFriend = {
+      _id: sender._id,
+      firstName: sender.firstName,
+      lastName: sender.lastName,
+      email: sender.email,
+    };
+
     const senderSocket = onlineUsers.get(sender.id.toString());
     const receiverSocket = onlineUsers.get(receiver.id.toString());
-
     if (senderSocket) {
       getIo()
         .to(senderSocket)
@@ -147,7 +149,6 @@ exports.acceptFriendRequest = async (req, res) => {
           },
         });
     }
-
     if (receiverSocket) {
       getIo()
         .to(receiverSocket)
@@ -162,14 +163,10 @@ exports.acceptFriendRequest = async (req, res) => {
         });
     }
 
+    // Return both message and friend data
     res.status(200).json({
       message: "Friend request accepted",
-      friend: {
-        _id: friend._id,
-        firstName: friend.firstName,
-        lastName: friend.lastName,
-        email: friend.email,
-      },
+      friend: newFriend,
     });
   } catch (err) {
     console.error("❌ Error accepting friend request:", err);
