@@ -26,33 +26,41 @@ export const TaskDetails = () => {
 
     return () => {
       navigation.getParent()?.setOptions({
-        tabBarStyle: [
-          {
-            backgroundColor: theme.colors.bottomNavBackground,
-            borderTopWidth: 0,
-            paddingTop: 0,
-            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-          },
-          Platform.OS === 'android' && {
-            height: 75,
-            elevation: 0,
-            shadowOpacity: 0,
-          },
-        ].filter(Boolean),
-        tabBarItemStyle: Platform.select({
-          android: {
-            height: 47,
-            paddingVertical: 0,
-            marginVertical: 4,
-          },
-          ios: {
-            height: 50,
-            paddingTop: 5,
-          },
-        }),
+        tabBarStyle: {
+          backgroundColor: theme.colors.bottomNavBackground,
+          borderTopWidth: 0,
+          paddingTop: 12,
+          paddingBottom: insets.bottom > 0 ? insets.bottom + 12 : 20,
+          paddingHorizontal: 16,
+          height: Platform.select({
+            android: 75 + (insets.bottom > 0 ? insets.bottom : 0),
+            ios: 85 + insets.bottom,
+          }),
+          // Remove shadows/elevation
+          ...Platform.select({
+            android: {
+              elevation: 0,
+            },
+            ios: {
+              shadowOpacity: 0,
+            },
+          }),
+          // Modern border radius
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 8,
+          marginHorizontal: 6,
+          borderRadius: 16,
+          minHeight: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        },
       });
     };
-  }, [navigation]);
+  }, [navigation, theme.colors.bottomNavBackground, insets.bottom]);
 
   const getPriorityColor = priority => {
     switch (priority?.toLowerCase()) {

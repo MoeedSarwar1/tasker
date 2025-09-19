@@ -15,15 +15,15 @@ import BottomTabs from './src/navigation/BottomTabs';
 
 const RootNavigator = () => {
   const { token, loading } = useAuth();
-  const { isDark, theme } = useTheme();
+  const { isDark } = useTheme();
 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <StatusBar
           barStyle={isDark ? 'light-content' : 'dark-content'}
-          backgroundColor={theme.colors.headerBackground}
-          translucent={false}
+          backgroundColor="transparent"
+          translucent
         />
       </View>
     );
@@ -73,7 +73,8 @@ const ThemedApp = () => {
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={theme.colors.headerBackground}
+        backgroundColor="transparent"
+        translucent
       />
       <RootNavigator />
     </View>
