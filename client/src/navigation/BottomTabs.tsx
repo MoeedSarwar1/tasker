@@ -4,9 +4,10 @@ import { Platform, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../context/Theme-context';
-import { tabNames } from './enums';
+import { NavigationRoutes, tabNames } from './enums';
 import { FriendsStack, HomeStack, SettingsStack } from './Home-stack';
 import { allRequests } from '../network/Friends';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
@@ -14,26 +15,24 @@ const BottomTabs = () => {
   const { theme } = useTheme();
   const [requests, setRequests] = useState([]);
 
-  const loadRequests = useCallback(async () => {
-    try {
-      const data = await allRequests();
-      setRequests(data || []);
-    } catch (error) {
-      console.error('Failed to load friend requests:', error);
-      setRequests([]);
-    }
-  }, []);
+  const getTabBarVisibility = route => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+    console.log('Current route name:', routeName); // Debug line - remove later
 
-  useEffect(() => {
-    loadRequests();
-  }, [loadRequests]);
+    // Add the actual screen names that should hide the tab bar
+    const hiddenScreens = [
+      NavigationRoutes.TASKS,
+      NavigationRoutes.PRIVACY,
+      NavigationRoutes.ABOUT,
+      // Add other screens that should hide the tab bar
+    ];
+    return !hiddenScreens.includes(routeName);
+  };
 
-  return (
-    <Tabs.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarStyle: {
+  // Create the common tab bar style
+  const getTabBarStyle = route => {
+    return getTabBarVisibility(route)
+      ? {
           backgroundColor: theme.colors.bottomNavBackground,
           borderTopWidth: 0,
           paddingTop: 12,
@@ -55,8 +54,13 @@ const BottomTabs = () => {
           // Modern border radius
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
-        },
-        tabBarItemStyle: {
+        }
+      : { display: 'none' };
+  };
+
+  const getTabBarItemStyle = route => {
+    return getTabBarVisibility(route)
+      ? {
           paddingVertical: 8,
           marginHorizontal: 6,
           borderRadius: 16,
@@ -64,7 +68,29 @@ const BottomTabs = () => {
           justifyContent: 'center',
           alignItems: 'center',
           flex: 1,
-        },
+        }
+      : { display: 'none' };
+  };
+
+  const loadRequests = useCallback(async () => {
+    try {
+      const data = await allRequests();
+      setRequests(data || []);
+    } catch (error) {
+      console.error('Failed to load friend requests:', error);
+      setRequests([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
+
+  return (
+    <Tabs.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
         tabBarActiveTintColor: theme.colors.primaryIcon,
         tabBarInactiveTintColor: theme.colors.secondaryIcon,
         tabBarHideOnKeyboard: Platform.OS === 'android',
@@ -73,7 +99,9 @@ const BottomTabs = () => {
       <Tabs.Screen
         name={tabNames.HOME}
         component={HomeStack}
-        options={{
+        options={({ route }) => ({
+          tabBarStyle: getTabBarStyle(route),
+          tabBarItemStyle: getTabBarItemStyle(route),
           tabBarIcon: ({ focused, color }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Icon
@@ -83,12 +111,14 @@ const BottomTabs = () => {
               />
             </View>
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name={tabNames.FRIENDS}
         component={FriendsStack}
-        options={{
+        options={({ route }) => ({
+          tabBarStyle: getTabBarStyle(route),
+          tabBarItemStyle: getTabBarItemStyle(route),
           tabBarIcon: ({ focused, color }) => (
             <View
               style={{
@@ -133,12 +163,14 @@ const BottomTabs = () => {
               )}
             </View>
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name={tabNames.SETTINGS}
         component={SettingsStack}
-        options={{
+        options={({ route }) => ({
+          tabBarStyle: getTabBarStyle(route),
+          tabBarItemStyle: getTabBarItemStyle(route),
           tabBarIcon: ({ focused, color }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Icon
@@ -148,7 +180,7 @@ const BottomTabs = () => {
               />
             </View>
           ),
-        }}
+        })}
       />
     </Tabs.Navigator>
   );
