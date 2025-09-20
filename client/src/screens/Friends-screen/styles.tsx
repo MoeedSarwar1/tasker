@@ -8,43 +8,125 @@ const friendsStyles = (theme: Theme, insets) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
-      paddingTop: verticalScale(theme.spacing.lg),
-    },
-    top: {
-      marginTop: verticalScale(theme.spacing.sm),
-      marginHorizontal: -verticalScale(theme.spacing.lg),
-    },
-    flatlistContainer: {
-      gap: scale(theme.spacing.md),
-      paddingBottom: insets.bottom + 170,
     },
 
-    list: {
-      paddingTop: verticalScale(theme.spacing.lg),
+    // Search Container
+    searchContainer: {
+      paddingTop: verticalScale(theme.spacing.md),
     },
-    subtitle: {
+
+    // Minimal Tab Container
+    tabContainer: {
+      flexDirection: 'row',
+      paddingHorizontal: scale(theme.spacing.lg),
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.border,
+    },
+
+    tab: {
+      flex: 1,
+      paddingVertical: verticalScale(theme.spacing.md),
+      alignItems: 'center',
+      borderBottomWidth: 2,
+      borderBottomColor: 'transparent',
+    },
+
+    activeTab: {
+      borderBottomColor: theme.colors.primaryIcon,
+    },
+
+    tabText: {
+      ...typography.bodyMD,
       color: theme.colors.subtitleTextColor,
-      ...typography.captionXS,
-      marginHorizontal: scale(theme.spacing.lg),
+      fontWeight: '500',
     },
+
+    activeTabText: {
+      color: theme.colors.primaryIcon,
+      fontWeight: '600',
+    },
+
+    // Content Container
+    contentContainer: {
+      flex: 1,
+    },
+
+    // Loading Container
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    // Empty States
     emptyContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      gap: scale(theme.spacing.sm),
+      paddingHorizontal: scale(theme.spacing.xl),
     },
-    emptyTextStyle: {
-      color: theme.colors.subtitleTextColor,
+
+    emptyTitle: {
+      ...typography.headingSM,
+      color: theme.colors.headerText,
+      textAlign: 'center',
+      marginTop: verticalScale(theme.spacing.md),
+      marginBottom: verticalScale(theme.spacing.xs),
+    },
+
+    emptyDescription: {
       ...typography.bodyMD,
+      color: theme.colors.subtitleTextColor,
+      textAlign: 'center',
+      lineHeight: scale(20),
     },
-    logoutContainer: {
+
+    // Lists
+    listContainer: {
+      paddingTop: scale(theme.spacing.lg),
+      paddingBottom: insets.bottom + verticalScale(100),
+      gap: verticalScale(theme.spacing.sm),
+    },
+
+    // Simple Add Button
+    addButton: {
       position: 'absolute',
-      bottom: scale(40),
-      right: scale(30),
-      borderRadius: 200,
+      bottom: insets.bottom + verticalScale(24),
+      right: scale(24),
+      width: scale(56),
+      height: scale(56),
+      borderRadius: scale(28),
+      backgroundColor: theme.colors.floatingButton,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.15,
+      shadowRadius: 8,
+      elevation: 4,
     },
-    content: {
-      padding: scale(theme.spacing.sm),
+
+    // Bottom Sheet Content
+    bottomSheetContent: {
+      flex: 1,
+      marginTop: verticalScale(theme.spacing.sm),
+      marginHorizontal: -verticalScale(theme.spacing.lg),
+    },
+
+    searchLoadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: verticalScale(40),
+    },
+
+    searchListContainer: {
+      paddingTop: scale(theme.spacing.lg),
+      paddingBottom: insets.bottom + verticalScale(40),
+      gap: verticalScale(theme.spacing.sm),
     },
   });
 

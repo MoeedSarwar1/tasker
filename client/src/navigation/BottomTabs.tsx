@@ -8,16 +8,16 @@ import { NavigationRoutes, tabNames } from './enums';
 import { FriendsStack, HomeStack, SettingsStack } from './Home-stack';
 import { allRequests } from '../network/Friends';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { useFriendsContext } from '../context/Friends-context';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-  const [requests, setRequests] = useState([]);
+  const { requests } = useFriendsContext();
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-    console.log('Current route name:', routeName); // Debug line - remove later
 
     // Add the actual screen names that should hide the tab bar
     const hiddenScreens = [
@@ -71,20 +71,6 @@ const BottomTabs = () => {
         }
       : { display: 'none' };
   };
-
-  const loadRequests = useCallback(async () => {
-    try {
-      const data = await allRequests();
-      setRequests(data || []);
-    } catch (error) {
-      console.error('Failed to load friend requests:', error);
-      setRequests([]);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadRequests();
-  }, [loadRequests]);
 
   return (
     <Tabs.Navigator

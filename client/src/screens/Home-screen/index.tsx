@@ -269,10 +269,10 @@ const HomeScreen = () => {
   // Greeting based on time
   const getGreeting = (): string => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Rise & Shine!';
-    if (hour < 15) return 'Midday Vibes!';
-    if (hour < 18) return 'Good Afternoon!';
-    return 'Good Evening!';
+    if (hour < 12) return 'Ready to Excel!';
+    if (hour < 15) return 'Stay Focused!';
+    if (hour < 18) return 'Closing Strong!';
+    return 'Well Done Today!';
   };
 
   const handleToggleTaskCompletion = async (taskId: string) => {

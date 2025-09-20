@@ -8,7 +8,6 @@ import SplashScreen from 'react-native-splash-screen';
 import { AuthProvider, useAuth } from './src/context/Auth-context';
 import { FriendsProvider } from './src/context/Friends-context';
 import { ModalProvider } from './src/context/Modal-context';
-import SocketManager from './src/context/Socket-context';
 import { ThemeProvider, useTheme } from './src/context/Theme-context';
 import AuthStack from './src/navigation/Auth-stack';
 import BottomTabs from './src/navigation/BottomTabs';
@@ -33,7 +32,6 @@ const RootNavigator = () => {
     <NavigationContainer>
       {token ? (
         <FriendsProvider>
-          <SocketManager />
           <BottomTabs />
         </FriendsProvider>
       ) : (

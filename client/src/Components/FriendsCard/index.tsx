@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import Text from '../Text';
 import { Friends } from './friends.interface';
@@ -49,9 +49,9 @@ const FriendsCard = ({
         colors={theme.colors.friendsCard}
         start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 0 }}
-        style={style.gradientContainer}
-      >
-        <View style={style.content}>
+        style={StyleSheet.absoluteFill}
+      />
+      <View style={style.content}>
         <View style={style.header}>
           <View style={style.avatar}>
             <SvgXml xml={user.avatar} width={35} height={35} />
@@ -94,8 +94,7 @@ const FriendsCard = ({
             </View>
           </View>
         )}
-        </View>
-      </LinearGradient>
+      </View>
     </Pressable>
   );
 };

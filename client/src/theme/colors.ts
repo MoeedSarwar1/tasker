@@ -34,8 +34,8 @@ export const colors = {
     'rgba(40, 35, 25, 0.74)', // Rich bronze
   ],
   // Floating Button Gradient
-  floatingButtonLight: ['#BFA14A', '#F7E7CE'], // gold → champagne
-  floatingButtonDark: ['#283593', '#1A237E'], // deep blue gradient
+  floatingButtonLight: '#BFA14A', // matches your gold theme
+  floatingButtonDark: '#D4AF37', // matches your bright gold theme
 
   // Buttons
   primaryButtonLight: ['#BFA14A', '#D4AF37'], // luxury gold gradient

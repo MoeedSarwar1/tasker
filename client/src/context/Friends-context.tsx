@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import socket from '../network/Socket';
+import { io, Socket } from 'socket.io-client';
+import { useAuth } from './Auth-context';
+import { SOCKET } from '@env';
 
 interface Friend {
   id: string;
@@ -20,6 +22,7 @@ interface FriendsContextType {
   setRequests: React.Dispatch<React.SetStateAction<FriendRequest[]>>;
   friendsUpdated: number;
   notifyFriendsUpdate: () => void;
+  socket: Socket | null;
 }
 
 const FriendsContext = createContext<FriendsContextType>({
@@ -29,6 +32,7 @@ const FriendsContext = createContext<FriendsContextType>({
   setRequests: () => {},
   friendsUpdated: 0,
   notifyFriendsUpdate: () => {},
+  socket: null,
 });
 
 export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -37,12 +41,42 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({
   const [friends, setFriends] = useState<Friend[]>([]);
   const [requests, setRequests] = useState<FriendRequest[]>([]);
   const [friendsUpdated, setFriendsUpdated] = useState(0);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
+  const { user, token } = useAuth();
   const notifyFriendsUpdate = () => setFriendsUpdated(prev => prev + 1);
 
   useEffect(() => {
+    // Only connect if user is logged in
+    if (!user || !token) {
+      if (socket) {
+        socket.disconnect();
+        setSocket(null);
+      }
+      return;
+    }
+
+    // Create socket connection
+    const newSocket = io(SOCKET, {
+      transports: ['websocket'],
+      withCredentials: true,
+    });
+
+    setSocket(newSocket);
+
+    // 🔑 Register user when connected
+    newSocket.on('connect', () => {
+      const userId = user._id || user.id;
+      if (userId) {
+        newSocket.emit('register', userId);
+        console.log('✅ Connected and registered user ID:', userId);
+      } else {
+        console.log('❌ No user ID found in user object:', user);
+      }
+    });
+
     // 🔔 When a new friend is added
-    socket.on('friends:added', data => {
+    newSocket.on('friends:added', data => {
       console.log('✅ Friend added event:', data);
       const friend = data.friend;
       setFriends(prev => {
@@ -52,7 +86,7 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     // 📩 When you receive a new friend request
-    socket.on('friends:request:received', data => {
+    newSocket.on('friends:request:received', data => {
       console.log('📩 Friend request received:', data);
       const request = data.request;
       setRequests(prev => {
@@ -61,18 +95,46 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     });
 
+    // ✅ When a friend request is accepted
+    newSocket.on('friends:request:accepted', data => {
+      console.log('✅ Friend request accepted:', data);
+      setRequests(prev => prev.filter(r => r._id !== data.requestId));
+    });
+
     // ❌ When a friend is removed
-    socket.on('friends:removed', data => {
+    newSocket.on('friends:removed', data => {
       console.log('❌ Friend removed:', data);
       setFriends(prev => prev.filter(f => f.id !== data.friendId));
     });
 
+    // ❌ When a friend request is rejected
+    newSocket.on('friends:request:rejected', data => {
+      console.log('❌ Request rejected:', data);
+      setRequests(prev => prev.filter(r => r._id !== data.requestId));
+    });
+
+    // Handle connection errors
+    newSocket.on('connect_error', error => {
+      console.error('❌ Socket connection error:', error);
+    });
+
+    newSocket.on('disconnect', reason => {
+      console.log('🔌 Socket disconnected:', reason);
+    });
+
+    // Cleanup function
     return () => {
-      socket.off('friends:added');
-      socket.off('friends:request:received');
-      socket.off('friends:removed');
+      newSocket.off('connect');
+      newSocket.off('friends:added');
+      newSocket.off('friends:request:received');
+      newSocket.off('friends:request:accepted');
+      newSocket.off('friends:removed');
+      newSocket.off('friends:request:rejected');
+      newSocket.off('connect_error');
+      newSocket.off('disconnect');
+      newSocket.disconnect();
     };
-  }, []);
+  }, [user, token]); // Re-run when user or token changes
 
   return (
     <FriendsContext.Provider
@@ -83,6 +145,7 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({
         setRequests,
         friendsUpdated,
         notifyFriendsUpdate,
+        socket,
       }}
     >
       {children}

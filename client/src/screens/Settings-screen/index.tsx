@@ -43,7 +43,7 @@ const SettingsScreen = () => {
     },
     {
       id: 'privacy',
-      title: 'Privacy & Security',
+      title: 'Privacy Settings',
       icon: 'shield-outline',
       hasArrow: true,
       onPress: () => {
@@ -53,7 +53,7 @@ const SettingsScreen = () => {
     },
     {
       id: 'help',
-      title: 'Help & Support',
+      title: 'Support Center',
       icon: 'help-circle-outline',
       hasArrow: true,
       onPress: () => {
@@ -63,7 +63,7 @@ const SettingsScreen = () => {
     },
     {
       id: 'about',
-      title: 'About',
+      title: 'App Info',
       icon: 'information-outline',
       hasArrow: true,
       onPress: () => {
@@ -83,7 +83,7 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Settings" />
+      <Header title="Preferences" />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -108,7 +108,7 @@ const SettingsScreen = () => {
                     color={theme.colors.primaryIcon}
                   />
                 </View>
-                <Text style={styles.settingText}>Dark Mode</Text>
+                <Text style={styles.settingText}>Appearance</Text>
               </View>
               <ToggleButton
                 isToggled={isDark}

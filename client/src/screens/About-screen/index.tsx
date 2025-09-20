@@ -175,7 +175,7 @@ const AboutScreen = () => {
 
   return (
     <>
-      <Header title="About" showBack iconName="arrow-back" />
+      <Header title="App Info " showBack iconName="arrow-back" />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}

@@ -212,7 +212,7 @@ const PrivacySecurityScreen = () => {
 
   return (
     <>
-      <Header title="Privacy & Security" showBack iconName="arrow-back" />
+      <Header title="Privacy Controls" showBack iconName="arrow-back" />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}

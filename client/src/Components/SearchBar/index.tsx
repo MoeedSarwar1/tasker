@@ -6,11 +6,13 @@ import searchBarStyles from './styles';
 import { useTheme } from '../../context/Theme-context';
 
 const Searchbar = ({
+  placeholder,
   onSearch,
   clearTrigger,
 }: {
   onSearch?: (text: string) => void;
   clearTrigger?: any; // changes whenever you want it to reset
+  placeholder?: string;
 }) => {
   const { theme } = useTheme();
   const styles = searchBarStyles(theme);
@@ -43,7 +45,7 @@ const Searchbar = ({
   return (
     <View style={styles.input}>
       <TextInput
-        placeholder="Search"
+        placeholder={placeholder}
         style={{ flex: 1, color: theme.colors.inputTextColor }}
         placeholderTextColor={theme.colors.placeholderTextColor} // ✅ correct
         value={query}

@@ -12,10 +12,6 @@ const cardStyles = (theme: Theme) =>
       overflow: 'hidden', // only here
     },
 
-    gradientContainer: {
-      flex: 1,
-    },
-
     content: {
       flex: 1,
       padding: 16, // keep padding inside

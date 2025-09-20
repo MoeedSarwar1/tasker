@@ -12,7 +12,9 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import CustomBottomSheet from '../../Components/BottomSheet';
 import FriendsCard from '../../Components/FriendsCard';
 import Header from '../../Components/Header/Header';
+import Searchbar from '../../Components/SearchBar';
 import Text from '../../Components/Text';
+import { useFriendsContext } from '../../context/Friends-context';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import {
@@ -25,8 +27,6 @@ import {
 } from '../../network/Friends';
 import { fetchUsers } from '../../network/User';
 import friendsStyles from './styles';
-import Searchbar from '../../Components/SearchBar';
-import LinearGradient from 'react-native-linear-gradient';
 
 const FriendsScreen = () => {
   const snapPoints = useMemo(() => ['90%'], []);
@@ -35,14 +35,14 @@ const FriendsScreen = () => {
     'friends',
   );
 
-  const [friends, setFriends] = useState<any[]>([]);
   const [filteredFriends, setFilteredFriends] = useState<any[]>([]);
-  const [requests, setRequests] = useState([]);
+  const { requests, setRequests, friends, setFriends, friendsUpdated } =
+    useFriendsContext();
   const [filteredRequests, setFilteredRequests] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true); // main loader
+  const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchResetKey, setSearchResetKey] = useState(0);
@@ -56,24 +56,28 @@ const FriendsScreen = () => {
     bottomSheetRef.current?.close();
     setSearchResetKey(prev => prev + 1);
   };
+
   const handlePresentModal = () => bottomSheetRef.current?.expand();
 
-  const nothingToShow = (
-    hasData: boolean,
-    message: string = 'Nothing To Show',
-    icon: string,
-  ) => (
+  const EmptyState = ({
+    message,
+    icon,
+    description,
+  }: {
+    message: string;
+    icon: string;
+    description?: string;
+  }) => (
     <View style={styles.emptyContainer}>
-      {!hasData && (
-        <>
-          <Material name={icon} size={52} color={theme.colors.secondaryIcon} />
-          <Text style={styles.emptyTextStyle}>{message}</Text>
-        </>
+      <Material name={icon} size={48} color={theme.colors.primaryIcon} />
+      <Text style={styles.emptyTitle}>{message}</Text>
+      {description && (
+        <Text style={styles.emptyDescription}>{description}</Text>
       )}
     </View>
   );
 
-  // ✅ Load all data initially
+  // Load all data initially
   const loadAllData = async () => {
     try {
       setLoading(true);
@@ -87,24 +91,22 @@ const FriendsScreen = () => {
 
       setFriends(friendsData);
       setFilteredFriends(friendsData);
-
       setRequests(requestsData);
       setFilteredRequests(requestsData);
-
       setUsers(usersData);
-      setFilteredUsers([]); // empty until search
+      setFilteredUsers([]);
     } catch (error) {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        title: 'Something Went Wrong,',
+        title: 'Connection Error',
         description: 'Failed to load data. Check your connection and retry.',
         buttonRow: false,
         onConfirm: () => loadAllData(),
       });
     } finally {
       setRefreshing(false);
-      setLoading(false); // stop search loader
+      setLoading(false);
     }
   };
 
@@ -124,7 +126,7 @@ const FriendsScreen = () => {
       showModal({
         mode: 'error',
         iconName: 'wifi-alert',
-        title: 'Something Went Wrong,',
+        title: 'Refresh Failed',
         description: 'Could not refresh data.',
         buttonRow: false,
       });
@@ -133,10 +135,8 @@ const FriendsScreen = () => {
     }
   };
 
-  // ✅ Accept friend
   const handleAddFriend = async (requestId: string) => {
     try {
-      // Show loading modal
       showModal({
         mode: 'loading',
         title: 'Adding Friend...',
@@ -146,33 +146,29 @@ const FriendsScreen = () => {
       });
 
       const addedFriend = await acceptFriendRequest(requestId);
-
       const userName =
         addedFriend.friend.firstName + ' ' + addedFriend.friend.lastName;
-      // Update local state
+
       setFriends(prev =>
         prev.some(f => f._id === addedFriend._id)
           ? prev
-          : [...prev, addedFriend],
+          : [...prev, addedFriend.friend],
       );
       setFilteredFriends(prev =>
         prev.some(f => f._id === addedFriend._id)
           ? prev
-          : [...prev, addedFriend],
+          : [...prev, addedFriend.friend],
       );
-      setRequests(prev => prev.filter(r => r._id !== requestId));
+
       setFilteredRequests(prev => prev.filter(r => r._id !== requestId));
 
-      // Brief delay to show success state
       setTimeout(() => {
         handleHideModal();
-
-        // Show success modal after a short delay
         setTimeout(() => {
           showModal({
             mode: 'success',
-            title: 'Welcome to Your Network! 🤝',
-            description: `${userName} is now your friend and can share tasks with you`,
+            title: 'Friend Added',
+            description: `${userName} is now in your network`,
             iconName: 'account-heart-outline',
             buttonRow: false,
           });
@@ -180,7 +176,6 @@ const FriendsScreen = () => {
       }, 600);
     } catch (error: any) {
       handleHideModal();
-
       setTimeout(() => {
         showModal({
           mode: 'error',
@@ -188,7 +183,7 @@ const FriendsScreen = () => {
           title: 'Unable to Add Friend',
           description:
             error?.response?.data?.message ||
-            'Failed to accept friend request. Please check your connection and try again.',
+            'Failed to accept friend request.',
           buttonRow: false,
         });
       }, 100);
@@ -197,15 +192,16 @@ const FriendsScreen = () => {
 
   const handleRemoveFriend = async (firstName: string, lastName: string) => {
     try {
-      const removedFriend = await removeFriend(firstName, lastName);
+      const response = await removeFriend(firstName, lastName);
+      const removedFriendId = response.friend._id || response.friend.id;
 
-      setFriends(prev => prev.filter(f => f._id !== removedFriend));
-      setFilteredFriends(prev => prev.filter(f => f._id !== removedFriend));
+      setFriends(prev => prev.filter(f => f._id !== removedFriendId));
+      setFilteredFriends(prev => prev.filter(f => f._id !== removedFriendId));
 
       showModal({
         mode: 'success',
-        title: 'All Set',
-        description: `${firstName} ${lastName} Removed successfully 🎉`,
+        title: 'Friend Removed',
+        description: `${firstName} ${lastName} removed from network`,
         iconName: 'checkbox-marked-circle-outline',
         buttonRow: false,
       });
@@ -224,43 +220,32 @@ const FriendsScreen = () => {
 
   const handleRejectRequest = async (requestID: string) => {
     try {
-      // Show loading modal
       showModal({
         mode: 'loading',
-        title: 'Processing Request',
-        description: 'Please wait while we decline the friend request...',
+        title: 'Declining Request',
+        description: 'Please wait...',
         iconName: 'account-clock-outline',
       });
 
-      const data = await rejectFriendRequest(requestID);
-
-      // Hide loading modal first
+      await rejectFriendRequest(requestID);
       handleHideModal();
+      setFilteredRequests(prev => prev.filter(r => r._id !== requestID));
 
-      // Update local state
-      setRequests(data);
-      setFilteredRequests(data);
-
-      // Show success modal
       showModal({
         title: 'Request Declined',
         mode: 'success',
-        description: 'The friend request has been declined',
+        description: 'Friend request declined',
         iconName: 'account-minus-outline',
         buttonRow: false,
       });
     } catch (error: any) {
-      // Hide loading modal first
       handleHideModal();
-
-      // Show error modal
       showModal({
         mode: 'error',
         iconName: 'account-cancel-outline',
         title: 'Could Not Decline Request',
         description:
-          error?.response?.data?.message ||
-          'Failed to decline friend request. Please try again.',
+          error?.response?.data?.message || 'Failed to decline request.',
         buttonRow: false,
       });
     }
@@ -268,53 +253,41 @@ const FriendsScreen = () => {
 
   const handleFriendRequestSend = async (email: string) => {
     try {
-      // Show loading modal
       showModal({
         mode: 'loading',
         title: 'Sending Request',
-        description: 'Please wait while we send your friend request...',
+        description: 'Please wait...',
         iconName: 'account-arrow-right-outline',
         buttonRow: false,
       });
 
-      const data = await sendFriendRequest(email);
-
-      // Hide loading modal first
+      await sendFriendRequest(email);
       handleHideModal();
 
-      // Update local state
       setUsers(prev =>
         prev.map(u => (u.email === email ? { ...u, status: 'sent' } : u)),
       );
-      setRequests(data);
 
-      // Close bottom sheet
       bottomSheetRef?.current?.close();
 
-      // Show success modal
       showModal({
-        title: 'Request Sent! 📤',
-        description: 'Your friend request has been sent successfully',
+        title: 'Request Sent',
+        description: 'Friend request sent successfully',
         iconName: 'account-check-outline',
         buttonRow: false,
         mode: 'success',
       });
     } catch (error: any) {
-      // Hide loading modal first
       handleHideModal();
-
-      // Show error modal
       showModal({
         mode: 'error',
         iconName: 'account-alert-outline',
         title: 'Could Not Send Request',
         description:
-          error?.response?.data?.message ||
-          'Failed to send friend request. Please try again.',
+          error?.response?.data?.message || 'Failed to send request.',
         buttonRow: false,
       });
     } finally {
-      // Clean up any loading states
       setTimeout(() => {
         setSearchLoading(false);
       }, 300);
@@ -340,7 +313,7 @@ const FriendsScreen = () => {
       setFilteredUsers(results);
     } finally {
       setTimeout(() => {
-        setSearchLoading(false); // stop search loader
+        setSearchLoading(false);
       }, 300);
     }
   };
@@ -369,56 +342,65 @@ const FriendsScreen = () => {
   }));
 
   useEffect(() => {
+    setFilteredRequests(requests);
+  }, [requests]);
+
+  useEffect(() => {
     loadAllData();
   }, []);
 
   return (
     <>
-      <Header title="Co-workers" />
+      <Header title="Network" />
 
       <View style={styles.container}>
-        <Searchbar onSearch={handleSearch} />
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Searchbar
+            onSearch={handleSearch}
+            placeholder={
+              selectedTab === 'friends'
+                ? 'Find people in your network'
+                : 'Search requests'
+            }
+          />
+        </View>
 
-        <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Pressable onPress={() => setSelectedTab('friends')}>
+        {/* Simple Tab Selector */}
+        <View style={styles.tabContainer}>
+          <Pressable
+            style={[styles.tab, selectedTab === 'friends' && styles.activeTab]}
+            onPress={() => setSelectedTab('friends')}
+          >
             <Text
               style={[
-                styles.subtitle,
-                selectedTab === 'friends' && {
-                  fontWeight: 'bold',
-                  color: theme.colors.subtitleTextColor,
-                },
+                styles.tabText,
+                selectedTab === 'friends' && styles.activeTabText,
               ]}
             >
-              All Co-workers ({filteredFriends.length})
+              Co-workers ({filteredFriends.length})
             </Text>
           </Pressable>
 
-          <Pressable onPress={() => setSelectedTab('requests')}>
+          <Pressable
+            style={[styles.tab, selectedTab === 'requests' && styles.activeTab]}
+            onPress={() => setSelectedTab('requests')}
+          >
             <Text
               style={[
-                styles.subtitle,
-                selectedTab === 'requests' && {
-                  fontWeight: 'bold',
-                  color: theme.colors.primaryTextColor,
-                },
+                styles.tabText,
+                selectedTab === 'requests' && styles.activeTabText,
               ]}
             >
-              Requests ({requests.length || 0})
+              Requests ({requests.length})
             </Text>
           </Pressable>
         </View>
 
-        {/* Tab Content */}
-        <View style={{ flex: 1 }}>
-          {loading || refreshing ? (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
+        {/* Content */}
+        <View style={styles.contentContainer}>
+          {loading ? (
+            <View style={styles.loadingContainer}>
               <ActivityIndicator
                 size="large"
                 color={theme.colors.primaryIcon}
@@ -426,7 +408,11 @@ const FriendsScreen = () => {
             </View>
           ) : selectedTab === 'friends' ? (
             filteredFriends.length === 0 ? (
-              nothingToShow(false, 'Connect to Continue', 'person-add-alt')
+              <EmptyState
+                message="No Co-workers"
+                icon="people-outline"
+                description="Add co-workers to start collaborating"
+              />
             ) : (
               <FlatList
                 data={filteredFriends.sort((a, b) =>
@@ -435,8 +421,7 @@ const FriendsScreen = () => {
                   ),
                 )}
                 showsVerticalScrollIndicator={false}
-                style={styles.list}
-                contentContainerStyle={styles.flatlistContainer}
+                contentContainerStyle={styles.listContainer}
                 refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
@@ -455,13 +440,16 @@ const FriendsScreen = () => {
               />
             )
           ) : filteredRequests.length === 0 ? (
-            nothingToShow(false, 'No Requests Yet', 'person-outline')
+            <EmptyState
+              message="No Pending Requests"
+              icon="inbox"
+              description="Friend requests will appear here"
+            />
           ) : (
             <FlatList
-              data={requests}
+              data={filteredRequests}
               showsVerticalScrollIndicator={false}
-              style={styles.list}
-              contentContainerStyle={styles.flatlistContainer}
+              contentContainerStyle={styles.listContainer}
               keyExtractor={(item, index) => item._id || index.toString()}
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -478,21 +466,11 @@ const FriendsScreen = () => {
             />
           )}
         </View>
-        <LinearGradient
-          colors={theme.colors.floatingButton}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.logoutContainer}
-        >
-          <Pressable
-            onPress={() => {
-              handlePresentModal();
-            }}
-            style={styles.content}
-          >
-            <Material name="add" size={28} color="white" />
-          </Pressable>
-        </LinearGradient>
+
+        {/* Simple Add Button */}
+        <Pressable style={styles.addButton} onPress={handlePresentModal}>
+          <Material name="add" size={24} color={theme.colors.primaryIcon} />
+        </Pressable>
       </View>
 
       {/* Bottom Sheet */}
@@ -502,51 +480,53 @@ const FriendsScreen = () => {
         snapPoints={snapPoints}
         title="Add Co-workers"
       >
-        <View style={styles.top}>
+        <View style={styles.bottomSheetContent}>
           <Searchbar
             onSearch={handleSearchUsers}
             clearTrigger={searchResetKey}
+            placeholder="Search by name or email"
           />
 
           {searchLoading ? (
-            <ActivityIndicator
-              size="large"
-              color={theme.colors.primaryIcon}
-              style={{ marginTop: 20 }}
-            />
-          ) : searchText.trim() === '' ? (
-            // Initial state before searching
-            nothingToShow(false, 'Connect to Continue', 'person-add-alt')
-          ) : filteredUsers.length === 0 ? (
-            // No results found
-            nothingToShow(false, 'No users found', 'no-accounts')
-          ) : (
-            <>
-              <Text style={styles.subtitle}>
-                Search Results ({usersWithStatus.length})
-              </Text>
-              <FlatList
-                data={usersWithStatus.sort((a, b) =>
-                  (a.firstName + ' ' + a.lastName).localeCompare(
-                    b.firstName + ' ' + b.lastName,
-                  ),
-                )}
-                showsVerticalScrollIndicator={false}
-                style={styles.list}
-                contentContainerStyle={styles.flatlistContainer}
-                keyExtractor={(item, index) => item._id || index.toString()}
-                renderItem={({ item }) => (
-                  <FriendsCard
-                    item={item}
-                    onPrimaryPress={() =>
-                      item.isFriend
-                        ? handleRemoveFriend(item.firstName, item.lastName)
-                        : handleFriendRequestSend(item.email)
-                    }
-                  />
-                )}
+            <View style={styles.searchLoadingContainer}>
+              <ActivityIndicator
+                size="large"
+                color={theme.colors.primaryIcon}
               />
-            </>
+            </View>
+          ) : searchText.trim() === '' ? (
+            <EmptyState
+              message="Search for Co-workers"
+              icon="search"
+              description="Enter name or email to find people"
+            />
+          ) : filteredUsers.length === 0 ? (
+            <EmptyState
+              message="No Results"
+              icon="search-off"
+              description="No users found matching your search"
+            />
+          ) : (
+            <FlatList
+              data={usersWithStatus.sort((a, b) =>
+                (a.firstName + ' ' + a.lastName).localeCompare(
+                  b.firstName + ' ' + b.lastName,
+                ),
+              )}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.searchListContainer}
+              keyExtractor={(item, index) => item._id || index.toString()}
+              renderItem={({ item }) => (
+                <FriendsCard
+                  item={item}
+                  onPrimaryPress={() =>
+                    item.isFriend
+                      ? handleRemoveFriend(item.firstName, item.lastName)
+                      : handleFriendRequestSend(item.email)
+                  }
+                />
+              )}
+            />
           )}
         </View>
       </CustomBottomSheet>

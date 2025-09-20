@@ -1,13 +1,13 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Platform, ScrollView, Text, View } from 'react-native';
+import React from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { scale } from 'react-native-size-matters';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../Components/Header/Header';
 import { useTheme } from '../../context/Theme-context';
-import React, { useEffect, useLayoutEffect } from 'react';
-import { taskDetailsStyles } from './styles';
 import { getTaskStatusText } from '../../utils/dateFormat';
-import { scale } from 'react-native-size-matters';
+import { taskDetailsStyles } from './styles';
 
 export const TaskDetails = () => {
   const route = useRoute();
