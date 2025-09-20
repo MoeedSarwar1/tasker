@@ -40,7 +40,7 @@ exports.sendFriendRequest = async (req, res) => {
     await request.save();
 
     // 🔔 Notify receiver in real-time
-    const receiverSocket = onlineUsers.get(friend.id.toString());
+    const receiverSocket = onlineUsers.get(friend._id.toString()); // Use _id instead of id
     if (receiverSocket) {
       getIo()
         .to(receiverSocket)
@@ -48,7 +48,7 @@ exports.sendFriendRequest = async (req, res) => {
           request: {
             _id: request._id,
             sender: {
-              id: user._id,
+              _id: user._id, // Use _id instead of id
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
@@ -136,15 +136,15 @@ exports.acceptFriendRequest = async (req, res) => {
       avatar: sender.avatar,
     };
 
-    const senderSocket = onlineUsers.get(sender.id.toString());
-    const receiverSocket = onlineUsers.get(receiver.id.toString());
+    const senderSocket = onlineUsers.get(sender._id.toString());
+    const receiverSocket = onlineUsers.get(receiver._id.toString());
     if (senderSocket) {
       getIo()
         .to(senderSocket)
         .emit("friends:added", {
-          friendId: receiver.id,
+          friendId: receiver._id, // Use _id
           friend: {
-            id: receiver.id,
+            _id: receiver._id, // Use _id instead of id
             firstName: receiver.firstName,
             lastName: receiver.lastName,
             email: receiver.email,
@@ -156,9 +156,9 @@ exports.acceptFriendRequest = async (req, res) => {
       getIo()
         .to(receiverSocket)
         .emit("friends:added", {
-          friendId: sender.id,
+          friendId: sender._id, // Use _id
           friend: {
-            id: sender.id,
+            _id: sender._id, // Use _id instead of id
             firstName: sender.firstName,
             lastName: sender.lastName,
             email: sender.email,
@@ -223,13 +223,13 @@ exports.removeFriend = async (req, res) => {
 
     // 🔔 Notify both users in real-time
     const userSocket = onlineUsers.get(userId.toString());
-    const friendSocket = onlineUsers.get(friend.id.toString());
+    const friendSocket = onlineUsers.get(friend._id.toString()); // Use _id
 
     if (userSocket) {
-      getIo().to(userSocket).emit("friends:removed", { friendId: friend.id });
+      getIo().to(userSocket).emit("friends:removed", { friendId: friend._id }); // Use _id
     }
     if (friendSocket) {
-      getIo().to(friendSocket).emit("friends:removed", { friendId: user.id });
+      getIo().to(friendSocket).emit("friends:removed", { friendId: userId });
     }
 
     res.status(200).json({ message: "Friend Removed", friend });
