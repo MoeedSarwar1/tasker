@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAuth } from '../../context/Auth-context';
@@ -42,8 +42,8 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
         colors={theme.colors.taskCard}
         start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 0 }}
-        style={style.gradientContainer}
-      >
+        style={StyleSheet.absoluteFill}
+      />
         <View style={style.content}>
           <View style={style.header}>
             <Pressable
@@ -116,7 +116,6 @@ const TaskCard = ({ item, onChange, onMorePress }: Task) => {
             </View>
           </View>
         </View>
-      </LinearGradient>
     </Pressable>
   );
 };
