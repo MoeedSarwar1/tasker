@@ -52,6 +52,7 @@ exports.sendFriendRequest = async (req, res) => {
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
+              avatar: user.avatar,
             },
           },
         });
@@ -71,7 +72,7 @@ exports.getReceivedRequests = async (req, res) => {
       receiver: userId,
       status: "pending",
     })
-      .populate("sender", "firstName lastName email") // get sender details
+      .populate("sender", "firstName lastName email avatar") // get sender details
       .sort({ createdAt: -1 });
 
     res.status(200).json(requests);
@@ -132,6 +133,7 @@ exports.acceptFriendRequest = async (req, res) => {
       firstName: sender.firstName,
       lastName: sender.lastName,
       email: sender.email,
+      avatar: sender.avatar,
     };
 
     const senderSocket = onlineUsers.get(sender.id.toString());
@@ -146,6 +148,7 @@ exports.acceptFriendRequest = async (req, res) => {
             firstName: receiver.firstName,
             lastName: receiver.lastName,
             email: receiver.email,
+            avatar: receiver.avatar,
           },
         });
     }
@@ -159,6 +162,7 @@ exports.acceptFriendRequest = async (req, res) => {
             firstName: sender.firstName,
             lastName: sender.lastName,
             email: sender.email,
+            avatar: sender.avatar,
           },
         });
     }
