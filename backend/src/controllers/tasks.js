@@ -1,6 +1,5 @@
 const Task = require("../models/taskSchema");
 const mongoose = require("mongoose");
-const { getIo, onlineUsers } = require("./socket");
 
 const fetchAllTasks = async (req, res) => {
   try {
@@ -61,18 +60,6 @@ const addTask = async (req, res) => {
       assignedTo,
     });
     await newTask.save();
-
-    // Socket.io event
-    const io = getIo();
-    if (assignedTo && assignedTo.length > 0) {
-      assignedTo.forEach((userId) => {
-        const socketId = onlineUsers.get(userId);
-        if (socketId) {
-          io.to(socketId).emit("task:new", newTask);
-        }
-      });
-    }
-
     res.status(201).json(newTask);
   } catch (error) {
     console.error("Error adding task:", error);
@@ -101,16 +88,6 @@ const deleteTask = async (req, res) => {
       });
     }
 
-    // Socket.io event
-    const io = getIo();
-    const recipients = [task.user.toString(), ...task.assignedTo.map(id => id.toString())];
-    recipients.forEach((recipientId) => {
-        const socketId = onlineUsers.get(recipientId);
-        if (socketId) {
-            io.to(socketId).emit("task:delete", taskID);
-        }
-    });
-
     res.status(204).send();
   } catch (error) {
     console.error("Error deleting task:", error);
@@ -135,17 +112,6 @@ const updateTask = async (req, res) => {
         .status(404)
         .json({ error: "Task not found or not authorized" });
     }
-
-    // Socket.io event
-    const io = getIo();
-    const recipients = [updatedTask.user.toString(), ...updatedTask.assignedTo.map(id => id.toString())];
-    recipients.forEach((recipientId) => {
-        const socketId = onlineUsers.get(recipientId);
-        if (socketId) {
-            io.to(socketId).emit("task:update", updatedTask);
-        }
-    });
-
 
     res.json(updatedTask);
   } catch (error) {
