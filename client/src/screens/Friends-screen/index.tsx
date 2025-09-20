@@ -149,17 +149,22 @@ const FriendsScreen = () => {
       const userName =
         addedFriend.friend.firstName + ' ' + addedFriend.friend.lastName;
 
+      // Update friends list in context
       setFriends(prev =>
-        prev.some(f => f._id === addedFriend._id)
-          ? prev
-          : [...prev, addedFriend.friend],
-      );
-      setFilteredFriends(prev =>
-        prev.some(f => f._id === addedFriend._id)
+        prev.some(f => f._id === addedFriend.friend._id)
           ? prev
           : [...prev, addedFriend.friend],
       );
 
+      // Update filtered friends list
+      setFilteredFriends(prev =>
+        prev.some(f => f._id === addedFriend.friend._id)
+          ? prev
+          : [...prev, addedFriend.friend],
+      );
+
+      // Remove from both requests lists (context and local)
+      setRequests(prev => prev.filter(r => r._id !== requestId));
       setFilteredRequests(prev => prev.filter(r => r._id !== requestId));
 
       setTimeout(() => {
@@ -195,6 +200,7 @@ const FriendsScreen = () => {
       const response = await removeFriend(firstName, lastName);
       const removedFriendId = response.friend._id || response.friend.id;
 
+      // Update both friends lists (context and local)
       setFriends(prev => prev.filter(f => f._id !== removedFriendId));
       setFilteredFriends(prev => prev.filter(f => f._id !== removedFriendId));
 
@@ -228,8 +234,12 @@ const FriendsScreen = () => {
       });
 
       await rejectFriendRequest(requestID);
-      handleHideModal();
+
+      // Remove from both requests lists (context and local)
+      setRequests(prev => prev.filter(r => r._id !== requestID));
       setFilteredRequests(prev => prev.filter(r => r._id !== requestID));
+
+      handleHideModal();
 
       showModal({
         title: 'Request Declined',
@@ -329,7 +339,8 @@ const FriendsScreen = () => {
       f => f.firstName.includes(text) || f.lastName.includes(text),
     );
     const requestResults = requests.filter(
-      r => r.firstName.includes(text) || r.lastName.includes(text),
+      r =>
+        r.sender.firstName.includes(text) || r.sender.lastName.includes(text),
     );
 
     setFilteredFriends(friendResults);
@@ -341,9 +352,15 @@ const FriendsScreen = () => {
     isFriend: friends.some(f => f._id === u._id),
   }));
 
+  // Sync filtered requests when context requests change
   useEffect(() => {
     setFilteredRequests(requests);
   }, [requests]);
+
+  // Sync filtered friends when context friends change
+  useEffect(() => {
+    setFilteredFriends(friends);
+  }, [friends]);
 
   useEffect(() => {
     loadAllData();
@@ -458,7 +475,7 @@ const FriendsScreen = () => {
                 <FriendsCard
                   title="Accept"
                   buttonRow
-                  item={{ ...item, isFriend: false }}
+                  item={{ ...item.sender, isFriend: false }}
                   onPrimaryPress={() => handleAddFriend(item._id)}
                   onSecondaryPress={() => handleRejectRequest(item._id)}
                 />

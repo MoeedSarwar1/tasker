@@ -33,9 +33,9 @@ export const colors = {
     'rgba(30, 28, 25, 0.88)', // Deep onyx
     'rgba(40, 35, 25, 0.74)', // Rich bronze
   ],
-  // Floating Button Gradient
-  floatingButtonLight: '#BFA14A', // matches your gold theme
-  floatingButtonDark: '#D4AF37', // matches your bright gold theme
+  // Floating Button Gradient - Updated colors
+  floatingButtonLight: '#E8B84A', // warmer golden amber
+  floatingButtonDark: '#F4D03F', // brighter luminous gold
 
   // Buttons
   primaryButtonLight: ['#BFA14A', '#D4AF37'], // luxury gold gradient

@@ -10,12 +10,14 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Material from 'react-native-vector-icons/MaterialIcons';
 import AddTask from '../../Components/AddTask/AddTask';
 import CustomBottomSheet from '../../Components/BottomSheet';
 import Header from '../../Components/Header/Header';
 import { Task } from '../../Components/TaskCard/task.interface';
 import TaskCard from '../../Components/TaskCard/TaskCard';
 import Text from '../../Components/Text';
+import { useFriendsContext } from '../../context/Friends-context';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import { fetchFriends, getFriendTasks } from '../../network/Friends';
@@ -27,11 +29,11 @@ import {
   updateTaskCompletion,
 } from '../../network/Tasks';
 import homeStles from './styles';
-import { useFriendsContext } from '../../context/Friends-context';
 
 const HomeScreen = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+
   const [tasks, setTasks] = useState([]);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -46,10 +48,30 @@ const HomeScreen = () => {
   const styles = homeStles(insets, theme);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { friendsUpdated } = useFriendsContext();
 
   const { showModal } = useModal();
+
+  // Empty State Component - similar to FriendsScreen
+  const EmptyState = ({
+    message,
+    icon,
+    description,
+  }: {
+    message: string;
+    icon: string;
+    description?: string;
+  }) => (
+    <View style={styles.emptyContainer}>
+      <Material name={icon} size={64} color={theme.colors.secondaryIcon} />
+      <Text style={styles.emptyTitle}>{message}</Text>
+      {description && (
+        <Text style={styles.emptyDescription}>{description}</Text>
+      )}
+    </View>
+  );
+
   const openMore = (task: Task) => {
     setSelectedTask(task);
     moreRef.current?.expand();
@@ -64,27 +86,21 @@ const HomeScreen = () => {
   const handlePresentModal = () => bottomSheetRef.current?.expand();
 
   useEffect(() => {
-    if (!loading) {
-      loadTasks(); // reload tasks when a friend is added/removed
-    }
+    loadTasks(); // reload tasks when a friend is added/removed
   }, [friendsUpdated]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); // 2 seconds
+  // Remove the old timer-based loading useEffect
 
-    return () => clearTimeout(timer);
-  }, []);
   // Close BottomSheet
   const handleHideModal = () => {
     setEditMode(false);
     bottomSheetRef.current?.close();
   };
+
   // Fetch tasks from backend
   const loadTasks = async () => {
     try {
-      setRefreshing(true);
+      setLoading(true); // Show loader when fetching starts
 
       const myTasks = await fetchTasks(); // logged-in user
       const friends = await fetchFriends();
@@ -101,12 +117,12 @@ const HomeScreen = () => {
         mode: 'error',
         iconName: 'wifi-alert',
         title: 'Something Went Wrong,',
-        description: 'Tasks didn’t load. Check your connection and retry.',
+        description: "Tasks didn't load. Check your connection and retry.",
         buttonRow: false,
         onConfirm: () => onRefresh(),
       });
     } finally {
-      setRefreshing(false);
+      setLoading(false); // Hide loader when fetching is complete
     }
   };
 
@@ -123,6 +139,7 @@ const HomeScreen = () => {
       hideListener.remove();
     };
   }, []);
+
   // Add new task
   const handleAddTask = async (task: {
     title: string;
@@ -258,7 +275,9 @@ const HomeScreen = () => {
 
   // Pull-to-refresh
   const onRefresh = async () => {
+    setRefreshing(true);
     await loadTasks();
+    setRefreshing(false);
   };
 
   // Fetch tasks on mount
@@ -310,6 +329,7 @@ const HomeScreen = () => {
       );
     }
   };
+
   const filteredTasks = tasks.filter(task => {
     if (filter === 'pending') return !task.completed;
     if (filter === 'completed') return task.completed;
@@ -322,66 +342,82 @@ const HomeScreen = () => {
       : filter === 'pending'
       ? `${filteredTasks.length} pending tasks`
       : `${filteredTasks.length} completed tasks`;
+
+  // Get appropriate empty state message and icon based on filter
+  const getEmptyStateProps = () => {
+    switch (filter) {
+      case 'pending':
+        return {
+          message: 'No Pending Tasks',
+          icon: 'pending-actions',
+          description: 'All caught up! No pending tasks to complete.',
+        };
+      case 'completed':
+        return {
+          message: 'No Completed Tasks',
+          icon: 'assignment-turned-in',
+          description: 'Completed tasks will appear here once you finish them.',
+        };
+      default:
+        return {
+          message: 'No Tasks Yet',
+          icon: 'assignment',
+          description:
+            'Create your first task to get started with productivity.',
+        };
+    }
+  };
+
   return (
     <>
+      {/* Header is always visible */}
+      <Header
+        title={getGreeting()}
+        showChips
+        showAdd
+        subtitle={subtitle}
+        onPressAdd={handlePresentModal}
+        onFilterChange={setFilter}
+      />
+      
+      {/* Only hide the content, not the header */}
       {loading ? (
-        <View
-          style={[
-            styles.container,
-            { justifyContent: 'center', alignItems: 'center' },
-          ]}
-        >
+        <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primaryIcon} />
+          <Text style={styles.loadingText}>Loading your tasks...</Text>
         </View>
       ) : (
-        <>
-          <Header
-            title={getGreeting()}
-            showChips
-            showAdd
-            subtitle={subtitle}
-            onPressAdd={handlePresentModal}
-            onFilterChange={setFilter} // ✅ update filter state when chip is tapped
-          />
-          <View style={styles.container}>
-            {filteredTasks.length === 0 ? (
-              <View style={styles.emptyContainer}>
-                <Icon
-                  name="notebook-edit-outline"
-                  size={64}
-                  color={theme.colors.secondaryIcon}
+        <View style={styles.container}>
+          {filteredTasks.length === 0 ? (
+            <EmptyState {...getEmptyStateProps()} />
+          ) : (
+            <FlatList
+              data={filteredTasks}
+              showsVerticalScrollIndicator={false}
+              style={styles.list}
+              contentContainerStyle={styles.flatlistContainer}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
                 />
-
-                <Text style={styles.emptyTextStyle}>You’re clear for now</Text>
-              </View>
-            ) : (
-              <FlatList
-                data={filteredTasks} // ✅ only filtered tasks shown
-                showsVerticalScrollIndicator={false}
-                style={styles.list}
-                contentContainerStyle={styles.flatlistContainer}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                keyExtractor={(item, index) => item._id || index.toString()}
-                renderItem={({ item }) => (
-                  <TaskCard
-                    item={item}
-                    onChange={() => handleToggleTaskCompletion(item._id)}
-                    onMorePress={() => {
-                      setSelectedTask(item); // save which task we want to act on
-                      openMore(item); // open the "More" bottom sheet
-                    }}
-                  />
-                )}
-              />
-            )}
-          </View>
-        </>
+              }
+              keyExtractor={(item, index) => item._id || index.toString()}
+              renderItem={({ item }) => (
+                <TaskCard
+                  item={item}
+                  onChange={() => handleToggleTaskCompletion(item._id)}
+                  onMorePress={() => {
+                    setSelectedTask(item);
+                    openMore(item);
+                  }}
+                />
+              )}
+            />
+          )}
+        </View>
       )}
+
       <CustomBottomSheet
         ref={bottomSheetRef}
         onClose={handleHideModal}
@@ -407,7 +443,7 @@ const HomeScreen = () => {
                   title: 'Are You Sure?',
                   iconColor: '#DC3545',
                   description:
-                    'This action can’t be undone. Do you want to proceed?',
+                    "This action can't be undone. Do you want to proceed?",
                   iconName: 'delete-outline',
                   onCancel: () => openMore(),
                   onConfirm: () => {
@@ -442,11 +478,11 @@ const HomeScreen = () => {
           </View>
         ) : (
           <AddTask
-            mode="edit" // ✅ tell AddTask this is editing
-            initialTask={selectedTask} // ✅ pass the task directly
+            mode="edit"
+            initialTask={selectedTask}
             onSubmit={updatedTask => {
               if (selectedTask?._id) {
-                handleUpdateTask(selectedTask._id, updatedTask); // ✅ no `.item`
+                handleUpdateTask(selectedTask._id, updatedTask);
               }
               closeMore();
             }}
