@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "tasuku",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -34,7 +34,7 @@
     "react-native-vector-icons": "^10.3.0",
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-native-worklets": "^0.4.2",
-    "socket.io-client": "^4.8.1"
+    "socket.io-tasuku": "^4.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

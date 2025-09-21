@@ -1,4 +1,4 @@
-package com.client
+package com.tasuku.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -20,7 +20,7 @@ class MainActivity : ReactActivity() {
   super.onCreate(savedInstanceState)
 }
 
-  override fun getMainComponentName(): String = "client"
+  override fun getMainComponentName(): String = "Tasuku"
 
 
   /**
