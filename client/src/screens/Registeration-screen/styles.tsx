@@ -51,4 +51,8 @@ export const registerationStyles = (theme: Theme) =>
       alignItems: 'center',
       marginTop: verticalScale(theme.spacing.lg),
     },
+    button: {
+      borderRadius: scale(theme.borderRadius.xl),
+      paddingVertical: verticalScale(12),
+    },
   });

@@ -51,6 +51,10 @@ const loginStyles = (theme: Theme) =>
       color: theme.colors.primaryButtonText,
       ...typography.buttonLG,
     },
+    button: {
+      borderRadius: scale(theme.borderRadius.xl),
+      paddingVertical: verticalScale(12),
+    },
   });
 
 export default loginStyles;

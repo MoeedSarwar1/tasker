@@ -197,9 +197,7 @@ const RegisterScreen = () => {
             buttonStyle={{
               padding: 8,
               borderRadius: 20,
-              backgroundColor: isDark
-                ? 'rgba(255,255,255,0.1)'
-                : 'rgba(0,0,0,0.05)',
+      backgroundColor: theme.colors.cardBackground,
             }}
           />
         </View>
@@ -292,7 +290,7 @@ const RegisterScreen = () => {
           textStyle={styles.buttonText}
           onPress={handleRegister}
           disabled={loading}
-          style={loading ? { opacity: 0.6 } : {}}
+          style={[styles.button, loading ? { opacity: 0.6 } : {}]}
         />
 
         {/* Link to Login */}

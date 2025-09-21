@@ -191,6 +191,7 @@ const LoginScreen = () => {
           title={loading ? 'Signing in...' : 'Sign In'}
           textStyle={styles.buttonText}
           onPress={handleLogin}
+          style={styles.button}
         />
 
         <View style={styles.linkText}>
