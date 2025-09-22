@@ -1,10 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
 import AboutScreen from '../screens/About-screen';
 import FriendsScreen from '../screens/Friends-screen';
 import HomeScreen from '../screens/Home-screen';
 import PrivacySecurityScreen from '../screens/Privacy-screen';
 import SettingsScreen from '../screens/Settings-screen';
+import SupportCenterScreen from '../screens/SupportCenter/SupportCenter';
 import { TaskDetails } from '../screens/Task-details';
 import { NavigationRoutes } from './enums';
 
@@ -15,6 +15,7 @@ export type RootStackParamList = {
   [NavigationRoutes.ABOUT]: undefined; // no params for Home
   [NavigationRoutes.PRIVACY]: undefined; // no params for Homh
   [NavigationRoutes.TASKS]: undefined; // no params for Homh
+  [NavigationRoutes.SUPPORT]: undefined; // no params for Homh
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -46,6 +47,10 @@ const SettingsStack: React.FC = () => {
       <Stack.Screen
         name={NavigationRoutes.PRIVACY}
         component={PrivacySecurityScreen}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.SUPPORT}
+        component={SupportCenterScreen}
       />
     </Stack.Navigator>
   );

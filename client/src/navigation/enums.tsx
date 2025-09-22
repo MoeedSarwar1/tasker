@@ -6,8 +6,9 @@ export enum NavigationRoutes {
   SETTINGS = 'Settings Screen',
   VERIFICATION = 'Verification Screen',
   PRIVACY = 'Privacy Screen',
-  TASKS ='Tasks Screen',
+  TASKS = 'Tasks Screen',
   ABOUT = 'About Screen',
+  SUPPORT = 'Support Screen',
 }
 
 export enum tabNames {

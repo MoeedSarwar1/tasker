@@ -58,7 +58,7 @@ const SettingsScreen = () => {
       hasArrow: true,
       onPress: () => {
         // Navigate to help
-        console.log('Navigate to help');
+        navigation.navigate(NavigationRoutes.SUPPORT);
       },
     },
     {

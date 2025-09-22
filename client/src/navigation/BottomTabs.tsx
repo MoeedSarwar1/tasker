@@ -1,14 +1,13 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useCallback, useEffect, useState } from 'react';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import React from 'react';
 import { Platform, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useFriendsContext } from '../context/Friends-context';
 import { useTheme } from '../context/Theme-context';
 import { NavigationRoutes, tabNames } from './enums';
 import { FriendsStack, HomeStack, SettingsStack } from './Home-stack';
-import { allRequests } from '../network/Friends';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { useFriendsContext } from '../context/Friends-context';
 
 const BottomTabs = () => {
   const Tabs = createBottomTabNavigator();
@@ -24,6 +23,7 @@ const BottomTabs = () => {
       NavigationRoutes.TASKS,
       NavigationRoutes.PRIVACY,
       NavigationRoutes.ABOUT,
+      NavigationRoutes.SUPPORT,
       // Add other screens that should hide the tab bar
     ];
     return !hiddenScreens.includes(routeName);

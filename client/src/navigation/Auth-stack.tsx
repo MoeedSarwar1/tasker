@@ -6,9 +6,10 @@ import { NavigationRoutes } from './enums';
 import EmailVerificationScreen from '../screens/Verification-screen';
 
 export type RootStackParamList = {
+  [NavigationRoutes.SPLASH]: undefined;
   [NavigationRoutes.LOGIN]: undefined; // no params for Home
   [NavigationRoutes.REGISTER]: undefined; // no params for Home
-  [NavigationRoutes.VERIFICATION]:undefined;
+  [NavigationRoutes.VERIFICATION]: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
