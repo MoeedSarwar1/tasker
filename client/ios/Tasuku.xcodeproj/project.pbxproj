@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		015550692D0944069D39C307 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9D335F0781D45E0A588EDFC /* Poppins-Medium.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-Tasuku.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Tasuku.a */; };
+		11B9E07A2E8205D10096688D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11B9E0792E8205D10096688D /* Launch Screen.storyboard */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		318E9EFCFA794C108E2F3A01 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AF0FB800C479402589C5D898 /* Poppins-SemiBold.ttf */; };
 		4982E84BD5CA4BEEB34547B0 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0BF473B54934D789211D6C9 /* Poppins-Italic.ttf */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		07F06F4696974B24BE7AD4EA /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		11B9E0792E8205D10096688D /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Tasuku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tasuku.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Tasuku/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tasuku/Info.plist; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				11B9E0792E8205D10096688D /* Launch Screen.storyboard */,
 			);
 			name = Tasuku;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				83552B8DD2A24E568BA34E52 /* Poppins-BlackItalic.ttf in Resources */,
 				68D603BD86EA4F5D81B3BC62 /* Poppins-Bold.ttf in Resources */,
 				6081719852714DA1A70CAA96 /* Poppins-BoldItalic.ttf in Resources */,
+				11B9E07A2E8205D10096688D /* Launch Screen.storyboard in Resources */,
 				C6A7A6C8127E418A84F3840E /* Poppins-ExtraBold.ttf in Resources */,
 				8318BB711A294115A0C7D097 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				E3E6B29C077A4A1DAB30ED7D /* Poppins-ExtraLight.ttf in Resources */,
@@ -267,13 +271,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Tasuku/Pods-Tasuku-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Tasuku/Pods-Tasuku-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -310,13 +310,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Tasuku/Pods-Tasuku-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Tasuku/Pods-Tasuku-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
