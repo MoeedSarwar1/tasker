@@ -16,17 +16,22 @@ const BottomTabs = () => {
   const { requests } = useFriendsContext();
 
   const getTabBarVisibility = route => {
+    // Grab the nested route name
     const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 
-    // Add the actual screen names that should hide the tab bar
+    // Screens where you want to HIDE the tab bar
     const hiddenScreens = [
       NavigationRoutes.TASKS,
       NavigationRoutes.PRIVACY,
       NavigationRoutes.ABOUT,
       NavigationRoutes.SUPPORT,
-      // Add other screens that should hide the tab bar
     ];
-    return !hiddenScreens.includes(routeName);
+
+    if (hiddenScreens.includes(routeName)) {
+      return false;
+    }
+
+    return true;
   };
 
   // Create the common tab bar style
