@@ -4,6 +4,7 @@ import { useTheme } from '../../context/Theme-context';
 import { useModal } from '../../context/Modal-context';
 import Button from '../Button';
 import { contactStyles } from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ContactForm = () => {
   const { theme } = useTheme();
@@ -12,7 +13,8 @@ const ContactForm = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const styles = contactStyles(theme);
+  const insets = useSafeAreaInsets();
+  const styles = contactStyles(theme, insets);
 
   const handleSubmit = async () => {
     // Validate form

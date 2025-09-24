@@ -111,6 +111,7 @@ const PrivacySecurityScreen = () => {
             iconName: 'check-circle',
             description: 'All local data has been removed successfully.',
           });
+          await logout();
         } catch (error) {
           showModal({
             mode: 'error',

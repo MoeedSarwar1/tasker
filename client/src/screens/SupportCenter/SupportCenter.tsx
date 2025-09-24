@@ -8,14 +8,12 @@ import { supportStyles } from './styles';
 
 const SupportCenterScreen = () => {
   const { theme } = useTheme();
-  const styles = supportStyles(theme)
+  const styles = supportStyles(theme);
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
+    <>
       <Header showBack iconName="arrow-back" title="Support Center" />
-      <ScrollView style={styles.content}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
         <Text style={[styles.title, { color: theme.colors.headerTextColor }]}>
           Frequently Asked Questions
         </Text>
@@ -56,7 +54,7 @@ const SupportCenterScreen = () => {
         </Text>
         <ContactForm />
       </ScrollView>
-    </View>
+    </>
   );
 };
 

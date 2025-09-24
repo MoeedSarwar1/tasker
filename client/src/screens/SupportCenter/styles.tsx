@@ -8,6 +8,7 @@ export const supportStyles = (theme: Theme) =>
       flex: 1,
     },
     content: {
+      backgroundColor: theme.colors.background,
       padding: 20,
     },
     title: {

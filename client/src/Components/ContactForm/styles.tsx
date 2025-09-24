@@ -3,10 +3,11 @@ import { scale, moderateScale, verticalScale } from 'react-native-size-matters';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
 
-export const contactStyles = (theme: Theme) =>
+export const contactStyles = (theme: Theme, insets) =>
   StyleSheet.create({
     container: {
       marginTop: 20,
+      marginBottom: insets.bottom + 20,
     },
     messageInput: {
       height: 150,
