@@ -338,6 +338,7 @@ const RegisterScreen = () => {
         </View>
       </KeyboardAvoidingView>
       <CustomBottomSheet
+        snapPoints={['90%']}
         ref={termsBottomSheet}
         title="Terms of Service"
         onClose={closeTermsOfService}

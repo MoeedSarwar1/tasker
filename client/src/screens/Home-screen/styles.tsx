@@ -6,12 +6,11 @@ import { typography } from '../../theme/typography';
 const homeStles = (insets, theme: Theme) =>
   StyleSheet.create({
     childrenWrapperStyle: {
-      borderRadius: theme.borderRadius.xl,
-      padding: scale(theme.spacing.md),
+      borderRadius: theme.borderRadius.md,
+      paddingVertical: scale(theme.spacing.md),
+      paddingHorizontal: scale(theme.spacing.sm),
       backgroundColor: theme.colors.primaryButtonSolid,
-      flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
     },
     parentView: {
       paddingBottom: insets.bottom,
@@ -20,19 +19,18 @@ const homeStles = (insets, theme: Theme) =>
     },
     editColor: {
       backgroundColor: theme.colors.secondaryButtonBackground,
-      borderRadius: theme.borderRadius.xl,
-      padding: scale(theme.spacing.md),
-      flexDirection: 'row',
+      borderRadius: theme.borderRadius.md,
+      paddingVertical: scale(theme.spacing.md),
+      paddingHorizontal: scale(theme.spacing.sm),
       alignItems: 'center',
-      justifyContent: 'space-between',
     },
     modalText: {
       color: theme.colors.secondaryButtonText,
-      ...typography.titleXL,
+      ...typography.titleLG,
     },
     text: {
       color: theme.colors.primaryButtonText,
-      ...typography.titleXL,
+      ...typography.titleLG,
     },
     flatlistContainer: {
       gap: verticalScale(theme.spacing.md),
@@ -50,7 +48,7 @@ const homeStles = (insets, theme: Theme) =>
       paddingHorizontal: scale(theme.spacing.xl),
     },
     emptyTitle: {
-      color: theme.colors.primaryTextColor,
+      color: theme.colors.headerTextColor,
       ...typography.titleXL,
       textAlign: 'center',
       marginTop: scale(theme.spacing.sm),

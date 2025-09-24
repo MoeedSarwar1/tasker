@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   FlatList,
   Keyboard,
+  Platform,
   Pressable,
   RefreshControl,
   View,
@@ -41,10 +42,13 @@ const HomeScreen = () => {
   const moreRef = React.useRef<BottomSheet>(null);
   const [filter, setFilter] = useState('all'); // all | pending | completed
   const snapPoints = useMemo(
-    () => (isKeyboardVisible ? ['65%'] : ['55%']),
+    () => (isKeyboardVisible ? ['90%'] : ['90%']),
     [isKeyboardVisible],
   );
-  const moreSnapPoints = useMemo(() => ['25%'], []);
+  const moreSnapPoints = useMemo(
+    () => (Platform.OS === 'ios' ? ['35%'] : ['50%']),
+    [],
+  );
   const styles = homeStles(insets, theme);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -453,11 +457,6 @@ const HomeScreen = () => {
               style={styles.childrenWrapperStyle}
             >
               <Text style={styles.text}>Remove</Text>
-              <Icon
-                name="delete-outline"
-                size={20}
-                color={theme.colors.secondaryButtonText}
-              />
             </Pressable>
 
             <Pressable
@@ -465,13 +464,6 @@ const HomeScreen = () => {
               onPress={() => setEditMode(true)}
             >
               <Text style={styles.modalText}>Update</Text>
-              <Pressable hitSlop={10}>
-                <Icon
-                  name="square-edit-outline"
-                  size={20}
-                  color={theme.colors.secondaryButtonText}
-                />
-              </Pressable>
             </Pressable>
           </View>
         ) : (

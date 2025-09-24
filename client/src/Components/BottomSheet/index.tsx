@@ -5,7 +5,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
 import React, { forwardRef, useMemo, useCallback } from 'react';
-import { View } from 'react-native';
+import { View, Keyboard, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/Theme-context';
 import Text from '../Text';
@@ -14,7 +14,14 @@ import { bottomSheetStyles } from './styles';
 
 const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
   (
-    { children, snapPoints = ['50%'], initialIndex = -1, onClose, title },
+    {
+      children,
+      snapPoints = ['50%'],
+      initialIndex = -1,
+      onClose,
+      title,
+      enableDynamicSizing = false, // Add this prop for dynamic content
+    },
     ref,
   ) => {
     const { theme } = useTheme();
@@ -32,6 +39,13 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
       [onClose],
     );
 
+    // Dismiss keyboard when sheet starts moving
+    const handleAnimate = useCallback((fromIndex: number, toIndex: number) => {
+      if (Platform.OS === 'android' && fromIndex !== toIndex) {
+        Keyboard.dismiss();
+      }
+    }, []);
+
     return (
       <Portal>
         <BottomSheet
@@ -40,8 +54,10 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
           snapPoints={memoizedSnapPoints}
           enablePanDownToClose
           onChange={handleSheetChanges}
-          backgroundStyle={{ backgroundColor: theme.colors.cardBackground }}
-          keyboardBehavior="interactive"
+          onAnimate={handleAnimate}
+          backgroundStyle={{
+            backgroundColor: theme.colors.cardBackground,
+          }}
           handleStyle={{
             backgroundColor: theme.colors.cardBackground,
             borderTopLeftRadius: 20,
@@ -53,13 +69,19 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
             height: 4,
             marginTop: 8,
           }}
+          // Keyboard behavior fixes
+          keyboardBehavior={Platform.OS === 'ios' ? 'interactive' : 'extend'}
           keyboardBlurBehavior="restore"
-          // Android-specific scroll fixes
-          enableContentPanningGesture={true} // Enable for Android
+          android_keyboardInputMode="adjustPan" // Changed from adjustResize
+          // Gesture and content sizing
+          enableDynamicSizing={enableDynamicSizing}
+          enableContentPanningGesture={false} // Disable to prevent conflicts
           enableHandlePanningGesture={true}
-          activeOffsetY={[-10, 10]} // Increased threshold for Android
+          activeOffsetY={[-10, 10]}
           failOffsetX={[-5, 5]}
-          android_keyboardInputMode="adjustResize" // Important for Android
+          // Prevent over-scrolling
+          enableOverDrag={false}
+          overDragResistanceFactor={0}
           backdropComponent={props => (
             <BottomSheetBackdrop
               {...props}
@@ -70,10 +92,17 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
             />
           )}
         >
-          <BottomSheetView style={{ flex: 1 }}>
+          <View style={{ flex: 1, maxHeight: '100%' }}>
             {/* Fixed Header */}
             {title && (
-              <View style={{ paddingHorizontal: 24, paddingTop: 8 }}>
+              <View
+                style={{
+                  paddingHorizontal: 24,
+                  paddingTop: 8,
+                  backgroundColor: theme.colors.cardBackground,
+                  zIndex: 1,
+                }}
+              >
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.separator} />
               </View>
@@ -84,25 +113,28 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
               contentContainerStyle={{
                 paddingHorizontal: 24,
                 paddingBottom: insets.bottom + 20,
-                flexGrow: 1,
+                minHeight: 1, // Prevent collapsing
+              }}
+              style={{
+                flex: 1,
               }}
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
-              bounces={true}
-              // These props prevent auto-scroll to top
-              maintainVisibleContentPosition={{
-                minIndexForVisible: 0,
-                autoscrollToTopThreshold: 10,
-              }}
+              bounces={false} // Disable bouncing to prevent snap point issues
+              overScrollMode="never" // Android specific
               scrollEventThrottle={16}
+              nestedScrollEnabled={true}
+              // Remove maintainVisibleContentPosition as it can cause issues
             >
               {children}
             </BottomSheetScrollView>
-          </BottomSheetView>
+          </View>
         </BottomSheet>
       </Portal>
     );
   },
 );
+
+CustomBottomSheet.displayName = 'CustomBottomSheet';
 
 export default CustomBottomSheet;

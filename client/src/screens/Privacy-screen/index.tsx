@@ -393,6 +393,7 @@ const PrivacySecurityScreen = () => {
         </View>
       </ScrollView>
       <CustomBottomSheet
+        snapPoints={['90%']}
         ref={privayBottomSheet}
         title="Privacy Policy"
         onClose={closePrivacyPolicy}
@@ -401,6 +402,7 @@ const PrivacySecurityScreen = () => {
       </CustomBottomSheet>
       <CustomBottomSheet
         ref={termsBottomSheet}
+        snapPoints={['90%']}
         title="Terms of Service"
         onClose={closeTermsOfService}
       >
