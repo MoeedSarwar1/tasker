@@ -29,7 +29,7 @@ export const verificationScreenStyles = (theme: Theme) =>
     },
     linkText: {
       alignItems: 'center',
-      marginTop: verticalScale(theme.spacing.lg),
+      marginTop: verticalScale(theme.spacing.md),
     },
 
     logoContainer: {

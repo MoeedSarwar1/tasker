@@ -50,13 +50,13 @@ const App = () => {
     <ThemeProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ModalProvider>
-          <PortalProvider>
-            <SafeAreaProvider>
+          <SafeAreaProvider>
+            <PortalProvider>
               <AuthProvider>
                 <ThemedApp />
               </AuthProvider>
-            </SafeAreaProvider>
-          </PortalProvider>
+            </PortalProvider>
+          </SafeAreaProvider>
         </ModalProvider>
       </GestureHandlerRootView>
     </ThemeProvider>

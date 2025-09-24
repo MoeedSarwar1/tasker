@@ -100,21 +100,7 @@ const AboutScreen = () => {
       title: 'Contact Support',
       subtitle: 'Get help when you need it',
       color: '#3B82F6',
-      action: () => Linking.openURL('mailto:support@tasuku.app'),
-    },
-    {
-      icon: 'github',
-      title: 'GitHub',
-      subtitle: 'View source code & contribute',
-      color: '#6B7280',
-      action: () => Linking.openURL('https://github.com/your-repo'),
-    },
-    {
-      icon: 'web',
-      title: 'Official Website',
-      subtitle: 'Learn more about Tasuku',
-      color: '#059669',
-      action: () => Linking.openURL('https://tasuku.app'),
+      action: () => Linking.openURL('mailto:moeedsarwar112@gmail.com'),
     },
     {
       icon: 'star',
@@ -122,54 +108,6 @@ const AboutScreen = () => {
       subtitle: 'Leave a review on the App Store',
       color: '#F59E0B',
       action: () => Linking.openURL('https://apps.apple.com'),
-    },
-  ];
-
-  const teamMembers = [
-    {
-      name: 'Alex Chen',
-      role: 'Lead Developer',
-      avatar: '👨‍💻',
-      description: 'Full-stack developer with 8+ years experience',
-    },
-    {
-      name: 'Sarah Kim',
-      role: 'UI/UX Designer',
-      avatar: '👩‍🎨',
-      description: 'Design systems expert and user experience advocate',
-    },
-    {
-      name: 'Mike Johnson',
-      role: 'Product Manager',
-      avatar: '👨‍💼',
-      description: 'Product strategy and user research specialist',
-    },
-  ];
-
-  const achievements = [
-    {
-      icon: 'account-group',
-      number: '10K+',
-      label: 'Active Users',
-      description: 'Growing community',
-    },
-    {
-      icon: 'check-circle',
-      number: '50K+',
-      label: 'Tasks Completed',
-      description: 'Productivity achieved',
-    },
-    {
-      icon: 'star',
-      number: '4.8',
-      label: 'App Store Rating',
-      description: 'User satisfaction',
-    },
-    {
-      icon: 'download',
-      number: '25K+',
-      label: 'Downloads',
-      description: 'Trusted worldwide',
     },
   ];
 
@@ -248,46 +186,6 @@ const AboutScreen = () => {
           </Text>
         </View>
 
-        {/* Team Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Meet the Team</Text>
-          <View style={styles.teamGrid}>
-            {teamMembers.map((member, index) => (
-              <View key={index} style={styles.teamCard}>
-                <Text style={styles.teamAvatar}>{member.avatar}</Text>
-                <Text style={styles.teamName}>{member.name}</Text>
-                <Text style={styles.teamRole}>{member.role}</Text>
-                <Text style={styles.teamDescription}>{member.description}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* Achievements Grid */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>By the Numbers</Text>
-          <View style={styles.achievementsGrid}>
-            {achievements.map((achievement, index) => (
-              <View key={index} style={styles.achievementCard}>
-                <View style={styles.achievementIconContainer}>
-                  <Icon
-                    name={achievement.icon}
-                    size={24}
-                    color={theme.colors.primaryIcon}
-                  />
-                </View>
-                <Text style={styles.achievementNumber}>
-                  {achievement.number}
-                </Text>
-                <Text style={styles.achievementLabel}>{achievement.label}</Text>
-                <Text style={styles.achievementDescription}>
-                  {achievement.description}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
         {/* Social Links Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Connect with Us</Text>
@@ -321,9 +219,9 @@ const AboutScreen = () => {
         {/* Footer */}
         <View style={styles.footer}>
           <View style={styles.footerContent}>
-            <Icon name="heart" size={20} color="#EF4444" />
             <Text style={styles.footerText}>
-              Made with love for productivity enthusiasts
+              Made with <Icon name="heart" size={20} color="#EF4444" /> for
+              productivity enthusiasts
             </Text>
           </View>
           <Text style={styles.copyright}>

@@ -1,35 +1,42 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import { useLayoutEffect, useState } from 'react';
-import {
-  Alert,
-  Platform,
-  Pressable,
-  ScrollView,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRef, useState } from 'react';
+import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../Components/Header/Header';
+import { useAuth } from '../../context/Auth-context';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import { deleteMe } from '../../network/User';
 import { privacyStyles } from './styles';
-import { useAuth } from '../../context/Auth-context';
+import CustomBottomSheet from '../../Components/BottomSheet';
+import PrivacyPolicyScreen from '../Privacy-policy';
+import TermsConditionsScreen from '../Terms-and-condition';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const PrivacySecurityScreen = () => {
   const { theme } = useTheme();
   const styles = privacyStyles(theme);
-  const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
   const { showModal } = useModal();
   const { logout } = useAuth();
+  const privayBottomSheet = useRef<BottomSheet>(null);
+  const termsBottomSheet = useRef<BottomSheet>(null);
 
+  const openPrivacyPolicy = () => {
+    privayBottomSheet.current?.expand();
+  };
+  const openTermsOfService = () => {
+    termsBottomSheet.current?.expand();
+  };
+
+  const closePrivacyPolicy = () => {
+    privayBottomSheet.current?.close();
+  };
+
+  const closeTermsOfService = () => {
+    termsBottomSheet.current?.close();
+  };
   // Privacy settings state
   const [settings, setSettings] = useState({
-    biometricAuth: true,
     analytics: false,
     crashReports: true,
     dataSharing: false,
@@ -118,14 +125,6 @@ const PrivacySecurityScreen = () => {
 
   const privacySettings = [
     {
-      id: 'biometricAuth',
-      title: 'Biometric Authentication',
-      description: 'Use Face ID or fingerprint to secure your tasks',
-      icon: 'fingerprint',
-      value: settings.biometricAuth,
-      onToggle: () => toggleSetting('biometricAuth'),
-    },
-    {
       id: 'analytics',
       title: 'Analytics & Usage Data',
       description: 'Help improve Tasuku by sharing anonymous usage data',
@@ -152,14 +151,6 @@ const PrivacySecurityScreen = () => {
   ];
 
   const securityActions = [
-    {
-      id: 'exportData',
-      title: 'Export My Data',
-      description: 'Download all your tasks and settings',
-      icon: 'download',
-      onPress: () =>
-        Alert.alert('Export Data', 'Your data export will be ready shortly.'),
-    },
     {
       id: 'clearData',
       title: 'Clear All Data',
@@ -204,9 +195,7 @@ const PrivacySecurityScreen = () => {
   ];
 
   const securityTips = [
-    'Enable biometric authentication for an extra layer of security',
     'Regularly review and update your privacy settings',
-    'Export your data regularly to keep local backups',
     'Keep your app updated to get the latest security improvements',
   ];
 
@@ -371,7 +360,11 @@ const PrivacySecurityScreen = () => {
         {/* Footer */}
         <View style={styles.footer}>
           <View style={styles.footerLinks}>
-            <Pressable style={styles.footerLink}>
+            <Pressable
+              style={styles.footerLink}
+              hitSlop={10}
+              onPress={openPrivacyPolicy}
+            >
               <Text style={styles.footerLinkText}>Privacy Policy</Text>
               <Icon
                 name="arrow-top-right-thin"
@@ -380,7 +373,11 @@ const PrivacySecurityScreen = () => {
               />
             </Pressable>
             <View style={styles.footerDivider} />
-            <Pressable style={styles.footerLink}>
+            <Pressable
+              style={styles.footerLink}
+              hitSlop={10}
+              onPress={openTermsOfService}
+            >
               <Text style={styles.footerLinkText}>Terms of Service</Text>
               <Icon
                 name="arrow-top-right-thin"
@@ -394,6 +391,20 @@ const PrivacySecurityScreen = () => {
           </Text>
         </View>
       </ScrollView>
+      <CustomBottomSheet
+        ref={privayBottomSheet}
+        title="Privacy Policy"
+        onClose={closePrivacyPolicy}
+      >
+        <PrivacyPolicyScreen />
+      </CustomBottomSheet>
+      <CustomBottomSheet
+        ref={termsBottomSheet}
+        title="Terms of Service"
+        onClose={closeTermsOfService}
+      >
+        <TermsConditionsScreen />
+      </CustomBottomSheet>
     </>
   );
 };

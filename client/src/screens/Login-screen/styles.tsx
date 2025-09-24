@@ -44,7 +44,7 @@ const loginStyles = (theme: Theme) =>
     },
     linkText: {
       alignItems: 'center',
-      marginTop: verticalScale(theme.spacing.lg),
+      marginTop: verticalScale(theme.spacing.md),
     },
 
     buttonText: {

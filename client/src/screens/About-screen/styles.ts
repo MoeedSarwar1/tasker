@@ -286,6 +286,7 @@ export const aboutStyles = (theme: Theme) =>
       color: theme.colors.descriptionText,
       marginLeft: scale(theme.spacing.sm),
       fontWeight: '500',
+      textAlign: 'center',
     },
     copyright: {
       ...typography.captionSM,

@@ -1,5 +1,6 @@
+import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -10,15 +11,17 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CustomBottomSheet from '../../Components/BottomSheet';
 import Button from '../../Components/Button';
 import LinkText from '../../Components/link-text';
 import Text from '../../Components/Text';
+import { ToggleButton } from '../../Components/Toggle';
 import { useModal } from '../../context/Modal-context';
 import { useTheme } from '../../context/Theme-context';
 import { NavigationRoutes } from '../../navigation/enums';
 import { register } from '../../network/Auth';
+import TermsConditionsScreen from '../Terms-and-condition';
 import { registerationStyles } from './styles';
-import { ToggleButton } from '../../Components/Toggle';
 
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -30,11 +33,20 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   const { showModal } = useModal();
   const { theme, toggleTheme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = registerationStyles(theme);
+  const termsBottomSheet = useRef<BottomSheet>(null);
+  const openTermsOfService = () => {
+    termsBottomSheet.current?.expand();
+  };
+
+  const closeTermsOfService = () => {
+    termsBottomSheet.current?.close();
+  };
 
   // Input validation helper
   const validateInputs = (firstName, lastName, email, password) => {
@@ -165,6 +177,8 @@ const RegisterScreen = () => {
     }
   };
 
+  const isButtonDisabled =
+    !firstName || !lastName || !email || !password || !accepted || loading;
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <KeyboardAvoidingView
@@ -197,7 +211,7 @@ const RegisterScreen = () => {
             buttonStyle={{
               padding: 8,
               borderRadius: 20,
-      backgroundColor: theme.colors.cardBackground,
+              backgroundColor: theme.colors.cardBackground,
             }}
           />
         </View>
@@ -282,6 +296,26 @@ const RegisterScreen = () => {
               />
             </Pressable>
           </View>
+          <Pressable
+            onPress={() => setAccepted(prev => !prev)}
+            style={styles.textStyle}
+            disabled={loading}
+          >
+            <Icon
+              name={
+                accepted ? 'checkbox-marked-outline' : 'checkbox-blank-outline'
+              }
+              size={18}
+              color={
+                accepted ? theme.colors.primaryIcon : theme.colors.secondaryIcon
+              }
+            />
+            <LinkText
+              text="I agree to the"
+              onPress={openTermsOfService}
+              pressableText="Terms of Service"
+            />
+          </Pressable>
         </View>
 
         {/* Register Button */}
@@ -289,8 +323,8 @@ const RegisterScreen = () => {
           title={loading ? 'Setting up account...' : 'Create Account'}
           textStyle={styles.buttonText}
           onPress={handleRegister}
-          disabled={loading}
-          style={[styles.button, loading ? { opacity: 0.6 } : {}]}
+          disabled={isButtonDisabled}
+          style={[styles.button, isButtonDisabled ? { opacity: 0.6 } : {}]}
         />
 
         {/* Link to Login */}
@@ -303,6 +337,13 @@ const RegisterScreen = () => {
           />
         </View>
       </KeyboardAvoidingView>
+      <CustomBottomSheet
+        ref={termsBottomSheet}
+        title="Terms of Service"
+        onClose={closeTermsOfService}
+      >
+        <TermsConditionsScreen />
+      </CustomBottomSheet>
     </View>
   );
 };

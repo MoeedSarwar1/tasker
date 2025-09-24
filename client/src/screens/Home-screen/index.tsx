@@ -379,7 +379,7 @@ const HomeScreen = () => {
         onPressAdd={handlePresentModal}
         onFilterChange={setFilter}
       />
-      
+
       {/* Only hide the content, not the header */}
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -397,10 +397,7 @@ const HomeScreen = () => {
               style={styles.list}
               contentContainerStyle={styles.flatlistContainer}
               refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
               keyExtractor={(item, index) => item._id || index.toString()}
               renderItem={({ item }) => (
@@ -429,6 +426,7 @@ const HomeScreen = () => {
 
       <CustomBottomSheet
         ref={moreRef}
+        scrollable
         onClose={handleHideModal}
         title={editMode ? 'Update' : 'Actions'}
         snapPoints={moreSnapPoints}

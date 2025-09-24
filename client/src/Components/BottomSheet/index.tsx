@@ -1,15 +1,16 @@
 import BottomSheet, {
   BottomSheetBackdrop,
+  BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
-import React, { forwardRef, useMemo } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import React, { forwardRef, useMemo, useCallback } from 'react';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/Theme-context';
 import Text from '../Text';
-import { bottomSheetStyles } from './styles';
 import { ReusableBottomSheetProps } from './interface';
+import { bottomSheetStyles } from './styles';
 
 const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
   (
@@ -18,8 +19,18 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
   ) => {
     const { theme } = useTheme();
     const styles = bottomSheetStyles(theme);
-    const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
     const insets = useSafeAreaInsets();
+    const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
+
+    // Handle sheet changes
+    const handleSheetChanges = useCallback(
+      (index: number) => {
+        if (index === -1 && onClose) {
+          onClose();
+        }
+      },
+      [onClose],
+    );
 
     return (
       <Portal>
@@ -28,17 +39,30 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
           index={initialIndex}
           snapPoints={memoizedSnapPoints}
           enablePanDownToClose
-          onClose={onClose}
+          onChange={handleSheetChanges}
           backgroundStyle={{ backgroundColor: theme.colors.cardBackground }}
           keyboardBehavior="interactive"
           handleStyle={{
-            color: theme.colors.primaryIcon,
+            backgroundColor: theme.colors.cardBackground,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
           }}
-          style={styles.bottomshhetContainer}
+          handleIndicatorStyle={{
+            backgroundColor: theme.colors.primaryIcon || theme.colors.textColor,
+            width: 40,
+            height: 4,
+            marginTop: 8,
+          }}
           keyboardBlurBehavior="restore"
-          backdropComponent={backdropProps => (
+          // Android-specific scroll fixes
+          enableContentPanningGesture={true} // Enable for Android
+          enableHandlePanningGesture={true}
+          activeOffsetY={[-10, 10]} // Increased threshold for Android
+          failOffsetX={[-5, 5]}
+          android_keyboardInputMode="adjustResize" // Important for Android
+          backdropComponent={props => (
             <BottomSheetBackdrop
-              {...backdropProps}
+              {...props}
               appearsOnIndex={0}
               disappearsOnIndex={-1}
               pressBehavior="close"
@@ -46,20 +70,34 @@ const CustomBottomSheet = forwardRef<BottomSheet, ReusableBottomSheetProps>(
             />
           )}
         >
-          <BottomSheetView
-            style={[styles.container, { paddingBottom: insets.bottom }]}
-          >
-            <View style={styles.parentView}>
-              <Text style={styles.title}>{title}</Text>
+          <BottomSheetView style={{ flex: 1 }}>
+            {/* Fixed Header */}
+            {title && (
+              <View style={{ paddingHorizontal: 24, paddingTop: 8 }}>
+                <Text style={styles.title}>{title}</Text>
+                <View style={styles.separator} />
+              </View>
+            )}
 
-              <View style={styles.separator} />
-
-              <KeyboardAvoidingView
-                contentContainerStyle={styles.scrollContent}
-              >
-                {children}
-              </KeyboardAvoidingView>
-            </View>
+            {/* Scrollable Content */}
+            <BottomSheetScrollView
+              contentContainerStyle={{
+                paddingHorizontal: 24,
+                paddingBottom: insets.bottom + 20,
+                flexGrow: 1,
+              }}
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+              bounces={true}
+              // These props prevent auto-scroll to top
+              maintainVisibleContentPosition={{
+                minIndexForVisible: 0,
+                autoscrollToTopThreshold: 10,
+              }}
+              scrollEventThrottle={16}
+            >
+              {children}
+            </BottomSheetScrollView>
           </BottomSheetView>
         </BottomSheet>
       </Portal>

@@ -26,6 +26,7 @@ export const bottomSheetStyles = (theme: Theme) =>
       ...shadows.heavy,
     },
     scrollContent: {
-      flexGrow: 1,
+      paddingBottom: 20, // <- add padding to scroll above keyboard
+      marginHorizontal: 24,
     },
   });

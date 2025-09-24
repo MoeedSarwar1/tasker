@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { shadows } from '../../theme/shadows';
 
 export const bottomSheetStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -19,6 +20,17 @@ export const bottomSheetStyles = (theme: Theme) =>
       justifyContent: 'center',
       marginBottom: verticalScale(theme.spacing.md),
       alignItems: 'center',
+    },
+    title: {
+      color: theme.colors.headerText,
+      ...typography.headingXL,
+    },
+    separator: {
+      height: 1,
+      marginHorizontal: -24,
+      marginVertical: 8, // spacing above & below
+      alignSelf: 'stretch',
+      ...shadows.heavy,
     },
     input: {
       backgroundColor: theme.colors.inputBackground,

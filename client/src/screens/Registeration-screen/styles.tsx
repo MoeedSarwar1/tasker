@@ -24,10 +24,16 @@ export const registerationStyles = (theme: Theme) =>
       padding: moderateScale(theme.spacing.md),
       marginBottom: verticalScale(theme.spacing.md),
     },
+    textStyle: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: scale(theme.spacing.xs),
+    },
     buttonText: {
       color: theme.colors.primaryButtonText,
       ...typography.buttonLG,
     },
+
     logoContainer: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -49,7 +55,7 @@ export const registerationStyles = (theme: Theme) =>
     },
     linkText: {
       alignItems: 'center',
-      marginTop: verticalScale(theme.spacing.lg),
+      marginTop: verticalScale(theme.spacing.md),
     },
     button: {
       borderRadius: scale(theme.borderRadius.xl),
