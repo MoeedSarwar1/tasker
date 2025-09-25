@@ -1,8 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from 'react-native-size-matters';
 import { Theme } from '../../theme/theme.interface';
 import { typography } from '../../theme/typography';
-import { scale, verticalScale } from 'react-native-size-matters';
-import { borderRadius } from '../../theme/borderRadius';
 
 const settingStyles = (Platform, insets, theme: Theme) =>
   StyleSheet.create({

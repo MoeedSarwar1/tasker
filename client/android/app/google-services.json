@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1063659276328",
+    "project_id": "tasuku-4e125",
+    "storage_bucket": "tasuku-4e125.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063659276328:android:25b546d88742dd9ebbcd1d",
+        "android_client_info": {
+          "package_name": "com.tasuku.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBviTAt4gw7nACH-balQyJlCgaNrQ9XTRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+

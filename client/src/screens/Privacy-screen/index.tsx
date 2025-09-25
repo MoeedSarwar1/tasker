@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../../Components/Header/Header';
@@ -12,6 +12,8 @@ import CustomBottomSheet from '../../Components/BottomSheet';
 import PrivacyPolicyScreen from '../Privacy-policy';
 import TermsConditionsScreen from '../Terms-and-condition';
 import BottomSheet from '@gorhom/bottom-sheet';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const PrivacySecurityScreen = () => {
   const { theme } = useTheme();
@@ -35,6 +37,7 @@ const PrivacySecurityScreen = () => {
   const closeTermsOfService = () => {
     termsBottomSheet.current?.close();
   };
+
   // Privacy settings state
   const [settings, setSettings] = useState({
     analytics: false,
@@ -44,11 +47,113 @@ const PrivacySecurityScreen = () => {
     locationAccess: false,
   });
 
-  const toggleSetting = key => {
-    setSettings(prev => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const [loading, setLoading] = useState(false);
+
+  // Load initial Firebase settings
+  useEffect(() => {
+    loadInitialSettings();
+  }, []);
+
+  const loadInitialSettings = async () => {
+    try {
+      // Get current Firebase settings
+      const analyticsEnabled =
+        (await analytics().isAnalyticsCollectionEnabled?.()) || false;
+      const crashlyticsEnabled =
+        (await crashlytics().isCrashlyticsCollectionEnabled?.()) || true;
+
+      // Load from AsyncStorage for other settings
+      const storedSettings = await AsyncStorage.getItem('privacySettings');
+      const parsedSettings = storedSettings ? JSON.parse(storedSettings) : {};
+
+      setSettings(prev => ({
+        ...prev,
+        analytics: analyticsEnabled,
+        crashReports: crashlyticsEnabled,
+        dataSharing: parsedSettings.dataSharing || false,
+        notifications: parsedSettings.notifications || true,
+        locationAccess: parsedSettings.locationAccess || false,
+      }));
+    } catch (error) {
+      console.error('Error loading privacy settings:', error);
+    }
+  };
+
+  const saveSettingsToStorage = async (newSettings: typeof settings) => {
+    try {
+      await AsyncStorage.setItem(
+        'privacySettings',
+        JSON.stringify(newSettings),
+      );
+    } catch (error) {
+      console.error('Error saving privacy settings:', error);
+    }
+  };
+
+  const toggleSetting = async (key: keyof typeof settings) => {
+    if (loading) return;
+
+    setLoading(true);
+    const newValue = !settings[key];
+
+    try {
+      // Handle Firebase-specific settings
+      if (key === 'analytics') {
+        await analytics().setAnalyticsCollectionEnabled(newValue);
+
+        // Only log the event if analytics is being enabled
+        // or if it was already enabled before this change
+        if (newValue || settings.analytics) {
+          await analytics().logEvent('privacy_setting_changed', {
+            setting: key,
+            enabled: newValue,
+          });
+        }
+      }
+
+      if (key === 'crashReports') {
+        await crashlytics().setCrashlyticsCollectionEnabled(newValue);
+
+        // Log to analytics only if analytics is enabled
+        if (settings.analytics) {
+          await analytics().logEvent('privacy_setting_changed', {
+            setting: key,
+            enabled: newValue,
+          });
+        }
+      }
+
+      // Update state
+      const updatedSettings = { ...settings, [key]: newValue };
+      setSettings(updatedSettings);
+
+      // Save to AsyncStorage for non-Firebase settings
+      if (!['analytics', 'crashReports'].includes(key)) {
+        await saveSettingsToStorage(updatedSettings);
+      }
+
+      // Log to analytics (only if analytics is enabled and this isn't the analytics toggle)
+      if (settings.analytics && key !== 'analytics') {
+        await analytics().logEvent('privacy_setting_changed', {
+          setting: key,
+          enabled: newValue,
+        });
+      }
+    } catch (error) {
+      console.error(`Error toggling ${key}:`, error);
+
+      // Show error to user
+      Alert.alert(
+        'Settings Error',
+        `Failed to update ${key} setting. Please try again.`,
+        [{ text: 'OK' }],
+      );
+
+      // Revert state if there was an error
+      setSettings(prev => ({ ...prev, [key]: !newValue }));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const showDeleteAccountAlert = () => {
@@ -71,6 +176,13 @@ const PrivacySecurityScreen = () => {
           await deleteMe();
           await AsyncStorage.clear();
 
+          // Log account deletion (if analytics enabled)
+          if (settings.analytics) {
+            await analytics().logEvent('account_deleted', {
+              timestamp: new Date().toISOString(),
+            });
+          }
+
           showModal({
             mode: 'success',
             title: 'Account Deleted',
@@ -83,6 +195,7 @@ const PrivacySecurityScreen = () => {
             logout();
           }, 1500);
         } catch (error) {
+          console.error('Account deletion error:', error);
           showModal({
             mode: 'error',
             title: 'Deletion Failed',
@@ -104,15 +217,27 @@ const PrivacySecurityScreen = () => {
         'This will remove all tasks, labels, and settings from this device. This action cannot be undone. Do you want to continue?',
       onConfirm: async () => {
         try {
+          // Log before clearing (if analytics enabled)
+          if (settings.analytics) {
+            await analytics().logEvent('local_data_cleared', {
+              timestamp: new Date().toISOString(),
+            });
+          }
+
           await AsyncStorage.clear();
+
           showModal({
             mode: 'success',
             title: 'Data Cleared',
             iconName: 'check-circle',
             description: 'All local data has been removed successfully.',
           });
-          await logout();
+
+          setTimeout(() => {
+            logout();
+          }, 1000);
         } catch (error) {
+          console.error('Data clearing error:', error);
           showModal({
             mode: 'error',
             title: 'Failed to Clear Data',
@@ -132,6 +257,7 @@ const PrivacySecurityScreen = () => {
       icon: 'chart-line',
       value: settings.analytics,
       onToggle: () => toggleSetting('analytics'),
+      disabled: loading,
     },
     {
       id: 'crashReports',
@@ -140,6 +266,7 @@ const PrivacySecurityScreen = () => {
       icon: 'bug',
       value: settings.crashReports,
       onToggle: () => toggleSetting('crashReports'),
+      disabled: loading,
     },
     {
       id: 'dataSharing',
@@ -148,6 +275,7 @@ const PrivacySecurityScreen = () => {
       icon: 'share-variant',
       value: settings.dataSharing,
       onToggle: () => toggleSetting('dataSharing'),
+      disabled: loading,
     },
   ];
 
@@ -242,6 +370,7 @@ const PrivacySecurityScreen = () => {
                   <Switch
                     value={setting.value}
                     onValueChange={setting.onToggle}
+                    disabled={setting.disabled}
                     trackColor={{
                       false: theme.colors.secondaryButtonBackground,
                       true: theme.colors.primaryButtonBackground,

@@ -1,7 +1,6 @@
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
-  BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
 import React, { forwardRef, useMemo, useCallback } from 'react';
